@@ -1,6 +1,7 @@
 import { motion, useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
+ import { useRef, useState, useCallback } from 'react';
 import { Sparkles, Heart, Volume2, Package } from 'lucide-react';
+ import { BreathingPlush } from './BreathingPlush';
 import plushBunny from '@/assets/plush-bunny.jpg';
 import plushBear from '@/assets/plush-bear.jpg';
 import plushBearRibbon from '@/assets/plush-bear-ribbon.jpg';
@@ -35,6 +36,14 @@ export const ProductSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [activeImage, setActiveImage] = useState(0);
   const [activeFeature, setActiveFeature] = useState<number | null>(null);
+   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
+ 
+   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+     const rect = e.currentTarget.getBoundingClientRect();
+     const x = ((e.clientX - rect.left) / rect.width) * 100;
+     const y = ((e.clientY - rect.top) / rect.height) * 100;
+     setMousePosition({ x, y });
+   }, []);
 
   return (
     <section id="product" className="py-24 lg:py-32 bg-background" ref={ref}>
@@ -61,19 +70,36 @@ export const ProductSection = () => {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="relative">
+             <div className="relative" onMouseMove={handleMouseMove}>
               <motion.div
                 key={activeImage}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4 }}
-                className="rounded-3xl overflow-hidden shadow-romantic bg-muted"
+                 className="rounded-3xl overflow-hidden shadow-romantic bg-muted relative group"
               >
+                 {/* Radial glow following mouse */}
+                 <div
+                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10"
+                   style={{
+                     background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(255, 20, 147, 0.3) 0%, transparent 50%)`,
+                   }}
+                 />
                 <img
                   src={productImages[activeImage]}
                   alt="Peluche Étreinte Éternelle"
-                  className="w-full h-auto aspect-square object-cover"
+                   className="w-full h-auto aspect-square object-cover transition-transform duration-500 group-hover:scale-105"
                 />
+                 {/* Rose bloom on hover */}
+                 <motion.div
+                   className="absolute top-6 right-6 text-3xl z-20 opacity-0 group-hover:opacity-100"
+                   initial={{ scale: 0, rotate: -180 }}
+                   whileHover={{ scale: 1.2 }}
+                   animate={{ scale: 1, rotate: 0 }}
+                   transition={{ duration: 0.5, delay: 0.2 }}
+                 >
+                   🌹
+                 </motion.div>
               </motion.div>
 
               {/* Thumbnail Navigation */}

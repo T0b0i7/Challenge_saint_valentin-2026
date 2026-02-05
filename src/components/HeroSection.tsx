@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import { ArrowDown, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CountdownTimer } from './CountdownTimer';
+ import { AnimatedTitle, AnimatedItalicWord } from './AnimatedTitle';
+ import { ParticleRipple } from './ParticleRipple';
 import plushBear from '@/assets/plush-bear.jpg';
 
 export const HeroSection = () => {
@@ -56,16 +58,15 @@ export const HeroSection = () => {
               <span className="text-sm text-primary-foreground font-medium">Édition Saint-Valentin 2025</span>
             </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-display font-bold text-primary-foreground leading-tight mb-6"
-            >
-              Cette peluche gardera votre{' '}
-              <span className="italic">étreinte</span>{' '}
-              pour toujours
-            </motion.h1>
+             <div className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-display font-bold text-primary-foreground leading-tight mb-6">
+               <AnimatedTitle delay={0.3} as="h1" className="inline">
+                 Cette peluche gardera votre
+               </AnimatedTitle>{' '}
+               <AnimatedItalicWord delay={1.2}>étreinte</AnimatedItalicWord>{' '}
+               <AnimatedTitle delay={1.8} as="span" className="inline">
+                 pour toujours
+               </AnimatedTitle>
+             </div>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -83,20 +84,23 @@ export const HeroSection = () => {
               transition={{ delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12"
             >
-              <Button
-                variant="cta-white"
-                size="xl"
-                onClick={() => scrollToSection('pricing')}
-                className="group"
-              >
-                Offrir l'Étreinte Éternelle
-                <motion.span
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ repeat: Infinity, duration: 1.5 }}
-                >
-                  →
-                </motion.span>
-              </Button>
+               <ParticleRipple particleCount={30} spread={80}>
+                 <Button
+                   variant="cta-white"
+                   size="xl"
+                   onClick={() => scrollToSection('pricing')}
+                   className="group hover:animate-heartbeat hover:shadow-glow transition-all duration-300"
+                 >
+                   <Heart className="w-5 h-5 group-hover:animate-heartbeat" fill="currentColor" />
+                   Offrir l'Étreinte Éternelle
+                   <motion.span
+                     animate={{ x: [0, 5, 0] }}
+                     transition={{ repeat: Infinity, duration: 1.5 }}
+                   >
+                     →
+                   </motion.span>
+                 </Button>
+               </ParticleRipple>
               <Button
                 variant="hero-secondary"
                 size="xl"
