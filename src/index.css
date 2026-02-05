@@ -228,6 +228,80 @@
       transform: translateY(-5px) translateX(-50%);
     }
   }
+ 
+   /* Gentle Breathing Animation */
+   .breathing {
+     animation: gentleBreathing 4s ease-in-out infinite;
+   }
+ 
+   @keyframes gentleBreathing {
+     0%, 100% { transform: scale(1) translateY(0); }
+     50% { transform: scale(1.02) translateY(-2px); }
+   }
+ 
+   /* Rose Bloom Effect */
+   .rose-bloom {
+     @apply relative overflow-hidden;
+   }
+ 
+   .rose-bloom::after {
+     content: '';
+     @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+     background: radial-gradient(
+       circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+       rgba(255, 20, 147, 0.3) 0%,
+       transparent 50%
+     );
+   }
+ 
+   .rose-bloom:hover::after {
+     @apply opacity-100;
+   }
+ 
+   /* Page pulse effect */
+   @keyframes pagePulse {
+     0%, 100% { filter: brightness(1); }
+     50% { filter: brightness(1.1) saturate(1.2); }
+   }
+ 
+   .page-pulse {
+     animation: pagePulse 1s ease-in-out;
+   }
+ 
+   /* Ink spreading effect for forms */
+   @keyframes inkSpread {
+     from { background-size: 0% 100%; }
+     to { background-size: 100% 100%; }
+   }
+ 
+   .ink-effect {
+     background: linear-gradient(to right, hsl(var(--valentine-pink)) 50%, transparent 50%);
+     background-size: 200% 100%;
+     background-position: right bottom;
+   }
+ 
+   .ink-effect:focus {
+     animation: inkSpread 0.5s ease-out forwards;
+     background-position: left bottom;
+   }
+ 
+   /* Liquid heart button effect */
+   @keyframes liquidHeart {
+     0% { border-radius: 50%; }
+     25% { border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; }
+     50% { border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; }
+     75% { border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; }
+     100% { border-radius: 50%; }
+   }
+ 
+   .liquid-heart:hover {
+     animation: liquidHeart 0.5s ease-in-out;
+   }
+ 
+   /* Radial gradient utility */
+   .bg-gradient-radial {
+     background: radial-gradient(circle at center, var(--tw-gradient-from) 0%, var(--tw-gradient-to) 100%);
+   }
 }
 
 @layer utilities {

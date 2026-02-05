@@ -8,10 +8,12 @@ import { TestimonialsSection } from '@/components/TestimonialsSection';
 import { HeartSyncSection } from '@/components/HeartSyncSection';
 import { FinalCTASection } from '@/components/FinalCTASection';
 import { Footer } from '@/components/Footer';
+ import { HeartCascade } from '@/components/HeartCascade';
 
 const Index = () => {
   return (
     <main className="overflow-hidden">
+       <HeartCascade duration={6000} intensity="high" />
       <HeroSection />
       <WhySection />
       <ProductSection />
