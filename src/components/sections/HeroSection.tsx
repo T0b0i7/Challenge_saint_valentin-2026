@@ -1,18 +1,47 @@
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { ArrowDown, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { CountdownTimer } from './CountdownTimer';
- import { AnimatedTitle, AnimatedItalicWord } from './AnimatedTitle';
- import { ParticleRipple } from './ParticleRipple';
-import plushBear from '@/assets/plush-bear.jpg';
+import { CountdownTimer } from '../interactive/CountdownTimer';
+import { AnimatedTitle, AnimatedItalicWord } from '../common/AnimatedTitle';
+import { ParticleRipple } from '../effects/ParticleRipple';
+import plushBear from '@/assets/images/plush-bear.jpg';
+import { useRef, useEffect } from 'react';
 
 export const HeroSection = () => {
+  const sectionRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const isInView = useInView(sectionRef, { amount: 0.5 });
+
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isInView) {
+        videoRef.current.play();
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [isInView]);
+
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Video Background - Bien visible */}
+      <video
+        ref={videoRef}
+        className="absolute inset-0 w-full h-full object-contain min-w-full min-h-full -z-10"
+        loop
+        playsInline
+        style={{ opacity: 0.8 }}
+      >
+        <source src="/I love you.mp4" type="video/mp4" />
+      </video>
+      
+      {/* Overlay léger pour lisibilité */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-[#FF1493]/10 to-black/20 -z-5" />
+      
       {/* Floating Hearts Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(15)].map((_, i) => (
@@ -52,13 +81,13 @@ export const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 bg-card/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6"
+              className="inline-flex items-center gap-2 bg-[#F5F5F5]/80 backdrop-blur-sm rounded-full px-4 py-2 mb-6 border border-[#FF1493]/20"
             >
-              <Heart className="w-4 h-4 text-primary-foreground heartbeat" fill="currentColor" />
-              <span className="text-sm text-primary-foreground font-medium">Édition Saint-Valentin 2025</span>
+              <Heart className="w-4 h-4 text-[#FF1493] heartbeat" fill="#FF1493" />
+              <span className="text-sm text-[#DC143C] font-medium">Édition Saint-Valentin 2026</span>
             </motion.div>
 
-             <div className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-display font-bold text-primary-foreground leading-tight mb-6">
+             <div className="text-4xl xs:text-5xl sm:text-5xl lg:text-6xl xl:text-7xl font-display font-bold text-black leading-tight mb-6">
                <AnimatedTitle delay={0.3} as="h1" className="inline">
                  Cette peluche gardera votre
                </AnimatedTitle>{' '}
@@ -72,7 +101,7 @@ export const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="text-lg sm:text-xl text-primary-foreground/90 mb-8 font-body font-light max-w-xl mx-auto lg:mx-0"
+              className="text-lg xs:text-xl sm:text-xl text-black/90 mb-8 font-body font-light max-w-xl mx-auto lg:mx-0"
             >
               Le cadeau qui dit "je t'aime" même quand vous êtes loin. 
               Une présence douce et réconfortante qui traverse les distances.
@@ -86,10 +115,8 @@ export const HeroSection = () => {
             >
                <ParticleRipple particleCount={30} spread={80}>
                  <Button
-                   variant="cta-white"
-                   size="xl"
+                   className="group text-lg bg-[#FF1493] hover:bg-[#FF0000] text-white border-2 border-[#FF1493] hover:border-[#FF0000] px-6 py-3 xs:px-8 xs:py-4 transition-all duration-300"
                    onClick={() => scrollToSection('pricing')}
-                   className="group hover:animate-heartbeat hover:shadow-glow transition-all duration-300"
                  >
                    <Heart className="w-5 h-5 group-hover:animate-heartbeat" fill="currentColor" />
                    Offrir l'Étreinte Éternelle
@@ -102,8 +129,7 @@ export const HeroSection = () => {
                  </Button>
                </ParticleRipple>
               <Button
-                variant="hero-secondary"
-                size="xl"
+                className="bg-white/20 hover:bg-white/30 text-white border border-white/30 hover:border-white/50 px-6 py-3 xs:px-8 xs:py-4 transition-all duration-300"
                 onClick={() => scrollToSection('product')}
               >
                 Découvrir
@@ -116,7 +142,7 @@ export const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
             >
-              <p className="text-sm text-primary-foreground/70 mb-4 font-body uppercase tracking-widest">
+              <p className="text-xs sm:text-sm text-black/70 mb-4 font-body uppercase tracking-widest">
                 Livraison garantie avant le 14 février
               </p>
               <CountdownTimer />
@@ -128,11 +154,11 @@ export const HeroSection = () => {
             initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             transition={{ duration: 1, delay: 0.4, type: "spring" }}
-            className="relative"
+            className="relative lg:ml-24"
           >
             <div className="relative mx-auto max-w-md lg:max-w-lg">
               {/* Glow Effect */}
-              <div className="absolute inset-0 bg-gradient-romantic rounded-full blur-3xl opacity-30 scale-110" />
+              <div className="absolute inset-0 bg-[#FF1493]/20 rounded-full blur-3xl opacity-40 scale-110" />
               
               <motion.div
                 animate={{ y: [0, -15, 0] }}
@@ -150,9 +176,9 @@ export const HeroSection = () => {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 1, type: "spring", stiffness: 200 }}
-                  className="absolute -top-4 -right-4 bg-card rounded-full p-3 shadow-lg"
+                  className="absolute -top-4 -right-4 bg-white rounded-full p-3 shadow-lg border-2 border-[#FF1493]"
                 >
-                  <Heart className="w-8 h-8 text-primary heartbeat" fill="currentColor" />
+                  <Heart className="w-8 h-8 text-[#FF1493] heartbeat" fill="#FF1493" />
                 </motion.div>
               </motion.div>
             </div>
@@ -166,7 +192,7 @@ export const HeroSection = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 scroll-indicator text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+        className="absolute bottom-8 left-1/2 scroll-indicator text-white/70 hover:text-white transition-colors"
         aria-label="Défiler vers le bas"
       >
         <ArrowDown className="w-6 h-6" />

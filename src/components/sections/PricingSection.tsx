@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 const plans = [
   {
     name: "Offre Standard",
-    price: 79,
+    price: 45000,
     description: "L'essentiel de l'amour",
     popular: false,
     features: [
@@ -19,8 +19,8 @@ const plans = [
   },
   {
     name: "Offre Ultime",
-    price: 129,
-    originalPrice: 159,
+    price: 75000,
+    originalPrice: 95000,
     description: "L'expérience complète",
     popular: true,
     badge: "PLUS QUE 14 !",
@@ -107,11 +107,11 @@ export const PricingSection = () => {
                 <div className="flex items-baseline justify-center gap-2">
                   {plan.originalPrice && (
                     <span className="text-lg line-through opacity-60">
-                      {plan.originalPrice}€
+                      {plan.originalPrice.toLocaleString()} FCFA
                     </span>
                   )}
                   <span className="text-5xl font-display font-bold">
-                    {plan.price}€
+                    {plan.price.toLocaleString()} FCFA
                   </span>
                 </div>
               </div>

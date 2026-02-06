@@ -1,73 +1,110 @@
-# Welcome to your Lovable project
+# Eternal Embrace Maker
 
-## Project info
+Un projet romantique interactif pour la Saint-Valentin avec animations et expériences immersives.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 📁 Structure du projet
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+src/
+├── components/
+│   ├── ui/                    # Composants shadcn/ui (inchangé)
+│   ├── layout/                # Composants de mise en page
+│   │   ├── Footer.tsx
+│   │   └── NavLink.tsx
+│   ├── sections/              # Sections de la page principale
+│   │   ├── HeroSection.tsx
+│   │   ├── BenefitsSection.tsx
+│   │   ├── ProductSection.tsx
+│   │   ├── PricingSection.tsx
+│   │   ├── TestimonialsSection.tsx
+│   │   ├── WhySection.tsx
+│   │   ├── ReassuranceSection.tsx
+│   │   ├── FinalCTASection.tsx
+│   │   └── HeartSyncSection.tsx
+│   ├── valentine/             # Composants thématiques Saint-Valentin
+│   │   ├── ValentinePreloader.tsx
+│   │   ├── ValentinePrompt.tsx
+│   │   ├── ValentineYes.tsx
+│   │   └── animations/
+│   │       ├── HeartDrawingAnimation.tsx
+│   │       └── CurtainOpeningAnimation.tsx
+│   ├── effects/               # Effets visuels et animations
+│   │   ├── FloatingHearts.tsx
+│   │   ├── HeartCascade.tsx
+│   │   ├── HeartConfetti.tsx
+│   │   ├── CursorHeartTrail.tsx
+│   │   ├── ParticleRipple.tsx
+│   │   ├── HangingLoveHearts.tsx
+│   │   ├── PetalRainBackground.tsx
+│   │   └── StarfieldBackground.tsx
+│   ├── interactive/           # Composants interactifs
+│   │   ├── BreathingPlush.tsx
+│   │   ├── HeartbeatCanvas.tsx
+│   │   ├── CountdownTimer.tsx
+│   │   └── MorphingTransition.tsx
+│   └── common/                # Composants réutilisables
+│       ├── AnimatedTitle.tsx
+│       ├── ParallaxSection.tsx
+│       └── LandingPage.tsx
+├── pages/                     # Pages de l'application
+│   ├── HomePage.tsx
+│   └── NotFound.tsx
+├── hooks/                     # Hooks personnalisés
+│   ├── ui/
+│   │   ├── use-mobile.tsx
+│   │   └── use-toast.ts
+│   └── valentine/
+│       ├── useHeartbeat.ts
+│       └── useHeartbeatAudio.ts
+├── assets/
+│   └── images/                # Images et assets statiques
+│       ├── plush-bear.jpg
+│       ├── plush-bear-ribbon.jpg
+│       └── plush-bunny.jpg
+└── lib/                       # Utilitaires et fonctions partagées
+    └── utils.ts
 ```
 
-**Edit a file directly in GitHub**
+## 🚀 Technologies utilisées
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- **React 18** avec TypeScript
+- **Vite** comme bundler
+- **Tailwind CSS** pour le style
+- **shadcn/ui** pour les composants UI
+- **Framer Motion** pour les animations
+- **React Router** pour la navigation
 
-**Use GitHub Codespaces**
+## 📦 Installation
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```bash
+# Installer les dépendances
+npm install
 
-## What technologies are used for this project?
+# Démarrer le serveur de développement
+npm run dev
 
-This project is built with:
+# Construire pour la production
+npm run build
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+# Lancer les tests
+npm run test
+```
 
-## How can I deploy this project?
+## 🎯 Fonctionnalités principales
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+- **Page d'accueil immersive** avec animations et effets visuels
+- **Expérience Saint-Valentin** interactive avec préloader
+- **Synchronisation cardiaque** avec effets visuels
+- **Compte à rebours** et animations morphing
+- **Design responsive** et optimisé
 
-## Can I connect a custom domain to my Lovable project?
+## 🎨 Thème et design
 
-Yes, you can!
+- Palette de couleurs romantique (rose, rouge passion)
+- Animations fluides et micro-interactions
+- Typographie élégante avec Dancing Script
+- Effets de parallaxe et particules
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+*Projet réorganisé avec une structure logique et maintenable*

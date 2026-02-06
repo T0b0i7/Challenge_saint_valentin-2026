@@ -1,21 +1,22 @@
-import { HeroSection } from '@/components/HeroSection';
-import { WhySection } from '@/components/WhySection';
-import { ProductSection } from '@/components/ProductSection';
-import { BenefitsSection } from '@/components/BenefitsSection';
-import { PricingSection } from '@/components/PricingSection';
-import { ReassuranceSection } from '@/components/ReassuranceSection';
-import { TestimonialsSection } from '@/components/TestimonialsSection';
-import { HeartSyncSection } from '@/components/HeartSyncSection';
-import { FinalCTASection } from '@/components/FinalCTASection';
-import { Footer } from '@/components/Footer';
- import { HeartCascade } from '@/components/HeartCascade';
- import { CursorHeartTrail } from '@/components/CursorHeartTrail';
- import { PetalRainBackground } from '@/components/PetalRainBackground';
- import { HangingLoveHearts } from '@/components/HangingLoveHearts';
- import { MorphingTransition, WaveDivider, HeartDivider } from '@/components/MorphingTransition';
- import { ParallaxSection, ParallaxFloat } from '@/components/ParallaxSection';
+import { HeroSection } from '@/components/sections/HeroSection';
+import { WhySection } from '@/components/sections/WhySection';
+import { ProductSection } from '@/components/sections/ProductSection';
+import { BenefitsSection } from '@/components/sections/BenefitsSection';
+import { PricingSection } from '@/components/sections/PricingSection';
+import { ReassuranceSection } from '@/components/sections/ReassuranceSection';
+import { TestimonialsSection } from '@/components/sections/TestimonialsSection';
+import { HeartSyncSection } from '@/components/sections/HeartSyncSection';
+import { Plush3DSection } from '@/components/sections/Plush3DSection';
+import { FinalCTASection } from '@/components/sections/FinalCTASection';
+import { Footer } from '@/components/layout/Footer';
+import { HeartCascade } from '@/components/effects/HeartCascade';
+import { CursorHeartTrail } from '@/components/effects/CursorHeartTrail';
+import { PetalRainBackground } from '@/components/effects/PetalRainBackground';
+import { HangingLoveHearts } from '@/components/effects/HangingLoveHearts';
+import { MorphingTransition, WaveDivider, HeartDivider } from '@/components/interactive/MorphingTransition';
+import { ParallaxSection, ParallaxFloat } from '@/components/common/ParallaxSection';
 
-const Index = () => {
+const LandingPage = () => {
   return (
     <main className="overflow-hidden">
        {/* Global Effects */}
@@ -79,6 +80,9 @@ const Index = () => {
        <ParallaxSection speed={0.2}>
          <HeartSyncSection />
        </ParallaxSection>
+
+       {/* 3D Plush Experience */}
+       <Plush3DSection />
        
        {/* Final CTA */}
        <FinalCTASection />
@@ -87,4 +91,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default LandingPage;

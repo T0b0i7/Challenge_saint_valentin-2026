@@ -2,8 +2,8 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Heart, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { CountdownTimer } from './CountdownTimer';
-import plushBearRibbon from '@/assets/plush-bear-ribbon.jpg';
+import { CountdownTimer } from '../interactive/CountdownTimer';
+import plushBearRibbon from '@/assets/images/plush-bear-ribbon.jpg';
 
 export const FinalCTASection = () => {
   const ref = useRef(null);

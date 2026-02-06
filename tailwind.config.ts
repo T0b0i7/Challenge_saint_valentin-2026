@@ -9,7 +9,12 @@ export default {
       center: true,
       padding: "2rem",
       screens: {
-        "2xl": "1400px",
+        "xs": "475px",    // Extra small phones
+        "sm": "640px",    // Small phones
+        "md": "768px",    // Tablets
+        "lg": "1024px",   // Small laptops
+        "xl": "1280px",   // Laptops
+        "2xl": "1400px",  // Large screens
       },
     },
     extend: {
@@ -47,14 +52,14 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Valentine Custom Colors
+        // Valentine Brief Colors - Exact HEX values
         valentine: {
-          red: "hsl(var(--red-vivid))",
-          pink: "hsl(var(--valentine-pink))",
-          romantic: "hsl(var(--romantic-pink))",
-          passion: "hsl(var(--passion-red))",
-          soft: "hsl(var(--soft-pink))",
-          cream: "hsl(var(--cream))",
+          "red-vivid": "#FF0000",        // Rouge vif
+          "valentine-pink": "#FF1493",   // Rose Saint-Valentin  
+          "romantic-pink": "#FF69B4",    // Rose romantique
+          "passion-red": "#DC143C",      // Rouge passion
+          "white-pure": "#FFFFFF",       // Blanc pur
+          "white-off": "#F5F5F5",       // Blanc cassé
         },
       },
       fontFamily: {

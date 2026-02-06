@@ -2,10 +2,10 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { Heart, Volume2, VolumeX, Download, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useHeartbeat } from '@/hooks/useHeartbeat';
-import { useHeartbeatAudio } from '@/hooks/useHeartbeatAudio';
-import { HeartbeatCanvas } from './HeartbeatCanvas';
-import plushBear from '@/assets/plush-bear.jpg';
+import { useHeartbeat } from '@/hooks/valentine/useHeartbeat';
+import { useHeartbeatAudio } from '@/hooks/valentine/useHeartbeatAudio';
+import { HeartbeatCanvas } from '../interactive/HeartbeatCanvas';
+import plushBear from '@/assets/images/plush-bear.jpg';
 
 const romanticWhispers = [
   "Ton cœur bat pour moi à {bpm} BPM",

@@ -4,32 +4,46 @@ import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const testimonials = [
   {
-    name: "Marie & Pierre",
-    location: "Paris",
-    text: "Elle dort avec depuis un mois. Chaque soir, c'est comme si j'étais là, à ses côtés. Cette peluche a transformé notre relation à distance.",
+    name: "Amina & Boubacar",
+    location: "Dakar, Sénégal",
+    text: "Depuis que Boubacar est parti étudier en France, notre peluche nous maintient connectés. Chaque soir, je pose ma main dessus et je sens sa présence.",
     rating: 5,
     avatar: "👩‍❤️‍👨",
   },
   {
-    name: "Sarah",
-    location: "Lyon",
-    text: "Mon mari déployé l'a reçue. Il m'a dit que c'est comme si j'étais là avec lui. Les moments difficiles sont moins lourds maintenant.",
+    name: "Fatou",
+    location: "Abidjan, Côte d'Ivoire",
+    text: "Mon fiancé travaille au Nigeria. Cette peluche a transformé notre relation à distance. C'est comme s'il était là, à mes côtés, chaque nuit.",
     rating: 5,
     avatar: "💑",
   },
   {
-    name: "Julien & Emma",
-    location: "Bordeaux",
-    text: "On s'est offert chacun une peluche. Maintenant, même à 800km l'un de l'autre, on a l'impression de s'endormir ensemble.",
+    name: "Koffi & Aïcha",
+    location: "Ouagadougou, Burkina Faso",
+    text: "Nous vivons à 2000km l'un de l'autre. Grâce à ces peluches, nos enfants dorment avec l'odeur de leurs parents. C'est magique.",
     rating: 5,
     avatar: "❤️",
   },
   {
-    name: "Claire",
-    location: "Marseille",
-    text: "J'ai offert cette peluche à ma grand-mère qui vit seule. Elle me dit que ça lui rappelle mes câlins d'enfant. Précieux.",
+    name: "Chantal",
+    location: "Yaoundé, Cameroun",
+    text: "J'ai offert cette peluche à ma mère qui vit seule au village. Elle me dit que ça lui rappelle mes câlins d'enfant. Très précieux.",
     rating: 5,
     avatar: "👵🏻",
+  },
+  {
+    name: "Mohamed & Zara",
+    location: "Tunis, Tunisie",
+    text: "Zara est partie au Canada pour ses études. Notre peluche synchronisée nous permet de dormir au même rythme. On se sent proches malgré les 7000km.",
+    rating: 5,
+    avatar: "💕",
+  },
+  {
+    name: "Grace",
+    location: "Lomé, Togo",
+    text: "Mon mari est marin et parti 6 mois par an. La peluche enregistre ma voix et la diffuse quand je m'endors. Je ne me sens plus jamais seule.",
+    rating: 5,
+    avatar: "🌹",
   },
 ];
 
