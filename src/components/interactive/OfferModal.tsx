@@ -34,7 +34,6 @@ interface Offer {
   features: string[];
   badge?: string;
   popular?: boolean;
-  image: string;
 }
 
 const offers: Offer[] = [
@@ -50,8 +49,7 @@ const offers: Offer[] = [
       "Carte de vœux calligraphiée",
       "Livraison offerte"
     ],
-    badge: 'POPULAIRE',
-    image: '/src/assets/images/pelluche_produit.jpg'
+    badge: 'POPULAIRE'
   },
   {
     id: 'ultimate',
@@ -67,8 +65,7 @@ const offers: Offer[] = [
       "Certificat d'authenticité"
     ],
     badge: 'LIMITÉE',
-    popular: true,
-    image: '/src/assets/images/pelluche_produit.jpg'
+    popular: true
   }
 ];
 
@@ -130,7 +127,6 @@ export const OfferModal = ({ isOpen, selectedOfferId, onClose }: OfferModalProps
     const selectedOfferData = offers.find(offer => offer.id === selectedOfferId);
     const offerName = selectedOfferData?.name || 'Standard';
     const totalPrice = selectedOfferData?.price || 45000;
-    const imageUrl = selectedOfferData?.image || '';
     
     const invoiceData: InvoiceData = {
       offer: offerName,
@@ -194,24 +190,11 @@ export const OfferModal = ({ isOpen, selectedOfferId, onClose }: OfferModalProps
     doc.text(`Adresse: ${invoiceData.address}`, 25, yPosition);
     yPosition += 12;
 
-    // Section Article avec Image
+    // Section Article
     doc.setFontSize(12);
     doc.setTextColor(255, 20, 147);
     doc.text('ARTICLE:', 20, yPosition);
     yPosition += 8;
-    
-    // Essayer d'ajouter l'image
-    try {
-      const img = new Image();
-      img.onload = () => {
-        doc.addImage(img, 'JPEG', 25, yPosition, 30, 30);
-      };
-      img.src = imageUrl;
-      yPosition += 35;
-    } catch (error) {
-      console.log('Erreur chargement image');
-      yPosition += 5;
-    }
     
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
@@ -357,20 +340,9 @@ export const OfferModal = ({ isOpen, selectedOfferId, onClose }: OfferModalProps
                       )}
 
                       <div className="text-center mb-4">
-                        <h3 className="text-lg font-bold text-gray-800 mb-3">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">
                           {offer.name}
                         </h3>
-                        
-                        {/* Image de l'offre */}
-                        {offer.image && (
-                          <div className="mb-4">
-                            <img 
-                              src={offer.image} 
-                              alt={offer.name}
-                              className="w-full h-40 object-cover rounded-lg"
-                            />
-                          </div>
-                        )}
                         
                         <div className="flex items-center justify-center gap-2 mb-4">
                           <span className="text-2xl font-bold text-[#FF1493]">
@@ -411,17 +383,6 @@ export const OfferModal = ({ isOpen, selectedOfferId, onClose }: OfferModalProps
                     <h3 className="text-lg font-semibold text-gray-800 mb-4">
                       Récapitulatif de votre commande
                     </h3>
-                    
-                    {/* Image du produit */}
-                    {selectedOfferData?.image && (
-                      <div className="mb-6 text-center">
-                        <img 
-                          src={selectedOfferData.image} 
-                          alt={selectedOfferData.name}
-                          className="w-full max-w-xs h-auto rounded-lg shadow-md mx-auto"
-                        />
-                      </div>
-                    )}
                     
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
