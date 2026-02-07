@@ -12,12 +12,36 @@ export const HeroSection = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(sectionRef, { amount: 0.5 });
   const [isMuted, setIsMuted] = useState(false);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(error => {
-        console.log("Video play error:", error);
-      });
+    const video = videoRef.current;
+    if (video) {
+      // Forcer le chargement et la lecture
+      video.load();
+      
+      const handleCanPlay = () => {
+        setIsVideoLoaded(true);
+        video.play().catch(error => {
+          console.log("Video play error:", error);
+          // Forcer la lecture avec interaction utilisateur
+          document.addEventListener('click', () => {
+            video.play().catch(e => console.log("Forced play error:", e));
+          }, { once: true });
+        });
+      };
+
+      const handleLoadStart = () => {
+        console.log("Video loading started");
+      };
+
+      video.addEventListener('canplay', handleCanPlay);
+      video.addEventListener('loadstart', handleLoadStart);
+      
+      return () => {
+        video.removeEventListener('canplay', handleCanPlay);
+        video.removeEventListener('loadstart', handleLoadStart);
+      };
     }
   }, []);
 
@@ -34,18 +58,30 @@ export const HeroSection = () => {
 
   return (
     <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Video Background - Bien visible */}
+      {/* Video Background - Optimisé pour autoplay avec son */}
       <video
         ref={videoRef}
-        className="absolute inset-0 w-full h-full object-contain min-w-full min-h-full -z-10"
+        className="absolute inset-0 w-full h-full object-cover min-w-full min-h-full -z-10"
         loop
         playsInline
         autoPlay
-        muted={isMuted}
+        muted={false}
+        preload="auto"
         style={{ opacity: 0.8 }}
+        onError={(e) => console.log("Video error:", e)}
+        onLoadStart={() => console.log("Video load start")}
+        onCanPlay={() => console.log("Video can play")}
       >
         <source src="/I love you.mp4" type="video/mp4" />
+        Votre navigateur ne supporte pas la vidéo.
       </video>
+      
+      {/* Indicateur de chargement */}
+      {!isVideoLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-pink-100/50 -z-5">
+          <div className="text-pink-600 font-semibold">Chargement de la vidéo...</div>
+        </div>
+      )}
       
       {/* Overlay léger pour lisibilité */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-[#FF1493]/10 to-black/20 -z-5" />
@@ -57,12 +93,14 @@ export const HeroSection = () => {
         transition={{ delay: 1 }}
         onClick={toggleMute}
         className="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur-sm rounded-full p-3 hover:bg-white transition-colors"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
         aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
       >
         {isMuted ? (
-          <VolumeX className="w-5 h-5 text-gray-600" />
+          <VolumeX className="w-5 h-5 text-pink-600" />
         ) : (
-          <Volume2 className="w-5 h-5 text-[#FF1493]" />
+          <Volume2 className="w-5 h-5 text-pink-600" />
         )}
       </motion.button>
       
