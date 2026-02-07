@@ -11,7 +11,7 @@ const guarantees = [
   {
     icon: Truck,
     title: "Livraison Offerte",
-    description: "Expédition gratuite dès 59€, partout en France métropolitaine",
+    description: "Expédition gratuite dès 59€, partout au Bénin métropolitaine",
   },
   {
     icon: RotateCcw,
@@ -81,7 +81,7 @@ export const ReassuranceSection = () => {
         >
           <div className="flex items-center gap-2 text-muted-foreground">
             <span className="text-2xl">🇫🇷</span>
-            <span className="text-sm font-medium">Fabriqué en France</span>
+            <span className="text-sm font-medium">Fabriqué au Bénin</span>
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">
             <span className="text-2xl">🔒</span>

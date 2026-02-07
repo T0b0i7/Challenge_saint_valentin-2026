@@ -31,9 +31,9 @@ export const Footer = () => {
           </div>
 
           <p className="text-primary-foreground/40 text-sm">
-            © 2025 Étreinte Éternelle. Fabriqué avec{' '}
+            ©2026 Étreinte Éternelle. Créer par Eucher ABATTI avec{' '}
             <Heart className="w-3 h-3 inline text-primary" fill="currentColor" />{' '}
-            en France
+            au Bénin
           </p>
         </div>
       </div>

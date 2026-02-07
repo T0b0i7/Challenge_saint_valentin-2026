@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { Heart, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CountdownTimer } from '../interactive/CountdownTimer';
-import plushBearRibbon from '@/assets/images/plush-bear-ribbon.jpg';
+import plushBearRibbon from '@/assets/images/pelluche_produit.jpg';
 
 export const FinalCTASection = () => {
   const ref = useRef(null);

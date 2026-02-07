@@ -1,41 +1,47 @@
-import { HeroSection } from '@/components/HeroSection';
-import { WhySection } from '@/components/WhySection';
-import { ProductSection } from '@/components/ProductSection';
-import { BenefitsSection } from '@/components/BenefitsSection';
-import { PricingSection } from '@/components/PricingSection';
-import { ReassuranceSection } from '@/components/ReassuranceSection';
-import { TestimonialsSection } from '@/components/TestimonialsSection';
-import { HeartSyncSection } from '@/components/HeartSyncSection';
-import { FinalCTASection } from '@/components/FinalCTASection';
-import { Footer } from '@/components/Footer';
- import { HeartCascade } from '@/components/HeartCascade';
- import { CursorHeartTrail } from '@/components/CursorHeartTrail';
- import { PetalRainBackground } from '@/components/PetalRainBackground';
- import { HangingLoveHearts } from '@/components/HangingLoveHearts';
- import { MorphingTransition, WaveDivider, HeartDivider } from '@/components/MorphingTransition';
- import { ParallaxSection, ParallaxFloat } from '@/components/ParallaxSection';
+import { useState } from 'react';
+import { HeroSection } from '@/components/sections/HeroSection';
+import { WhySection } from '@/components/sections/WhySection';
+import { ProductSection } from '@/components/sections/ProductSection';
+import { BenefitsSection } from '@/components/sections/BenefitsSection';
+import { PricingSection } from '@/components/sections/PricingSection';
+import { ReassuranceSection } from '@/components/sections/ReassuranceSection';
+import { TestimonialsSection } from '@/components/sections/TestimonialsSection';
+import { FinalCTASection } from '@/components/sections/FinalCTASection';
+import { Footer } from '@/components/layout/Footer';
+import { MorphingTransition, WaveDivider, HeartDivider } from '@/components/interactive/MorphingTransition';
+import { ParallaxSection } from '@/components/common/ParallaxSection';
+import { TransitionManager, usePageTransitions, useRandomTransition, type TransitionType } from '@/components/common/TransitionManager';
 
 const Index = () => {
+  const { currentTransition, isTransitioning, startTransition, endTransition } = usePageTransitions();
+  const { getRandomTransition } = useRandomTransition();
+
+  // Handle transitions between main sections
+  const [showTransition, setShowTransition] = useState(false);
+  const [transitionType, setTransitionType] = useState<TransitionType>('curtain-3d');
+
+  const handleSectionTransition = (random = false) => {
+    const type = random ? getRandomTransition() : currentTransition;
+    setTransitionType(type as TransitionType);
+    setShowTransition(true);
+  };
+
   return (
     <main className="overflow-hidden">
-       {/* Global Effects */}
-       <CursorHeartTrail />
-       <PetalRainBackground />
-       <HeartCascade duration={6000} intensity="high" />
-       
+       {/* Global transition system */}
+       <TransitionManager 
+         isActive={showTransition}
+         transitionType={transitionType}
+         onComplete={() => {
+           setShowTransition(false);
+           endTransition();
+         }}
+       />
+
        {/* Hero Section */}
        <ParallaxSection speed={0.2}>
          <HeroSection />
        </ParallaxSection>
-       
-       {/* LOVE Animation - Between Hero and Content */}
-       <section className="relative bg-gradient-to-b from-background via-muted to-background py-8 sm:py-12 lg:py-16">
-         <WaveDivider color="hsl(var(--background))" flip />
-         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-           <HangingLoveHearts />
-         </div>
-         <WaveDivider color="hsl(var(--muted))" />
-       </section>
        
        {/* Why Section with Morphing */}
        <MorphingTransition>
@@ -74,11 +80,6 @@ const Index = () => {
        </MorphingTransition>
        
        <WaveDivider color="hsl(var(--muted))" />
-       
-       {/* Heart Sync Experience */}
-       <ParallaxSection speed={0.2}>
-         <HeartSyncSection />
-       </ParallaxSection>
        
        {/* Final CTA */}
        <FinalCTASection />

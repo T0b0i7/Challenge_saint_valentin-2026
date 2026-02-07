@@ -58,9 +58,7 @@ src/
 │       └── useHeartbeatAudio.ts
 ├── assets/
 │   └── images/                # Images et assets statiques
-│       ├── plush-bear.jpg
-│       ├── plush-bear-ribbon.jpg
-│       └── plush-bunny.jpg
+│       └── pelluche_produit.jpg
 └── lib/                       # Utilitaires et fonctions partagées
     └── utils.ts
 ```

@@ -1,7 +1,8 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
-import { Check, Sparkles, Truck, Heart } from 'lucide-react';
+import { Check, Sparkles, Truck, Heart, Volume2, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { OfferModal } from '@/components/interactive/OfferModal';
 
 const plans = [
   {
@@ -39,6 +40,8 @@ export const PricingSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [stockCount, setStockCount] = useState(14);
+  const [showOfferModal, setShowOfferModal] = useState(false);
+  const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
 
   useEffect(() => {
     // Simulate stock decreasing occasionally
@@ -49,6 +52,16 @@ export const PricingSection = () => {
     }, 30000);
     return () => clearInterval(interval);
   }, [stockCount]);
+
+  const handleOpenOfferModal = (offerId: string) => {
+    setSelectedOfferId(offerId);
+    setShowOfferModal(true);
+  };
+
+  const handleCloseOfferModal = () => {
+    setShowOfferModal(false);
+    setSelectedOfferId(null);
+  };
 
   return (
     <section id="pricing" className="py-24 lg:py-32 bg-background" ref={ref}>
@@ -139,6 +152,7 @@ export const PricingSection = () => {
                 variant={plan.popular ? "cta-white" : "romantic"}
                 size="xl"
                 className="w-full"
+                onClick={() => handleOpenOfferModal(plan.name === 'Offre Ultime' ? 'ultimate' : 'standard')}
               >
                 {plan.popular ? (
                   <>
@@ -178,6 +192,12 @@ export const PricingSection = () => {
           </div>
         </motion.div>
       </div>
+
+      <OfferModal 
+        isOpen={showOfferModal}
+        selectedOfferId={selectedOfferId}
+        onClose={handleCloseOfferModal}
+      />
     </section>
   );
 };

@@ -1,7 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { Sparkles, Heart, Volume2, Package } from 'lucide-react';
-import plushBear from '@/assets/images/plush-bear.jpg';
+import plushBear from '@/assets/images/pelluche_produit.jpg';
 
 const features = [
   {

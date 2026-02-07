@@ -6,6 +6,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ValentinePreloader } from "@/components/valentine/ValentinePreloader";
 import LandingPage from "@/components/common/LandingPage";
+import HeartAnimationPage from "@/pages/HeartAnimationPage";
+import ValentineQuestionPage from "@/pages/ValentineQuestionPage";
+import { ValentinePrompt } from "@/components/valentine/ValentinePrompt";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,9 +40,12 @@ const App = () => {
                 {!showLanding && <ValentinePreloader onAnimationEnd={() => {
                   window.dispatchEvent(new CustomEvent('valentineAnimationEnd'));
                 }} />}
-                {showLanding && <LandingPage />}
+                {showLanding && <ValentinePrompt />}
               </>
             } />
+            <Route path="/valentine-prompt" element={<ValentinePrompt />} />
+            <Route path="/heart-animation-page" element={<HeartAnimationPage />} />
+            <Route path="/landing-page" element={<LandingPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

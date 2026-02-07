@@ -1,26 +1,32 @@
 import { motion, useInView } from 'framer-motion';
-import { ArrowDown, Heart } from 'lucide-react';
+import { ArrowDown, Heart, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CountdownTimer } from '../interactive/CountdownTimer';
 import { AnimatedTitle, AnimatedItalicWord } from '../common/AnimatedTitle';
 import { ParticleRipple } from '../effects/ParticleRipple';
-import plushBear from '@/assets/images/plush-bear.jpg';
-import { useRef, useEffect } from 'react';
+import plushBear from '@/assets/images/pelluche_produit.jpg';
+import { useRef, useEffect, useState } from 'react';
 
 export const HeroSection = () => {
   const sectionRef = useRef<HTMLVideoElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(sectionRef, { amount: 0.5 });
+  const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
     if (videoRef.current) {
-      if (isInView) {
-        videoRef.current.play();
-      } else {
-        videoRef.current.pause();
-      }
+      videoRef.current.play().catch(error => {
+        console.log("Video play error:", error);
+      });
     }
-  }, [isInView]);
+  }, []);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
 
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -34,6 +40,8 @@ export const HeroSection = () => {
         className="absolute inset-0 w-full h-full object-contain min-w-full min-h-full -z-10"
         loop
         playsInline
+        autoPlay
+        muted={isMuted}
         style={{ opacity: 0.8 }}
       >
         <source src="/I love you.mp4" type="video/mp4" />
@@ -41,6 +49,22 @@ export const HeroSection = () => {
       
       {/* Overlay léger pour lisibilité */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-[#FF1493]/10 to-black/20 -z-5" />
+      
+      {/* Bouton de contrôle du son */}
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+        onClick={toggleMute}
+        className="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur-sm rounded-full p-3 hover:bg-white transition-colors"
+        aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
+      >
+        {isMuted ? (
+          <VolumeX className="w-5 h-5 text-gray-600" />
+        ) : (
+          <Volume2 className="w-5 h-5 text-[#FF1493]" />
+        )}
+      </motion.button>
       
       {/* Floating Hearts Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -129,9 +153,10 @@ export const HeroSection = () => {
                  </Button>
                </ParticleRipple>
               <Button
-                className="bg-white/20 hover:bg-white/30 text-white border border-white/30 hover:border-white/50 px-6 py-3 xs:px-8 xs:py-4 transition-all duration-300"
+                className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 xs:px-8 xs:py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
                 onClick={() => scrollToSection('product')}
               >
+                ❤️
                 Découvrir
               </Button>
             </motion.div>
@@ -154,7 +179,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             transition={{ duration: 1, delay: 0.4, type: "spring" }}
-            className="relative lg:ml-24"
+            className="relative lg:ml-32"
           >
             <div className="relative mx-auto max-w-md lg:max-w-lg">
               {/* Glow Effect */}
@@ -166,8 +191,8 @@ export const HeroSection = () => {
                 className="relative"
               >
                 <img
-                  src={plushBear}
-                  alt="Peluche Étreinte Éternelle - Ourson Saint-Valentin"
+                  src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif"
+                  alt="Deux oursons qui s'embrassent - Peluche Étreinte Éternelle"
                   className="relative z-10 w-full h-auto rounded-3xl shadow-2xl"
                 />
                 

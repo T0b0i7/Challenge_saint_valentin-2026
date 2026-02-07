@@ -6,7 +6,7 @@ const testimonials = [
   {
     name: "Amina & Boubacar",
     location: "Dakar, Sénégal",
-    text: "Depuis que Boubacar est parti étudier en France, notre peluche nous maintient connectés. Chaque soir, je pose ma main dessus et je sens sa présence.",
+    text: "Depuis que Boubacar est parti étudier au Bénin, notre peluche nous maintient connectés. Chaque soir, je pose ma main dessus et je sens sa présence.",
     rating: 5,
     avatar: "👩‍❤️‍👨",
   },
