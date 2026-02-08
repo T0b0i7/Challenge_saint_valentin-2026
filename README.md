@@ -142,6 +142,61 @@ Tous les titres suivent le même pattern d'animation :
 ✨ **TestimonialsSection** - "Ils ont fait le choix de l'amour, et vous ?"
 ✨ **FinalCTASection** - "Parce que certaines étreintes ne devraient jamais s'arrêter"
 
+## 💌 Galerie d'Amour - Messages d'Amour Interactifs
+
+### Nouvelle Fonctionnalité (v3.0)
+
+Une expérience unique pour envoyer des messages d'amour personnalisés à votre partenaire!
+
+#### 🎯 Fonctionnalités:
+
+1. **Menu Landing Page** - Accès via lien "Galerie d'Amour" dans le menu Home
+2. **Composition** - Zone texte pour rédiger un message personnalisé
+3. **Partage Intelligent** :
+   - 🔗 **Lien unique** encodé en Base64 (pas de dépendance serveur)
+   - 📱 **QR Code** - Scannable directement pour les mobiles
+   - 📤 **Partage natif** - Envoyer via WhatsApp, SMS, Mail en un clic
+
+4. **Lecture du Message** :
+   - Page dédiée avec interface romantique
+   - Affichage élégant du message
+   - Animation de présentation
+
+5. **Proposition d'Offre** :
+   - Après lecture → Question "Voulez-vous offrir une peluche?"
+   - Réponse Oui/Non → Redirection vers landing page
+
+#### 📋 Routes Ajoutées:
+- `/love-message` - Interface de composition
+- `/love-message/:messageId` - Affichage du message reçu
+
+#### 💾 Système de Stockage:
+- **Base64 encoding** pour URL compacte
+- Aucune dépendance à localStorage ou serveur
+- Fonction de décodage intégrée
+- URL courte et partageable
+
+#### 🛣️ Flux Utilisateur:
+```
+Landing Page (Menu) 
+  ↓
+Galerie d'Amour (demande)
+  ↓
+Composition du message
+  ↓
+Génération du lien + QR Code
+  ↓
+Partage (Copie/QR/WhatsApp/SMS)
+  ↓
+Destinataire clique le lien
+  ↓
+Lecture du message
+  ↓
+Proposition peluche
+  ↓
+Redirection landing page
+```
+
 ---
 
-*Mise à jour : 8 Février 2026 - Version 2.0 avec animations Wave et Modal PDF*
+*Mise à jour : 8 Février 2026 - Version 3.0 avec Galerie d'Amour et messages partagés*
