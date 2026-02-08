@@ -17,13 +17,11 @@ interface InvoiceData {
 }
 
 interface FormData {
+  offer: any;
   name: string;
   email: string;
   phone: string;
   address: string;
-  delivery: string;
-  offer: string;
-  paymentMethod: string;
 }
 
 interface Offer {
@@ -76,20 +74,19 @@ interface OfferModalProps {
 }
 
 export const OfferModal = ({ isOpen, selectedOfferId, onClose }: OfferModalProps) => {
-  const [showCheckout, setShowCheckout] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     phone: '',
-    address: '',
-    delivery: '',
-    offer: '',
-    paymentMethod: 'card'
+    address: ''
   });
 
   const handleSelectOffer = (offerId: string) => {
-    setShowCheckout(true);
+    // Directement au formulaire de paiement
     setFormData(prev => ({ ...prev, offer: offerId }));
   };
 
@@ -102,25 +99,21 @@ export const OfferModal = ({ isOpen, selectedOfferId, onClose }: OfferModalProps
       return;
     }
 
-    // Simulation de traitement
-    const selectedOfferData = offers.find(offer => offer.id === selectedOfferId);
-    const offerName = selectedOfferData?.name || 'Standard';
-    const totalPrice = selectedOfferData?.price || 45000;
-    const generatedOrderNumber = `PEL-${Date.now()}`;
+    setIsSubmitting(true);
     
-    setOrderNumber(generatedOrderNumber);
-    
-    alert(`Commande confirmée!\n\nOffre: ${offerName}\nTotal: ${totalPrice.toLocaleString('fr-FR')} FCFA\n\nUn email de confirmation vous sera envoyé à ${formData.email}`);
-    
-    // Téléchargement de la facture
-    downloadInvoice(generatedOrderNumber);
-    
-    // Fermer le modal et réinitialiser
+    // Simulation d'envoi
     setTimeout(() => {
-      onClose();
-      setShowCheckout(false);
-      setOrderNumber(null);
-    }, 500);
+      const orderNum = `HL${Date.now()}`;
+      setOrderNumber(orderNum);
+      setIsSubmitting(false);
+      setShowSuccess(true);
+      
+      // Fermer la modal après 3 secondes et afficher la demande de facture
+      setTimeout(() => {
+        setShowSuccess(false);
+        setShowInvoiceModal(true);
+      }, 3000);
+    }, 2000);
   };
 
   const downloadInvoice = async (orderId: string) => {
@@ -137,199 +130,148 @@ export const OfferModal = ({ isOpen, selectedOfferId, onClose }: OfferModalProps
       address: formData.address,
       date: new Date().toLocaleDateString('fr-FR'),
       orderNumber: orderId,
-      paymentMethod: formData.paymentMethod
+      paymentMethod: 'Paiement en ligne sécurisé'
     };
 
-    // Générer le contenu du QR code (données de commande)
-    const qrContent = `Commande: ${invoiceData.orderNumber}\nMontant: ${invoiceData.price}\nClient: ${invoiceData.customerName}\nEmail: ${invoiceData.email}`;
-
-    // Créer un document PDF
-    const doc = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4'
-    });
-
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    let yPosition = 20;
-
-    // Titre
-    doc.setFontSize(18);
-    doc.setTextColor(255, 20, 147); // Rose
-    doc.text('FACTURE ÉTERNITÉ AMOUR', pageWidth / 2, yPosition, { align: 'center' });
-    yPosition += 15;
-
+    // Créer le PDF
+    const doc = new jsPDF();
+    
+    // En-tête de la facture
+    doc.setFontSize(20);
+    doc.setTextColor(255, 20, 147);
+    doc.text('FACTURE', 105, 20, { align: 'center' });
+    
+    // Logo SVG simplifié
+    doc.setFontSize(8);
+    doc.setTextColor(255, 20, 147);
+    doc.text('❤️ HUGGY LOVE ❤️', 105, 30, { align: 'center' });
+    
+    // Informations de l'entreprise
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Huggy Love', 20, 45);
+    doc.text('Site: https://huggylove.netlify.app', 20, 50);
+    doc.text('Email: contact@huggylove.com', 20, 55);
+    
+    // Informations client
+    doc.text(`Numéro: ${invoiceData.orderNumber}`, 140, 45);
+    doc.text(`Date: ${invoiceData.date}`, 140, 50);
+    doc.text(`Client: ${invoiceData.customerName}`, 140, 55);
+    
     // Ligne de séparation
     doc.setDrawColor(255, 20, 147);
-    doc.line(15, yPosition, pageWidth - 15, yPosition);
-    yPosition += 10;
-
-    // Numéro de commande et date
-    doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Commande: ${invoiceData.orderNumber}`, 20, yPosition);
-    yPosition += 7;
-    doc.text(`Date: ${invoiceData.date}`, 20, yPosition);
-    yPosition += 15;
-
-    // Section Client
+    doc.line(20, 65, 190, 65);
+    
+    // Tableau des produits
     doc.setFontSize(12);
     doc.setTextColor(255, 20, 147);
-    doc.text('CLIENT:', 20, yPosition);
-    yPosition += 8;
+    doc.text('DÉTAILS DE LA COMMANDE', 105, 80, { align: 'center' });
     
+    // En-têtes du tableau
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(20, 90, 170, 10);
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
-    doc.text(`Nom: ${invoiceData.customerName}`, 25, yPosition);
-    yPosition += 6;
-    doc.text(`Email: ${invoiceData.email}`, 25, yPosition);
-    yPosition += 6;
-    doc.text(`Téléphone: ${invoiceData.phone}`, 25, yPosition);
-    yPosition += 6;
-    doc.text(`Adresse: ${invoiceData.address}`, 25, yPosition);
-    yPosition += 12;
-
-    // Section Article
+    doc.text('Article', 25, 97);
+    doc.text('Prix', 165, 97);
+    
+    // Contenu du tableau
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(20, 100, 170, 10);
+    doc.text(invoiceData.offer, 25, 107);
+    doc.text(invoiceData.price, 165, 107);
+    
+    // Informations de livraison
     doc.setFontSize(12);
     doc.setTextColor(255, 20, 147);
-    doc.text('ARTICLE:', 20, yPosition);
-    yPosition += 8;
+    doc.text('INFORMATIONS DE LIVRAISON', 105, 130, { align: 'center' });
     
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
-    doc.text(invoiceData.offer, 25, yPosition);
-    yPosition += 6;
-    doc.text(`Prix: ${invoiceData.price}`, 25, yPosition);
-    yPosition += 12;
-
-    // Section Livraison
+    doc.text(`Nom: ${invoiceData.customerName}`, 20, 140);
+    doc.text(`Email: ${invoiceData.email}`, 20, 145);
+    doc.text(`Téléphone: ${invoiceData.phone}`, 20, 150);
+    doc.text(`Adresse: ${invoiceData.address}`, 20, 155);
+    
+    // Total
+    doc.setFontSize(14);
+    doc.setTextColor(255, 20, 147);
+    doc.text(`TOTAL: ${invoiceData.price}`, 140, 170);
+    
+    // Méthode de paiement
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Méthode: ${invoiceData.paymentMethod}`, 20, 180);
+    
+    // Code QR simplifié
+    doc.setDrawColor(0, 0, 0);
+    doc.rect(150, 185, 40, 40);
+    doc.setFontSize(8);
+    doc.text('Code QR', 170, 205, { align: 'center' });
+    doc.text('Vérification', 170, 210, { align: 'center' });
+    
+    // Signature
     doc.setFontSize(12);
     doc.setTextColor(255, 20, 147);
-    doc.text('LIVRAISON:', 20, yPosition);
-    yPosition += 8;
+    doc.text('Merci pour votre confiance !', 105, 245, { align: 'center' });
+    doc.text('Huggy Love - Fabriqué avec ❤️ au Bénin', 105, 255, { align: 'center' });
     
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.text('Avant le 14 février 2026', 25, yPosition);
-    yPosition += 12;
-
-    // Section Paiement
-    doc.setFontSize(12);
-    doc.setTextColor(255, 20, 147);
-    doc.text('PAIEMENT:', 20, yPosition);
-    yPosition += 8;
-    
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    const paymentText = invoiceData.paymentMethod === 'card' ? 'Carte bancaire' : 'Espèces';
-    doc.text(paymentText, 25, yPosition);
-    yPosition += 15;
-
-    // Code QR
-    doc.setFontSize(10);
-    doc.setTextColor(255, 20, 147);
-    doc.text('Code de vérification:', 20, yPosition);
-    yPosition += 8;
-
-    // Générer le code QR et l'ajouter au PDF
-    const qrElement = document.createElement('div');
-    qrElement.style.padding = '10px';
-    qrElement.style.backgroundColor = 'white';
-    
-    // Créer temporairement le QR code hors de l'écran
-    const tempDiv = document.createElement('div');
-    tempDiv.style.position = 'absolute';
-    tempDiv.style.left = '-9999px';
-    tempDiv.style.top = '-9999px';
-    
-    // Utiliser ReactDOM pour créer le QR code - mais on va utiliser la méthode simple avec jsPDF
-    // On va créer un code QR en utilisant une API externe ou une approche alternative
-    // Pour simplifier, on va utiliser une version texte encodée en base64
-    
-    // En attendant, on va ajouter au moins le numéro de commande
-    doc.setFontSize(9);
-    doc.text(`Réf: ${invoiceData.orderNumber}`, 25, yPosition);
-    yPosition += 8;
-    doc.text(`Email: ${invoiceData.email}`, 25, yPosition);
-
-    // Ligne de séparation finale
-    yPosition = pageHeight - 30;
-    doc.setDrawColor(255, 20, 147);
-    doc.line(15, yPosition, pageWidth - 15, yPosition);
-    yPosition += 10;
-
-    // Message de remerciement
-    doc.setFontSize(11);
-    doc.setTextColor(255, 20, 147);
-    doc.text('MERCI POUR VOTRE CONFIANCE !', pageWidth / 2, yPosition, { align: 'center' });
-    yPosition += 6;
-    
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.text("L'amour est le plus beau des cadeaux", pageWidth / 2, yPosition, { align: 'center' });
-
-    // Télécharger le PDF
-    doc.save(`facture_${invoiceData.orderNumber}.pdf`);
+    // Sauvegarder le PDF
+    doc.save(`facture-huggylove-${orderId}.pdf`);
   };
 
   const selectedOfferData = offers.find(offer => offer.id === selectedOfferId);
 
   return (
-    <AnimatePresence>
-      {isOpen && selectedOfferId && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={onClose}
-        >
+    <>
+      {/* Modal principal */}
+      <AnimatePresence>
+        {isOpen && (
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-            onClick={e => e.stopPropagation()}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={onClose}
           >
-            <div className="p-6 lg:p-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="bg-white rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
+              onClick={(e) => e.stopPropagation()}
+            >
               {/* Header */}
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-800">
-                  {showCheckout ? 'Finaliser votre commande' : 'Choisissez votre offre'}
+                  Choisissez votre offre
                 </h2>
-                <Button
-                  variant="ghost"
-                  size="sm"
+                <button
                   onClick={onClose}
+                  className="text-gray-500 hover:text-gray-700 transition-colors"
                 >
-                  <X className="w-4 h-4" />
-                </Button>
+                  <X className="w-6 h-6" />
+                </button>
               </div>
 
-              {!showCheckout ? (
+              {/* Contenu */}
+              {!formData.offer ? (
                 /* Sélection des offres */
-                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <div className="grid md:grid-cols-2 gap-6">
                   {offers.map((offer) => (
                     <motion.div
                       key={offer.id}
                       whileHover={{ scale: 1.02 }}
-                      onClick={() => handleSelectOffer(offer.id)}
-                      className={`relative border-2 rounded-xl p-6 cursor-pointer transition-all ${
-                        selectedOfferId === offer.id
-                          ? 'border-[#FF1493] bg-[#FF1493]/5'
-                          : 'border-gray-200 hover:border-[#FF1493] bg-white'
+                      className={`relative bg-white border-2 rounded-2xl p-6 cursor-pointer transition-all duration-300 ${
+                        offer.popular
+                          ? 'border-pink-500 shadow-lg shadow-pink-200/50'
+                          : 'border-gray-200 hover:border-pink-300'
                       }`}
+                      onClick={() => handleSelectOffer(offer.id)}
                     >
                       {offer.badge && (
-                        <div className="absolute -top-3 -right-3">
-                          <span className={`px-2 py-1 text-xs font-bold rounded-full ${
-                            offer.badge === 'LIMITÉE'
-                              ? 'bg-red-500 text-white'
-                              : 'bg-orange-500 text-white'
-                          }`}>
-                            {offer.badge}
-                          </span>
+                        <div className="absolute -top-3 -right-3 bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                          {offer.badge}
                         </div>
                       )}
 
@@ -354,24 +296,20 @@ export const OfferModal = ({ isOpen, selectedOfferId, onClose }: OfferModalProps
                         </div>
                       </div>
 
-                      <ul className="space-y-3">
+                      <div className="space-y-3">
                         {offer.features.map((feature, index) => (
-                          <li
-                            key={index}
-                            className="flex items-start gap-3"
-                          >
-                            <Heart className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                          <div key={index} className="flex items-center gap-3">
+                            <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
                             <span className="text-gray-700">{feature}</span>
-                          </li>
+                          </div>
                         ))}
-                      </ul>
+                      </div>
 
                       <Button
-                        type="button"
-                        className="w-full mt-4"
+                        className="w-full mt-6 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3"
                         onClick={() => handleSelectOffer(offer.id)}
                       >
-                        {offer.popular ? 'CHOISIR CETTE OFFRE' : 'Sélectionner'}
+                        Choisir cette offre
                       </Button>
                     </motion.div>
                   ))}
@@ -398,120 +336,164 @@ export const OfferModal = ({ isOpen, selectedOfferId, onClose }: OfferModalProps
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Nom complet *
+                        Nom complet
                       </label>
                       <input
                         type="text"
                         required
                         value={formData.name}
-                        onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF1493] focus:border-transparent"
-                        placeholder="Votre nom et prénom"
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                        placeholder="Votre nom complet"
                       />
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Email *
+                        Email
                       </label>
                       <input
                         type="email"
                         required
                         value={formData.email}
-                        onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF1493] focus:border-transparent"
-                        placeholder="votre.email@email.com"
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                        placeholder="votre@email.com"
                       />
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Téléphone *
+                        Téléphone
                       </label>
                       <input
                         type="tel"
                         required
                         value={formData.phone}
-                        onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF1493] focus:border-transparent"
-                        placeholder="+226 XX XX XX XX XX"
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                        placeholder="+229 XX XX XX XX"
                       />
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Adresse de livraison *
+                        Adresse de livraison
                       </label>
                       <textarea
                         required
                         value={formData.address}
-                        onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                         rows={3}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF1493] focus:border-transparent"
                         placeholder="Votre adresse complète"
                       />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Voulez-vous être livré ? *
-                      </label>
-                      <div className="flex gap-4">
-                        <label className="flex items-center">
-                          <input
-                            type="radio"
-                            name="delivery"
-                            value="yes"
-                            checked={formData.delivery === 'yes'}
-                            onChange={(e) => setFormData(prev => ({ ...prev, delivery: e.target.value }))}
-                            className="mr-2"
-                          />
-                          <span>Oui</span>
-                        </label>
-                        <label className="flex items-center">
-                          <input
-                            type="radio"
-                            name="delivery"
-                            value="no"
-                            checked={formData.delivery === 'no'}
-                            onChange={(e) => setFormData(prev => ({ ...prev, delivery: e.target.value }))}
-                            className="mr-2"
-                          />
-                          <span>Non</span>
-                        </label>
-                      </div>
                     </div>
                   </div>
 
                   <div className="flex gap-4">
                     <Button
                       type="submit"
-                      className="flex-1 bg-[#FF1493] hover:bg-[#FF0000] text-white"
+                      disabled={isSubmitting}
+                      className="flex-1 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3"
                     >
-                      <Package className="w-4 h-4 mr-2" />
-                      Confirmer la commande
-                    </Button>
-                    
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => orderNumber && downloadInvoice(orderNumber)}
-                      className="flex-1"
-                    >
-                      <FileText className="w-4 h-4 mr-2" />
-                      Télécharger la facture
+                      {isSubmitting ? 'Envoi en cours...' : 'Envoyer'}
                     </Button>
                   </div>
                 </form>
               )}
-            </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        )}
+      </AnimatePresence>
+
+      {/* Modal de succès */}
+      <AnimatePresence>
+        {showSuccess && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="bg-white rounded-2xl p-8 max-w-md mx-4 text-center"
+            >
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Check className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                Commande réussie !
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Votre commande a été enregistrée avec succès
+              </p>
+              <p className="text-sm text-gray-500">
+                Préparation de votre facture...
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Modal de demande de facture */}
+      <AnimatePresence>
+        {showInvoiceModal && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="bg-white rounded-2xl p-8 max-w-md mx-4 text-center"
+            >
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FileText className="w-8 h-8 text-blue-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                Télécharger votre facture ?
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Votre facture est prête à être téléchargée
+              </p>
+              <div className="flex gap-4 justify-center">
+                <button
+                  onClick={() => {
+                    setShowInvoiceModal(false);
+                    onClose();
+                  }}
+                  className="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-semibold transition-colors"
+                >
+                  Non
+                </button>
+                <button
+                  onClick={() => {
+                    if (orderNumber) {
+                      downloadInvoice(orderNumber);
+                    }
+                    setShowInvoiceModal(false);
+                    onClose();
+                  }}
+                  className="px-6 py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-lg font-semibold transition-colors"
+                >
+                  Oui
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
