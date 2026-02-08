@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Send, Copy, Check, Share2 } from 'lucide-react';
+import { Heart, Send, Copy, Check, Share2, MessageCircle, Mail } from 'lucide-react';
 
 const LoveMessagePage = () => {
   const navigate = useNavigate();
@@ -43,20 +43,47 @@ const LoveMessagePage = () => {
   };
 
   const handleShare = async () => {
+    const messageText = 'J\'ai créé un message spécial pour toi! 💌';
+    const shareText = `${messageText} ${generatedLink}`;
+
+    // Options de partage
+    const shareOptions = [
+      {
+        name: 'WhatsApp',
+        action: () => window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank')
+      },
+      {
+        name: 'Telegram',
+        action: () => window.open(`https://t.me/share/url?url=${encodeURIComponent(generatedLink)}&text=${encodeURIComponent(messageText)}`, '_blank')
+      },
+      {
+        name: 'Email',
+        action: () => window.location.href = `mailto:?subject=${encodeURIComponent('Un message d\'amour pour toi 💌')}&body=${encodeURIComponent(shareText)}`
+      },
+      {
+        name: 'Facebook',
+        action: () => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(generatedLink)}`, '_blank')
+      },
+      {
+        name: 'Twitter',
+        action: () => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(messageText)}&url=${encodeURIComponent(generatedLink)}`, '_blank')
+      }
+    ];
+
     if (navigator.share) {
       try {
         await navigator.share({
           title: 'Un message d\'amour pour toi 💌',
-          text: 'J\'ai créé un message spécial pour toi!',
+          text: messageText,
           url: generatedLink,
         });
       } catch (err) {
-        console.log('Erreur lors du partage:', err);
+        console.log('Partage annulé:', err);
       }
     } else {
-      // Fallback: ouvrir les options de partage
-      const shareText = encodeURIComponent(`J'ai créé un message spécial pour toi! ${generatedLink}`);
-      window.open(`https://wa.me/?text=${shareText}`, '_blank');
+      // Menu de sélection du réseau social
+      const selected = shareOptions[0]; // Défaut WhatsApp
+      selected.action();
     }
   };
 
@@ -312,15 +339,68 @@ const LoveMessagePage = () => {
             {/* Bouton Partager natif */}
             <button
               onClick={handleShare}
-              className="w-full px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg font-medium hover:shadow-lg transition-all flex items-center justify-center gap-2"
+              className="w-full px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg font-medium hover:shadow-lg transition-all flex items-center justify-center gap-2 mb-3"
             >
               <Share2 className="w-4 h-4" />
-              Partager directement (WhatsApp, SMS...)
+              Partager directement
             </button>
+
+            {/* Boutons de partage réseaux sociaux */}
+            <div className="grid grid-cols-3 gap-2">
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent('Regarde ce message d\'amour! 💌 ' + generatedLink)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors text-sm font-medium"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>WhatsApp</span>
+              </a>
+              <a
+                href={`mailto:?subject=Un message d'amour&body=Je t'ai créé un message spécial: ${generatedLink}`}
+                className="flex items-center justify-center gap-1 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors text-sm font-medium"
+              >
+                <Mail className="w-4 h-4" />
+                <span>Email</span>
+              </a>
+              <a
+                href={`https://t.me/share/url?url=${encodeURIComponent(generatedLink)}&text=Regarde ce message d'amour!`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1 px-3 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors text-sm font-medium"
+              >
+                <Send className="w-4 h-4" />
+                <span>Telegram</span>
+              </a>
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(generatedLink)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
+              >
+                <span>Facebook</span>
+              </a>
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('Je t\'ai créé un message d\'amour! 💌')} ${generatedLink}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1 px-3 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-lg transition-colors text-sm font-medium"
+              >
+                <span>Twitter</span>
+              </a>
+              <a
+                href={`https://t.me/share/url?url=${encodeURIComponent(generatedLink)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1 px-3 py-2 bg-gradient-to-br from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-colors text-sm font-medium"
+              >
+                <span>Instagram</span>
+              </a>
+            </div>
           </div>
 
           <p className="text-sm text-gray-600 mb-6">
-            3 façons de partager votre message:
+            Partagez votre message sur vos réseaux sociaux favoris:
           </p>
 
           <div className="flex gap-3">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Share2, Facebook, Twitter, Instagram, Link2, Volume2, VolumeX } from 'lucide-react';
+import { Share2, Facebook, Twitter, Instagram, Link2, Volume2, VolumeX, MessageCircle, Send, Linkedin, Music2, Pin } from 'lucide-react';
 
 interface ShareButtonProps {
   className?: string;
@@ -25,6 +25,12 @@ export const ShareButton = ({ className = "" }: ShareButtonProps) => {
 
   const shareLinks = [
     {
+      name: "WhatsApp",
+      icon: MessageCircle,
+      url: `https://wa.me/?text=${encodeURIComponent(shareText + " " + shareUrl)}`,
+      color: "bg-green-500 hover:bg-green-600"
+    },
+    {
       name: "Facebook",
       icon: Facebook,
       url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`,
@@ -41,6 +47,30 @@ export const ShareButton = ({ className = "" }: ShareButtonProps) => {
       icon: Instagram,
       url: `https://www.instagram.com/`,
       color: "bg-gradient-to-br from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+    },
+    {
+      name: "Telegram",
+      icon: Send,
+      url: `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`,
+      color: "bg-cyan-500 hover:bg-cyan-600"
+    },
+    {
+      name: "TikTok",
+      icon: Music2,
+      url: `https://www.tiktok.com/`,
+      color: "bg-black hover:bg-gray-800"
+    },
+    {
+      name: "Pinterest",
+      icon: Pin,
+      url: `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareUrl)}&description=${encodeURIComponent(shareText)}`,
+      color: "bg-red-600 hover:bg-red-700"
+    },
+    {
+      name: "LinkedIn",
+      icon: Linkedin,
+      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+      color: "bg-blue-800 hover:bg-blue-900"
     },
     {
       name: "Copier le lien",
