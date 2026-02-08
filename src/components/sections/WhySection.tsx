@@ -54,7 +54,6 @@ const TypewriterText = ({ text, isInView }: { text: string; isInView: boolean })
   return (
     <span>
       {displayedText}
-      {isTyping && <span className="animate-pulse">|</span>}
     </span>
   );
 };

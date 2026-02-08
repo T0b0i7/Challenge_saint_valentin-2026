@@ -106,7 +106,7 @@ export const ReassuranceSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section className="py-24 lg:py-32 bg-muted" ref={ref}>
+    <section id="reassurance" className="py-24 lg:py-32 bg-muted" ref={ref}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

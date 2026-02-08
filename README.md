@@ -1,76 +1,59 @@
-# Eternal Embrace Maker
+# 🎁 Eternal Embrace Maker - E-commerce Saint-Valentin
 
-Un projet romantique interactif pour la Saint-Valentin avec animations et expériences immersives.
+Une landing page e-commerce premium pour la Saint-Valentin avec animations sophistiquées, modal de paiement et génération de factures PDF.
 
 ## 📁 Structure du projet
 
 ```
 src/
 ├── components/
-│   ├── ui/                    # Composants shadcn/ui (inchangé)
-│   ├── layout/                # Composants de mise en page
-│   │   ├── Footer.tsx
-│   │   └── NavLink.tsx
-│   ├── sections/              # Sections de la page principale
-│   │   ├── HeroSection.tsx
-│   │   ├── BenefitsSection.tsx
-│   │   ├── ProductSection.tsx
-│   │   ├── PricingSection.tsx
-│   │   ├── TestimonialsSection.tsx
-│   │   ├── WhySection.tsx
-│   │   ├── ReassuranceSection.tsx
-│   │   ├── FinalCTASection.tsx
-│   │   └── HeartSyncSection.tsx
-│   ├── valentine/             # Composants thématiques Saint-Valentin
-│   │   ├── ValentinePreloader.tsx
-│   │   ├── ValentinePrompt.tsx
-│   │   ├── ValentineYes.tsx
-│   │   └── animations/
-│   │       ├── HeartDrawingAnimation.tsx
-│   │       └── CurtainOpeningAnimation.tsx
-│   ├── effects/               # Effets visuels et animations
+│   ├── common/                # Composants partagés
+│   │   ├── AnimatedTitle.tsx  # Titres animés avec typewriter
+│   │   ├── LandingPage.tsx    # Page d'accueil principale
+│   │   └── TransitionManager.tsx
+│   ├── sections/              # Sections de la landing page
+│   │   ├── HeroSection.tsx          # Vidéo + hero principal (autoplay/pause)
+│   │   ├── WhySection.tsx           # Animation wave sur titres
+│   │   ├── ProductSection.tsx       # Présentation produit
+│   │   ├── BenefitsSection.tsx      # Avantages émotionnels
+│   │   ├── PricingSection.tsx       # Pricing avec modal
+│   │   ├── ReassuranceSection.tsx   # Garanties
+│   │   ├── TestimonialsSection.tsx  # Avis clients
+│   │   └── FinalCTASection.tsx      # Dernier CTA
+│   ├── interactive/           # Composants interactifs
+│   │   ├── OfferModal.tsx      # Modal d'offre + PDF
+│   │   ├── CountdownTimer.tsx  # Compte à rebours
+│   │   └── HeartbeatCanvas.tsx
+│   ├── effects/               # Effets visuels
 │   │   ├── FloatingHearts.tsx
 │   │   ├── HeartCascade.tsx
-│   │   ├── HeartConfetti.tsx
-│   │   ├── CursorHeartTrail.tsx
-│   │   ├── ParticleRipple.tsx
-│   │   ├── HangingLoveHearts.tsx
 │   │   ├── PetalRainBackground.tsx
-│   │   └── StarfieldBackground.tsx
-│   ├── interactive/           # Composants interactifs
-│   │   ├── BreathingPlush.tsx
-│   │   ├── HeartbeatCanvas.tsx
-│   │   ├── CountdownTimer.tsx
-│   │   └── MorphingTransition.tsx
-│   └── common/                # Composants réutilisables
-│       ├── AnimatedTitle.tsx
-│       ├── ParallaxSection.tsx
-│       └── LandingPage.tsx
-├── pages/                     # Pages de l'application
-│   ├── HomePage.tsx
-│   └── NotFound.tsx
-├── hooks/                     # Hooks personnalisés
-│   ├── ui/
-│   │   ├── use-mobile.tsx
-│   │   └── use-toast.ts
-│   └── valentine/
-│       ├── useHeartbeat.ts
-│       └── useHeartbeatAudio.ts
-├── assets/
-│   └── images/                # Images et assets statiques
-│       └── pelluche_produit.jpg
-└── lib/                       # Utilitaires et fonctions partagées
-    └── utils.ts
+│   │   └── ParticleRipple.tsx
+│   └── ui/                    # Composants shadcn/ui
+├── pages/
+│   ├── Index.tsx              # Landing page
+│   ├── HeartAnimationPage.tsx # Page d'animation cœur
+│   └── ValentineQuestionPage.tsx
+├── hooks/
+│   ├── valentine/             # Hooks Valentine
+│   └── ui/
+├── lib/
+│   └── utils.ts
+└── assets/
+    └── images/
+        └── pelluche_produit.jpg
 ```
 
 ## 🚀 Technologies utilisées
 
-- **React 18** avec TypeScript
-- **Vite** comme bundler
-- **Tailwind CSS** pour le style
-- **shadcn/ui** pour les composants UI
-- **Framer Motion** pour les animations
-- **React Router** pour la navigation
+- **React 18** + TypeScript
+- **Vite** - Build tool ultra-rapide
+- **Tailwind CSS** - Styling utilitaire
+- **Framer Motion** - Animations avancées
+- **jsPDF v2.5.1** - Génération de factures PDF
+- **Radix UI** + **shadcn/ui** - Composants UI accessibles
+- **Lucide React** - Icônes
+- **React Router v6** - Navigation
 
 ## 📦 Installation
 
@@ -90,19 +73,75 @@ npm run test
 
 ## 🎯 Fonctionnalités principales
 
-- **Page d'accueil immersive** avec animations et effets visuels
-- **Expérience Saint-Valentin** interactive avec préloader
-- **Synchronisation cardiaque** avec effets visuels
-- **Compte à rebours** et animations morphing
-- **Design responsive** et optimisé
+### 🎬 Hero Section Dynamique
+- **Vidéo d'arrière-plan** avec contrôle utilisateur
+- **Démarrage en pause** - L'utilisateur décide quand jouer
+- **Bouton Play/Pause** pour contrôle full video
+- **Menu Navigation (Home icon)** avec 8 raccourcis :
+  - ▶️ Hero
+  - ❓ Pourquoi l'offrir ?
+  - 📦 Produit
+  - 🎁 Bénéfices
+  - 💰 Pricing
+  - ✅ Garanties
+  - ⭐ Avis clients
+  - ⚡ Dernier CTA
+- **Icônes Lucide React** pour chaque menu item
+- Vidéo réduite en opacité (0.6) et légèrement zoomée pour meilleure lisibilité
+
+### 🛍️ Modal d'Offre avec PDF
+- **2 offres** : Standard (45k FCFA) et Ultimate (75k FCFA)
+- **Génération facture PDF** avec tousles détails
+- Code de vérification alphanumérique unique
+- Formulaire client complet
+- Photos produit intégrées
+
+### ✨ Animations de Titres (Wave Effect)
+Les 7 sections principales ont des titres animés identiques :
+- **Entrée** : Flip 3D (rotateX) avec stagger par mot
+- **Glow continu** : Pulse rose/magenta autour des mots
+- **Hover** : Ondulation fluide par lettre
+- **Sortie** : Retour lisse à la position initiale
+
+### 📱 Design Responsive
+- Optimisé mobile, tablette et desktop
+- Layout fluide et adaptatif
+- Boutons et formulaires responsive
 
 ## 🎨 Thème et design
 
-- Palette de couleurs romantique (rose, rouge passion)
-- Animations fluides et micro-interactions
+- Palette de couleurs romantique (Deep Pink #FF1493, Crimson #DC143C)
+- Animations fluides avec Framer Motion
 - Typographie élégante avec Dancing Script
-- Effets de parallaxe et particules
+- Effets de parallaxe et particules animées
+- **Hero video** avec contrôle pause/play au scroll
+
+## 🔧 Configuration Importante
+
+### Fichiers vidéo Hero
+- Localisation : `/public/` (racine du projet)
+- Formats requis : MP4 + WebM (fallback)
+- Noms : `I love you.mp4`, `I love you.webm`
+- Contrôle : Autoplay avec son activé (muted=false)
+
+### Modal d'Offre
+- Intégrée dans PricingSection.tsx
+- Génère PDF avec jsPDF
+- Stockage client temporaire
+- Téléchargement automatique
+
+## 🌟 Sections animées avec Wave Effect
+
+Tous les titres suivent le même pattern d'animation :
+
+✨ **WhySection** - "Pourquoi l'offrir ?"
+✨ **ProductSection** - "Chaque détail pensé avec amour"
+✨ **BenefitsSection** - "Plus qu'une peluche, un témoin de votre histoire"
+✨ **PricingSection** - "L'investissement le plus précieux : votre bonheur"
+✨ **ReassuranceSection** - "Nous prenons soin de votre cœur comme du nôtre"
+✨ **TestimonialsSection** - "Ils ont fait le choix de l'amour, et vous ?"
+✨ **FinalCTASection** - "Parce que certaines étreintes ne devraient jamais s'arrêter"
 
 ---
 
-*Projet réorganisé avec une structure logique et maintenable*
+*Mise à jour : 8 Février 2026 - Version 2.0 avec animations Wave et Modal PDF*

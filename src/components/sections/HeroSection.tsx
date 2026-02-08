@@ -1,5 +1,5 @@
 import { motion, useInView } from 'framer-motion';
-import { ArrowDown, Heart, Volume2, VolumeX } from 'lucide-react';
+import { ArrowDown, Heart, Play, Pause, Home, HelpCircle, Package, Gift, DollarSign, ShieldCheck, Star, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CountdownTimer } from '../interactive/CountdownTimer';
 import { AnimatedTitle, AnimatedItalicWord } from '../common/AnimatedTitle';
@@ -11,60 +11,42 @@ export const HeroSection = () => {
   const sectionRef = useRef<HTMLVideoElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(sectionRef, { amount: 0.5 });
-  const [isMuted, setIsMuted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Démarrer la vidéo une seule fois
-    const playVideo = () => {
-      if (video.paused) {
-        video.play().catch(error => {
-          console.log("Erreur lors de la lecture de la vidéo:", error);
-        });
-      }
+    // Définir le vidéo comme chargé quand possible
+    const handleCanPlay = () => {
       setIsVideoLoaded(true);
+      console.log("Vidéo prête à jouer (utilisateur contrôle)");
+      // Assurer que la vidéo est en pause au chargement
+      if (!video.paused) {
+        video.pause();
+        setIsPlaying(false);
+      }
     };
 
-    // Démarrer la lecture quand c'est possible
-    video.addEventListener('canplay', playVideo);
-
-    // Gestion de la fin de la vidéo pour la boucler
-    const handleEnded = () => {
-      video.currentTime = 0;
-      video.play().catch(e => console.log("Erreur lors de la reprise:", e));
-    };
-    video.addEventListener('ended', handleEnded);
-
-    // Essayer de jouer immédiatement
-    playVideo();
+    video.addEventListener('canplay', handleCanPlay);
 
     return () => {
-      video.removeEventListener('canplay', playVideo);
-      video.removeEventListener('ended', handleEnded);
+      video.removeEventListener('canplay', handleCanPlay);
     };
   }, []);
 
-  // Pause/Play basé sur la visibilité de la section
-  useEffect(() => {
+  const togglePlay = () => {
     const video = videoRef.current;
     if (!video) return;
 
-    if (isInView) {
-      // Reprendre la vidéo quand on revient à la section
-      video.play().catch(e => console.log("Erreur lors de la reprise de lecture:", e));
-    } else {
-      // Pause la vidéo quand on quitte la section
+    if (isPlaying) {
       video.pause();
-    }
-  }, [isInView]);
-
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
+      setIsPlaying(false);
+    } else {
+      video.play().catch(e => console.log("Erreur lors de la reprise:", e));
+      setIsPlaying(true);
     }
   };
 
@@ -73,29 +55,19 @@ export const HeroSection = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Video Background - Optimisé pour lecture continue avec son */}
+    <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Video Background - Utilisateur contrôle le play/pause */}
       <video
         ref={videoRef}
         className="absolute inset-0 w-full h-full object-cover min-w-full min-h-full -z-10"
-        loop
         playsInline
-        autoPlay
-        muted={false}
         preload="auto"
-        style={{ opacity: 0.8 }}
+        style={{ opacity: 0.6, transform: 'scale(1.05)' }}
         onError={(e) => console.log("Video error:", e)}
         onLoadStart={() => console.log("Video load start")}
         onCanPlay={() => console.log("Video can play")}
         onCanPlayThrough={() => console.log("Video can play through")}
         onLoadedData={() => console.log("Video loaded data")}
-        onEnded={() => {
-          console.log("Video ended, restarting...");
-          if (videoRef.current) {
-            videoRef.current.currentTime = 0;
-            videoRef.current.play().catch(e => console.log("Loop restart error:", e));
-          }
-        }}
       >
         <source src="/I love you.mp4" type="video/mp4" />
         <source src="/I love you.webm" type="video/webm" />
@@ -112,21 +84,129 @@ export const HeroSection = () => {
       {/* Overlay léger pour lisibilité */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-[#FF1493]/10 to-black/20 -z-5" />
       
-      {/* Bouton de contrôle du son */}
+      {/* Bouton Home avec Menu Navigation */}
+      <div className="absolute top-4 left-4 z-20">
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="bg-white/90 backdrop-blur-sm rounded-full p-3 hover:bg-white transition-colors"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          aria-label="Menu navigation"
+        >
+          <Home className="w-5 h-5 text-pink-600" />
+        </motion.button>
+
+        {/* Menu déroulant */}
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute top-16 left-0 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-4 min-w-max border border-pink-200"
+          >
+            <nav className="space-y-2">
+              <button
+                onClick={() => {
+                  scrollToSection('hero');
+                  setMenuOpen(false);
+                }}
+                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+              >
+                <Play className="w-4 h-4" />
+                Hero
+              </button>
+              <button
+                onClick={() => {
+                  scrollToSection('why');
+                  setMenuOpen(false);
+                }}
+                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+              >
+                <HelpCircle className="w-4 h-4" />
+                Pourquoi l'offrir ?
+              </button>
+              <button
+                onClick={() => {
+                  scrollToSection('product');
+                  setMenuOpen(false);
+                }}
+                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+              >
+                <Package className="w-4 h-4" />
+                Produit
+              </button>
+              <button
+                onClick={() => {
+                  scrollToSection('benefits');
+                  setMenuOpen(false);
+                }}
+                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+              >
+                <Gift className="w-4 h-4" />
+                Bénéfices
+              </button>
+              <button
+                onClick={() => {
+                  scrollToSection('pricing');
+                  setMenuOpen(false);
+                }}
+                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+              >
+                <DollarSign className="w-4 h-4" />
+                Pricing
+              </button>
+              <button
+                onClick={() => {
+                  scrollToSection('reassurance');
+                  setMenuOpen(false);
+                }}
+                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+              >
+                <ShieldCheck className="w-4 h-4" />
+                Garanties
+              </button>
+              <button
+                onClick={() => {
+                  scrollToSection('testimonials');
+                  setMenuOpen(false);
+                }}
+                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+              >
+                <Star className="w-4 h-4" />
+                Avis clients
+              </button>
+              <button
+                onClick={() => {
+                  scrollToSection('cta');
+                  setMenuOpen(false);
+                }}
+                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+              >
+                <Zap className="w-4 h-4" />
+                Dernier CTA
+              </button>
+            </nav>
+          </motion.div>
+        )}
+      </div>
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        onClick={toggleMute}
+        transition={{ delay: 0.5 }}
+        onClick={togglePlay}
         className="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur-sm rounded-full p-3 hover:bg-white transition-colors"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
+        aria-label={isPlaying ? "Pause la vidéo" : "Jouer la vidéo"}
       >
-        {isMuted ? (
-          <VolumeX className="w-5 h-5 text-pink-600" />
+        {isPlaying ? (
+          <Pause className="w-5 h-5 text-pink-600" />
         ) : (
-          <Volume2 className="w-5 h-5 text-pink-600" />
+          <Play className="w-5 h-5 text-pink-600" />
         )}
       </motion.button>
       
@@ -217,11 +297,11 @@ export const HeroSection = () => {
                  </Button>
                </ParticleRipple>
               <Button
-                className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 xs:px-8 xs:py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+                className="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 xs:px-5 xs:py-2 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-1"
                 onClick={() => scrollToSection('product')}
               >
                 ❤️
-                Découvrir
+                <span className="hidden xs:inline">Découvrir</span>
               </Button>
             </motion.div>
 

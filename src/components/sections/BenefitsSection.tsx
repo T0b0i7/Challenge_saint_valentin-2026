@@ -101,7 +101,7 @@ export const BenefitsSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section className="py-24 lg:py-32 bg-soft-pink relative overflow-hidden" ref={ref}>
+    <section id="benefits" className="py-24 lg:py-32 bg-soft-pink relative overflow-hidden" ref={ref}>
       {/* Decorative Background */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />

@@ -90,7 +90,7 @@ export const FinalCTASection = () => {
   };
 
   return (
-    <section className="relative py-24 lg:py-32 bg-gradient-hero overflow-hidden" ref={ref}>
+    <section id="cta" className="relative py-24 lg:py-32 bg-gradient-hero overflow-hidden" ref={ref}>
       {/* Floating Hearts */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(8)].map((_, i) => (
