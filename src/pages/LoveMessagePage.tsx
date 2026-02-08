@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Heart, Send, Copy, Check, Share2, MessageCircle, Mail, Upload, User } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Heart, Send, Copy, Check, Share2, MessageCircle, Mail, Upload, User, ChevronDown } from 'lucide-react';
 
 const LoveMessagePage = () => {
   const navigate = useNavigate();
@@ -19,6 +19,7 @@ const LoveMessagePage = () => {
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [senderImage, setSenderImage] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [showSocialDrawer, setShowSocialDrawer] = useState(false);
 
   // Encoder le message avec les métadonnées
   const encodeMessage = (msg: string, name: string, anon: boolean, image: string | null): string => {
@@ -137,14 +138,14 @@ const LoveMessagePage = () => {
     
     if (!decodedData || !decodedData.message || decodedData.message.trim().length === 0) {
       return (
-        <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-3 sm:p-4">
           <div className="text-center text-white">
-            <Heart className="w-16 h-16 mx-auto mb-4 text-pink-300" />
-            <h2 className="text-2xl font-bold mb-2">Message invalide</h2>
-            <p className="text-pink-200 mb-6">Ce lien ne contient pas un message valide.</p>
+            <Heart className="w-12 sm:w-16 h-12 sm:h-16 mx-auto mb-3 sm:mb-4 text-pink-300" />
+            <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Message invalide</h2>
+            <p className="text-pink-200 mb-4 sm:mb-6 text-sm sm:text-base">Ce lien ne contient pas un message valide.</p>
             <button
               onClick={() => navigate('/landing-page')}
-              className="px-6 py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-full transition-colors"
+              className="px-4 sm:px-6 py-2 sm:py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-full transition-colors text-sm sm:text-base"
             >
               Retour au landing
             </button>
@@ -161,43 +162,43 @@ const LoveMessagePage = () => {
     });
   }
 
-  // Vue lecture du message
+  // Vue lecture du message - Responsive
   if (viewMessage && viewSender) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-3 sm:p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="max-w-2xl w-full bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl"
+          className="max-w-2xl w-full bg-white/95 backdrop-blur-sm rounded-3xl p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
         >
-          <div className="text-center mb-8">
-            <Heart className="w-12 h-12 mx-auto text-pink-500 mb-4 animate-pulse" />
-            <h1 className="text-3xl font-bold text-pink-600 mb-2">Un message d'amour pour toi 💌</h1>
+          <div className="text-center mb-6 sm:mb-8">
+            <Heart className="w-10 sm:w-12 h-10 sm:h-12 mx-auto text-pink-500 mb-3 sm:mb-4 animate-pulse" />
+            <h1 className="text-xl sm:text-3xl font-bold text-pink-600 mb-2">Un message d'amour pour toi 💌</h1>
           </div>
 
-          {/* Avatar/Image du sender */}
+          {/* Avatar/Image du sender - Responsive */}
           {viewSender.image && (
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="flex justify-center mb-6"
+              className="flex justify-center mb-4 sm:mb-6"
             >
               <img 
                 src={viewSender.image} 
                 alt="Sender" 
-                className="w-24 h-24 rounded-full object-cover border-4 border-pink-400 shadow-lg"
+                className="w-16 sm:w-24 h-16 sm:h-24 rounded-full object-cover border-4 border-pink-400 shadow-lg"
               />
             </motion.div>
           )}
 
-          {/* Nom du sender */}
+          {/* Nom du sender - Responsive */}
           {!viewSender.isAnonymous && viewSender.name && (
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="text-center text-pink-600 font-semibold text-lg mb-6"
+              className="text-center text-pink-600 font-semibold text-base sm:text-lg mb-4 sm:mb-6"
             >
               De la part de: {viewSender.name} 💕
             </motion.p>
@@ -208,7 +209,7 @@ const LoveMessagePage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="text-center text-gray-500 italic text-sm mb-6"
+              className="text-center text-gray-500 italic text-xs sm:text-sm mb-4 sm:mb-6"
             >
               📮 Message anonyme
             </motion.p>
@@ -218,9 +219,9 @@ const LoveMessagePage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-8 mb-8 min-h-48 flex items-center justify-center"
+            className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-4 sm:p-8 mb-6 sm:mb-8 min-h-32 sm:min-h-48 flex items-center justify-center"
           >
-            <p className="text-lg text-gray-800 text-center leading-relaxed whitespace-pre-wrap">
+            <p className="text-sm sm:text-lg text-gray-800 text-center leading-relaxed whitespace-pre-wrap">
               {viewMessage}
             </p>
           </motion.div>
@@ -230,7 +231,7 @@ const LoveMessagePage = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
             onClick={() => setShowOfferNotification(true)}
-            className="w-full px-6 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-medium hover:shadow-lg transition-all duration-300"
+            className="w-full px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-medium hover:shadow-lg transition-all duration-300 text-sm sm:text-base"
           >
             J'ai lu ❤️
           </motion.button>
@@ -239,21 +240,21 @@ const LoveMessagePage = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-6 bg-gradient-to-r from-pink-100 to-purple-100 rounded-2xl p-6 border-2 border-pink-300"
+              className="mt-4 sm:mt-6 bg-gradient-to-r from-pink-100 to-purple-100 rounded-2xl p-4 sm:p-6 border-2 border-pink-300"
             >
-              <p className="text-center text-gray-800 mb-4 font-semibold">
+              <p className="text-center text-gray-800 mb-3 sm:mb-4 font-semibold text-sm sm:text-base">
                 Voulez-vous lui offrir une peluche pour renforcer votre lien? 🧸
               </p>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <button
                   onClick={() => handleOfferResponse(true)}
-                  className="flex-1 px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg font-medium transition-colors"
+                  className="flex-1 px-3 sm:px-4 py-2 sm:py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg font-medium transition-colors text-sm sm:text-base"
                 >
                   Oui, je veux! 💝
                 </button>
                 <button
                   onClick={() => handleOfferResponse(false)}
-                  className="flex-1 px-4 py-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg font-medium transition-colors"
+                  className="flex-1 px-3 sm:px-4 py-2 sm:py-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg font-medium transition-colors text-sm sm:text-base"
                 >
                   Non merci
                 </button>
@@ -265,42 +266,42 @@ const LoveMessagePage = () => {
     );
   }
 
-  // Vue initiale - demande si envoyer un message
+  // Vue initiale - demande si envoyer un message - Responsive
   if (step === 'initial') {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-3 sm:p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="text-center max-w-md"
+          className="text-center max-w-md w-full"
         >
           <motion.div
             animate={{ scale: [1, 1.1, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="mb-6"
+            className="mb-6 sm:mb-8"
           >
-            <Heart className="w-20 h-20 mx-auto text-pink-300" />
+            <Heart className="w-16 sm:w-20 h-16 sm:h-20 mx-auto text-pink-300" />
           </motion.div>
 
-          <h1 className="text-3xl font-bold text-white mb-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">
             Galerie d'Amour ✨
           </h1>
 
-          <p className="text-pink-100 text-lg mb-8">
+          <p className="text-pink-100 text-base sm:text-lg mb-6 sm:mb-8">
             Voulez-vous envoyer un message d'amour à votre partenaire?
           </p>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3 sm:gap-4">
             <button
               onClick={() => setStep('compose')}
-              className="px-8 py-4 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
+              className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-bold text-base sm:text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
             >
               Oui, je veux! 💌
             </button>
 
             <button
               onClick={() => navigate('/landing-page')}
-              className="px-8 py-4 bg-transparent border-2 border-pink-300 text-pink-100 rounded-full font-bold text-lg hover:bg-pink-500/20 transition-all duration-300"
+              className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-transparent border-2 border-pink-300 text-pink-100 rounded-full font-bold text-base sm:text-lg hover:bg-pink-500/20 transition-all duration-300"
             >
               Non, retour au menu
             </button>
@@ -310,45 +311,45 @@ const LoveMessagePage = () => {
     );
   }
 
-  // Vue composition du message
+  // Vue composition du message - Responsive
   if (step === 'compose') {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-3 sm:p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-2xl w-full bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl"
+          className="max-w-2xl w-full bg-white/95 backdrop-blur-sm rounded-3xl p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
         >
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-pink-600 mb-2">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-pink-600 mb-2">
               Écrivez votre message d'amour 💕
             </h2>
-            <p className="text-gray-600">Exprimez vos sentiments de manière sincère et touchante.</p>
+            <p className="text-sm sm:text-base text-gray-600">Exprimez vos sentiments de manière sincère et touchante.</p>
           </div>
 
-          <div className="mb-6">
+          <div className="mb-6 sm:mb-8">
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Écris ici ton message d'amour..."
-              className="w-full h-64 p-4 border-2 border-pink-200 rounded-2xl focus:border-pink-500 focus:outline-none resize-none text-gray-700 bg-pink-50/50"
+              className="w-full h-48 sm:h-64 p-4 border-2 border-pink-200 rounded-2xl focus:border-pink-500 focus:outline-none resize-none text-gray-700 text-sm sm:text-base bg-pink-50/50"
             />
-            <p className="mt-2 text-sm text-gray-500">
+            <p className="mt-2 text-xs sm:text-sm text-gray-500">
               {message.length} caractères
             </p>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={() => setStep('initial')}
-              className="flex-1 px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-full font-medium transition-colors"
+              className="flex-1 px-4 sm:px-6 py-2 sm:py-3 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-full font-medium transition-colors text-sm sm:text-base"
             >
               Annuler
             </button>
             <button
               onClick={handleSendMessage}
               disabled={message.trim().length === 0}
-              className="flex-1 px-6 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-medium hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-1 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-medium hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm sm:text-base"
             >
               <Send className="w-4 h-4" />
               Envoyer
@@ -362,21 +363,21 @@ const LoveMessagePage = () => {
   // Vue options du message
   if (step === 'options') {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-3 sm:p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-2xl w-full bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl"
+          className="max-w-2xl w-full bg-white/95 backdrop-blur-sm rounded-3xl p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
         >
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-pink-600 mb-2">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-pink-600 mb-2">
               Avant d'envoyer... 💭
             </h2>
-            <p className="text-gray-600">Personnalisez votre message d'amour!</p>
+            <p className="text-sm sm:text-base text-gray-600">Personnalisez votre message d'amour!</p>
           </div>
 
-          {/* Option Anonymat */}
-          <div className="mb-8">
+          {/* Option Anonymat - Responsive */}
+          <div className="mb-6 sm:mb-8">
             <label className="flex items-center gap-3 cursor-pointer mb-4">
               <input
                 type="checkbox"
@@ -384,7 +385,7 @@ const LoveMessagePage = () => {
                 onChange={(e) => setIsAnonymous(e.target.checked)}
                 className="w-5 h-5 text-pink-600 rounded focus:ring-pink-500"
               />
-              <span className="text-lg text-gray-700 font-medium">📮 Envoyer en anonyme</span>
+              <span className="text-base sm:text-lg text-gray-700 font-medium">📮 Envoyer en anonyme</span>
             </label>
 
             {!isAnonymous && (
@@ -394,7 +395,7 @@ const LoveMessagePage = () => {
                 className="space-y-4"
               >
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                     <User className="w-4 h-4 inline mr-2" />
                     Votre nom ou pseudo:
                   </label>
@@ -403,22 +404,22 @@ const LoveMessagePage = () => {
                     value={senderName}
                     onChange={(e) => setSenderName(e.target.value)}
                     placeholder="Entrez votre nom..."
-                    className="w-full p-3 border-2 border-pink-200 rounded-lg focus:border-pink-500 focus:outline-none text-gray-700"
+                    className="w-full p-3 border-2 border-pink-200 rounded-lg focus:border-pink-500 focus:outline-none text-gray-700 text-sm"
                   />
                 </div>
               </motion.div>
             )}
           </div>
 
-          {/* Upload Image */}
-          <div className="mb-8">
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
+          {/* Upload Image - Responsive */}
+          <div className="mb-6 sm:mb-8">
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-3">
               <Upload className="w-4 h-4 inline mr-2" />
               Joindre une photo (optionnel):
             </label>
 
             {!imagePreview ? (
-              <div className="border-2 border-dashed border-pink-300 rounded-2xl p-6 text-center cursor-pointer hover:bg-pink-50 transition-colors">
+              <div className="border-2 border-dashed border-pink-300 rounded-2xl p-4 sm:p-6 text-center cursor-pointer hover:bg-pink-50 transition-colors">
                 <input
                   type="file"
                   accept="image/*"
@@ -427,8 +428,8 @@ const LoveMessagePage = () => {
                   id="image-upload"
                 />
                 <label htmlFor="image-upload" className="cursor-pointer block">
-                  <Upload className="w-8 h-8 mx-auto text-pink-500 mb-2" />
-                  <p className="text-gray-600">Cliquez pour ajouter une photo</p>
+                  <Upload className="w-6 sm:w-8 h-6 sm:h-8 mx-auto text-pink-500 mb-2" />
+                  <p className="text-xs sm:text-base text-gray-600">Cliquez pour ajouter une photo</p>
                   <p className="text-xs text-gray-500">PNG, JPG jusqu'à 10MB</p>
                 </label>
               </div>
@@ -437,14 +438,14 @@ const LoveMessagePage = () => {
                 <img 
                   src={imagePreview} 
                   alt="Preview" 
-                  className="w-32 h-32 rounded-lg object-cover border-2 border-pink-400"
+                  className="w-24 sm:w-32 h-24 sm:h-32 rounded-lg object-cover border-2 border-pink-400"
                 />
                 <button
                   onClick={() => {
                     setSenderImage(null);
                     setImagePreview(null);
                   }}
-                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 text-xs sm:text-base"
                 >
                   ✕
                 </button>
@@ -452,25 +453,25 @@ const LoveMessagePage = () => {
             )}
           </div>
 
-          {/* Résumé du message */}
-          <div className="mb-8 p-4 bg-pink-50 rounded-2xl border-2 border-pink-200">
+          {/* Résumé du message - Responsive */}
+          <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-pink-50 rounded-2xl border-2 border-pink-200">
             <p className="text-xs text-gray-600 mb-2 font-semibold">APERÇU:</p>
-            <div className="text-sm text-gray-700 bg-white rounded-lg p-3 max-h-32 overflow-y-auto">
+            <div className="text-xs sm:text-sm text-gray-700 bg-white rounded-lg p-3 max-h-24 sm:max-h-32 overflow-y-auto">
               {message.substring(0, 150)}{message.length > 150 ? '...' : ''}
             </div>
           </div>
 
-          {/* Boutons action */}
-          <div className="flex gap-3">
+          {/* Boutons action - Responsive */}
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={() => setStep('compose')}
-              className="flex-1 px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-full font-medium transition-colors"
+              className="flex-1 px-4 sm:px-6 py-2 sm:py-3 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-full font-medium transition-colors text-sm sm:text-base"
             >
               ← Retour
             </button>
             <button
               onClick={handleFinishOptions}
-              className="flex-1 px-6 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-medium hover:shadow-lg transition-all flex items-center justify-center gap-2"
+              className="flex-1 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-medium hover:shadow-lg transition-all flex items-center justify-center gap-2 text-sm sm:text-base"
             >
               <Send className="w-4 h-4" />
               Continuer
@@ -481,143 +482,184 @@ const LoveMessagePage = () => {
     );
   }
 
-  // Vue partage du lien
+  // Vue partage du lien - Responsive
   if (step === 'share') {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-3 sm:p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="max-w-2xl w-full bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl text-center"
+          className="max-w-2xl w-full bg-white/95 backdrop-blur-sm rounded-3xl p-6 sm:p-8 shadow-2xl text-center max-h-[90vh] overflow-y-auto"
         >
           <motion.div
             animate={{ scale: [1, 1.1, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="mb-6"
+            className="mb-6 sm:mb-8"
           >
-            <Heart className="w-16 h-16 mx-auto text-pink-500" />
+            <Heart className="w-12 sm:w-16 h-12 sm:h-16 mx-auto text-pink-500" />
           </motion.div>
 
-          <h2 className="text-2xl font-bold text-pink-600 mb-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-pink-600 mb-3 sm:mb-4">
             Message créé avec succès! 🎉
           </h2>
 
-          <p className="text-gray-600 mb-6">
+          <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
             Votre lien est prêt à être partagé. Il sera valide pendant 7 jours.
           </p>
 
           <div className="mb-6 p-4 bg-pink-50 rounded-2xl border-2 border-pink-200">
             <p className="text-sm text-gray-600 mb-3 font-semibold">Votre lien unique:</p>
-            <div className="flex gap-2 items-center mb-4">
+            
+            {/* Lien - Responsive */}
+            <div className="flex gap-2 items-center mb-4 flex-col sm:flex-row">
               <a
                 href={generatedLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 p-3 bg-white border border-pink-300 rounded-lg text-sm text-pink-600 font-medium hover:bg-pink-50 hover:border-pink-500 transition-colors truncate"
+                className="w-full sm:flex-1 p-3 bg-white border border-pink-300 rounded-lg text-xs sm:text-sm text-pink-600 font-medium hover:bg-pink-50 hover:border-pink-500 transition-colors truncate text-center sm:text-left"
               >
                 {generatedLink}
               </a>
               <button
                 onClick={handleCopyLink}
-                className="px-4 py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition-colors flex items-center gap-2 flex-shrink-0"
+                className="w-full sm:w-auto px-4 py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition-colors flex items-center justify-center gap-2 flex-shrink-0"
               >
                 {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                {copied ? 'Copié!' : 'Copier'}
               </button>
             </div>
 
-            {/* QR Code */}
+            {/* QR Code - Responsive */}
             {generatedLink && (
-              <div className="mb-4 flex flex-col items-center">
-                <p className="text-xs text-gray-600 mb-2">Ou scannez ce QR code:</p>
-                <img 
-                  src={generateQRCode(generatedLink)}
-                  alt="QR Code"
-                  className="w-32 h-32 border-2 border-pink-300 rounded-lg p-2 bg-white"
-                />
-              </div>
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-4 flex flex-col items-center"
+              >
+                <p className="text-xs text-gray-600 mb-3">📱 Ou scannez ce QR code:</p>
+                <div className="w-32 h-32 sm:w-40 sm:h-40 bg-white border-2 border-pink-300 rounded-lg p-2 flex items-center justify-center">
+                  <svg width="100%" height="100%" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    {/* QR Code simple en SVG */}
+                    <rect width="200" height="200" fill="white"/>
+                    {/* Motif QR simplifié */}
+                    <text x="100" y="100" textAnchor="middle" dy=".3em" fontSize="12" fill="gray">
+                      QR Code
+                    </text>
+                  </svg>
+                  {/* Fallback image si SVG ne suffit pas */}
+                  <img 
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(generatedLink)}`}
+                    alt="QR Code"
+                    className="w-full h-full object-contain rounded"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </div>
+              </motion.div>
             )}
 
-            {/* Bouton Partager natif */}
+            {/* Bouton Partager - Responsive */}
             <button
-              onClick={handleShare}
-              className="w-full px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg font-medium hover:shadow-lg transition-all flex items-center justify-center gap-2 mb-3"
+              onClick={() => setShowSocialDrawer(!showSocialDrawer)}
+              className="w-full px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg font-medium hover:shadow-lg transition-all flex items-center justify-center gap-2 mb-3"
             >
               <Share2 className="w-4 h-4" />
-              Partager directement
+              <span className="hidden sm:inline">Partager sur réseaux</span>
+              <span className="sm:hidden">Partager</span>
+              <ChevronDown className={`w-4 h-4 transition-transform ${showSocialDrawer ? 'rotate-180' : ''}`} />
             </button>
 
-            {/* Boutons de partage réseaux sociaux */}
-            <div className="grid grid-cols-3 gap-2">
-              <a
-                href={`https://wa.me/?text=${encodeURIComponent('Regarde ce message d\'amour! 💌 ' + generatedLink)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors text-sm font-medium"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>WhatsApp</span>
-              </a>
-              <a
-                href={`mailto:?subject=Un message d'amour&body=Je t'ai créé un message spécial: ${generatedLink}`}
-                className="flex items-center justify-center gap-1 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors text-sm font-medium"
-              >
-                <Mail className="w-4 h-4" />
-                <span>Email</span>
-              </a>
-              <a
-                href={`https://t.me/share/url?url=${encodeURIComponent(generatedLink)}&text=Regarde ce message d'amour!`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1 px-3 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors text-sm font-medium"
-              >
-                <Send className="w-4 h-4" />
-                <span>Telegram</span>
-              </a>
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(generatedLink)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
-              >
-                <span>Facebook</span>
-              </a>
-              <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('Je t\'ai créé un message d\'amour! 💌')} ${generatedLink}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1 px-3 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-lg transition-colors text-sm font-medium"
-              >
-                <span>Twitter</span>
-              </a>
-              <a
-                href={`https://t.me/share/url?url=${encodeURIComponent(generatedLink)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1 px-3 py-2 bg-gradient-to-br from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-colors text-sm font-medium"
-              >
-                <span>Instagram</span>
-              </a>
-            </div>
+            {/* Drawer de partage social - Responsive */}
+            <AnimatePresence>
+              {showSocialDrawer && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-gradient-to-b from-pink-100 to-purple-100 rounded-lg p-4 border-2 border-pink-200"
+                >
+                  <p className="text-xs sm:text-sm text-gray-700 font-semibold mb-3 text-center">
+                    Partager sur vos réseaux favoris:
+                  </p>
+                  
+                  {/* Grille responsive - 2 cols mobile, 3 cols desktop */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    <a
+                      href={`https://wa.me/?text=${encodeURIComponent('Regarde ce message d\'amour! 💌 ' + generatedLink)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-1 px-2 sm:px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors text-xs sm:text-sm font-medium"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      <span>WhatsApp</span>
+                    </a>
+                    <a
+                      href={`mailto:?subject=Un message d'amour&body=Je t'ai créé un message spécial: ${generatedLink}`}
+                      className="flex items-center justify-center gap-1 px-2 sm:px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors text-xs sm:text-sm font-medium"
+                    >
+                      <Mail className="w-4 h-4" />
+                      <span>Email</span>
+                    </a>
+                    <a
+                      href={`https://t.me/share/url?url=${encodeURIComponent(generatedLink)}&text=Regarde ce message d'amour!`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-1 px-2 sm:px-3 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors text-xs sm:text-sm font-medium"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>Telegram</span>
+                    </a>
+                    <a
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(generatedLink)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-1 px-2 sm:px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-xs sm:text-sm font-medium"
+                    >
+                      <span>Facebook</span>
+                    </a>
+                    <a
+                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('Je t\'ai créé un message d\'amour! 💌')} ${generatedLink}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-1 px-2 sm:px-3 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-lg transition-colors text-xs sm:text-sm font-medium"
+                    >
+                      <span>Twitter</span>
+                    </a>
+                    <a
+                      href={`https://www.instagram.com/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-1 px-2 sm:px-3 py-2 bg-gradient-to-br from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-colors text-xs sm:text-sm font-medium"
+                    >
+                      <span>Instagram</span>
+                    </a>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          <p className="text-sm text-gray-600 mb-6">
-            Partagez votre message sur vos réseaux sociaux favoris:
+          <p className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6 text-center">
+            💡 Conseil: Utilisez le drawer "Partager" ci-dessus pour diffuser votre message facilement
           </p>
 
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={() => {
                 setStep('initial');
                 setMessage('');
                 setGeneratedLink('');
+                setShowSocialDrawer(false);
               }}
-              className="flex-1 px-6 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-medium hover:shadow-lg transition-all"
+              className="flex-1 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-medium hover:shadow-lg transition-all text-sm sm:text-base"
             >
               Envoyer un autre message 💌
             </button>
             <button
               onClick={() => navigate('/landing-page')}
-              className="flex-1 px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-full font-medium transition-colors"
+              className="flex-1 px-4 sm:px-6 py-2 sm:py-3 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-full font-medium transition-colors text-sm sm:text-base"
             >
               Retour au landing
             </button>
