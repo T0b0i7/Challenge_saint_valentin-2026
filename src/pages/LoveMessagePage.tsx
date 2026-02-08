@@ -1,36 +1,71 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Send, Copy, Check, Share2, MessageCircle, Mail } from 'lucide-react';
+import { Heart, Send, Copy, Check, Share2, MessageCircle, Mail, Upload, User } from 'lucide-react';
 
 const LoveMessagePage = () => {
   const navigate = useNavigate();
   const { messageId } = useParams();
-  const [step, setStep] = useState<'initial' | 'compose' | 'share' | 'view'>('initial');
+  const [step, setStep] = useState<'initial' | 'compose' | 'options' | 'share' | 'view'>('initial');
   const [message, setMessage] = useState('');
   const [generatedLink, setGeneratedLink] = useState('');
   const [copied, setCopied] = useState(false);
   const [viewMessage, setViewMessage] = useState('');
+  const [viewSender, setViewSender] = useState<{ name: string | null; image: string | null; isAnonymous: boolean } | null>(null);
   const [showOfferNotification, setShowOfferNotification] = useState(false);
+  
+  // Nouvelles options
+  const [senderName, setSenderName] = useState('');
+  const [isAnonymous, setIsAnonymous] = useState(false);
+  const [senderImage, setSenderImage] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  // Encoder le message en Base64
-  const encodeMessage = (msg: string): string => {
-    return btoa(unescape(encodeURIComponent(msg)));
+  // Encoder le message avec les métadonnées
+  const encodeMessage = (msg: string, name: string, anon: boolean, image: string | null): string => {
+    const data = {
+      message: msg,
+      sender: anon ? null : name,
+      isAnonymous: anon,
+      image: image
+    };
+    return btoa(unescape(encodeURIComponent(JSON.stringify(data))));
   };
 
   // Décoder le message depuis Base64
-  const decodeMessage = (encoded: string): string => {
+  const decodeMessage = (encoded: string): { message: string; sender: string | null; isAnonymous: boolean; image: string | null } | null => {
     try {
-      return decodeURIComponent(escape(atob(encoded)));
+      const decoded = decodeURIComponent(escape(atob(encoded)));
+      return JSON.parse(decoded);
     } catch (e) {
-      return '';
+      return null;
     }
   };
 
   const handleSendMessage = () => {
     if (message.trim().length === 0) return;
+    setStep('options');
+  };
 
-    const encoded = encodeMessage(message);
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setSenderImage(base64);
+        setImagePreview(base64);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleFinishOptions = () => {
+    if (!isAnonymous && senderName.trim().length === 0) {
+      alert('Veuillez entrer un nom ou choisir anonyme');
+      return;
+    }
+
+    const encoded = encodeMessage(message, senderName, isAnonymous, senderImage);
     const link = `${window.location.origin}/love-message/${encoded}`;
     setGeneratedLink(link);
     setStep('share');
@@ -98,9 +133,9 @@ const LoveMessagePage = () => {
 
   // Vue affichage du message reçu
   if (messageId && !viewMessage) {
-    const decodedMsg = decodeMessage(messageId);
+    const decodedData = decodeMessage(messageId);
     
-    if (!decodedMsg || decodedMsg.trim().length === 0) {
+    if (!decodedData || !decodedData.message || decodedData.message.trim().length === 0) {
       return (
         <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-4">
           <div className="text-center text-white">
@@ -118,11 +153,16 @@ const LoveMessagePage = () => {
       );
     }
 
-    setViewMessage(decodedMsg);
+    setViewMessage(decodedData.message);
+    setViewSender({
+      name: decodedData.sender,
+      image: decodedData.image,
+      isAnonymous: decodedData.isAnonymous
+    });
   }
 
   // Vue lecture du message
-  if (viewMessage) {
+  if (viewMessage && viewSender) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-4">
         <motion.div
@@ -135,10 +175,49 @@ const LoveMessagePage = () => {
             <h1 className="text-3xl font-bold text-pink-600 mb-2">Un message d'amour pour toi 💌</h1>
           </div>
 
+          {/* Avatar/Image du sender */}
+          {viewSender.image && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+              className="flex justify-center mb-6"
+            >
+              <img 
+                src={viewSender.image} 
+                alt="Sender" 
+                className="w-24 h-24 rounded-full object-cover border-4 border-pink-400 shadow-lg"
+              />
+            </motion.div>
+          )}
+
+          {/* Nom du sender */}
+          {!viewSender.isAnonymous && viewSender.name && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="text-center text-pink-600 font-semibold text-lg mb-6"
+            >
+              De la part de: {viewSender.name} 💕
+            </motion.p>
+          )}
+
+          {viewSender.isAnonymous && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="text-center text-gray-500 italic text-sm mb-6"
+            >
+              📮 Message anonyme
+            </motion.p>
+          )}
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.4 }}
             className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-8 mb-8 min-h-48 flex items-center justify-center"
           >
             <p className="text-lg text-gray-800 text-center leading-relaxed whitespace-pre-wrap">
@@ -273,6 +352,128 @@ const LoveMessagePage = () => {
             >
               <Send className="w-4 h-4" />
               Envoyer
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Vue options du message
+  if (step === 'options') {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-2xl w-full bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl"
+        >
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-pink-600 mb-2">
+              Avant d'envoyer... 💭
+            </h2>
+            <p className="text-gray-600">Personnalisez votre message d'amour!</p>
+          </div>
+
+          {/* Option Anonymat */}
+          <div className="mb-8">
+            <label className="flex items-center gap-3 cursor-pointer mb-4">
+              <input
+                type="checkbox"
+                checked={isAnonymous}
+                onChange={(e) => setIsAnonymous(e.target.checked)}
+                className="w-5 h-5 text-pink-600 rounded focus:ring-pink-500"
+              />
+              <span className="text-lg text-gray-700 font-medium">📮 Envoyer en anonyme</span>
+            </label>
+
+            {!isAnonymous && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-4"
+              >
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <User className="w-4 h-4 inline mr-2" />
+                    Votre nom ou pseudo:
+                  </label>
+                  <input
+                    type="text"
+                    value={senderName}
+                    onChange={(e) => setSenderName(e.target.value)}
+                    placeholder="Entrez votre nom..."
+                    className="w-full p-3 border-2 border-pink-200 rounded-lg focus:border-pink-500 focus:outline-none text-gray-700"
+                  />
+                </div>
+              </motion.div>
+            )}
+          </div>
+
+          {/* Upload Image */}
+          <div className="mb-8">
+            <label className="block text-sm font-semibold text-gray-700 mb-3">
+              <Upload className="w-4 h-4 inline mr-2" />
+              Joindre une photo (optionnel):
+            </label>
+
+            {!imagePreview ? (
+              <div className="border-2 border-dashed border-pink-300 rounded-2xl p-6 text-center cursor-pointer hover:bg-pink-50 transition-colors">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  id="image-upload"
+                />
+                <label htmlFor="image-upload" className="cursor-pointer block">
+                  <Upload className="w-8 h-8 mx-auto text-pink-500 mb-2" />
+                  <p className="text-gray-600">Cliquez pour ajouter une photo</p>
+                  <p className="text-xs text-gray-500">PNG, JPG jusqu'à 10MB</p>
+                </label>
+              </div>
+            ) : (
+              <div className="relative w-fit mx-auto">
+                <img 
+                  src={imagePreview} 
+                  alt="Preview" 
+                  className="w-32 h-32 rounded-lg object-cover border-2 border-pink-400"
+                />
+                <button
+                  onClick={() => {
+                    setSenderImage(null);
+                    setImagePreview(null);
+                  }}
+                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Résumé du message */}
+          <div className="mb-8 p-4 bg-pink-50 rounded-2xl border-2 border-pink-200">
+            <p className="text-xs text-gray-600 mb-2 font-semibold">APERÇU:</p>
+            <div className="text-sm text-gray-700 bg-white rounded-lg p-3 max-h-32 overflow-y-auto">
+              {message.substring(0, 150)}{message.length > 150 ? '...' : ''}
+            </div>
+          </div>
+
+          {/* Boutons action */}
+          <div className="flex gap-3">
+            <button
+              onClick={() => setStep('compose')}
+              className="flex-1 px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-full font-medium transition-colors"
+            >
+              ← Retour
+            </button>
+            <button
+              onClick={handleFinishOptions}
+              className="flex-1 px-6 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-medium hover:shadow-lg transition-all flex items-center justify-center gap-2"
+            >
+              <Send className="w-4 h-4" />
+              Continuer
             </button>
           </div>
         </motion.div>
