@@ -1,6 +1,82 @@
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Heart } from 'lucide-react';
+
+const AnimatedWaveTitle = ({ text, isInView }: { text: string; isInView: boolean }) => {
+  const words = text.split(' ');
+  const [hoveredWordIndex, setHoveredWordIndex] = useState<number | null>(null);
+
+  return (
+    <h2 
+      className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-foreground mb-6 cursor-pointer"
+      onMouseLeave={() => setHoveredWordIndex(null)}
+    >
+      {words.map((word, wordIdx) => (
+        <motion.span
+          key={wordIdx}
+          className="inline-block mr-3"
+          onMouseEnter={() => setHoveredWordIndex(wordIdx)}
+          initial={{ opacity: 0, y: 20, rotateX: 90 }}
+          animate={isInView ? { 
+            opacity: 1, 
+            y: 0, 
+            rotateX: 0
+          } : {}}
+          transition={{
+            duration: 0.6,
+            delay: wordIdx * 0.1,
+            ease: "easeOut"
+          }}
+        >
+          <motion.span
+            className="relative inline-block"
+            animate={{
+              ...(hoveredWordIndex === wordIdx ? {
+                y: [0, -8, 0, -8, 0],
+              } : {}),
+              textShadow: isInView ? [
+                "0 0 0px rgba(255,20,147,0)",
+                "0 0 20px rgba(255,20,147,0.6)",
+                "0 0 0px rgba(255,20,147,0)"
+              ] : "0 0 0px rgba(255,20,147,0)"
+            }}
+            transition={{
+              y: {
+                duration: 0.6,
+                ease: "easeInOut"
+              },
+              textShadow: {
+                duration: 2,
+                delay: wordIdx * 0.1 + 0.3,
+                repeat: Infinity
+              }
+            }}
+          >
+            {word.split('').map((char, charIdx) => (
+              <motion.span
+                key={charIdx}
+                className="inline-block"
+                animate={hoveredWordIndex === wordIdx ? {
+                  y: [0, -10, 0],
+                } : {
+                  y: 0
+                }}
+                transition={{
+                  duration: hoveredWordIndex === wordIdx ? 0.5 : 0.3,
+                  delay: hoveredWordIndex === wordIdx ? charIdx * 0.05 : 0,
+                  repeat: hoveredWordIndex === wordIdx ? Infinity : 0,
+                  ease: "easeInOut"
+                }}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </motion.span>
+        </motion.span>
+      ))}
+    </h2>
+  );
+};
 
 const benefits = [
   {
@@ -42,10 +118,10 @@ export const BenefitsSection = () => {
           <span className="inline-block text-primary font-semibold text-sm uppercase tracking-widest mb-4">
             Bénéfices émotionnels
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-foreground mb-6">
-            Plus qu'une peluche, un{' '}
-            <span className="text-gradient italic">témoin de votre histoire</span>
-          </h2>
+          <AnimatedWaveTitle 
+            text="Plus qu'une peluche, un témoin de votre histoire" 
+            isInView={isInView}
+          />
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-body">
             Découvrez comment cette peluche transforme chaque moment d'absence 
             en une célébration de votre amour.

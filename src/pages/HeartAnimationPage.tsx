@@ -225,10 +225,16 @@ const HeartAnimationPage = () => {
 
       {/* Message romantique avec effet machine à écrire */}
       {showLoveMessage && (
-        <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 z-40 pointer-events-none text-center">
+        <div className={`absolute z-40 pointer-events-none text-center ${
+          isMobile 
+            ? 'bottom-40 left-4 right-4' 
+            : 'bottom-32 left-1/2 transform -translate-x-1/2'
+        }`}>
           {/* Message qui s'écrit progressivement */}
           <div className="min-h-[60px] flex items-center justify-center">
-            <p className="text-white text-lg md:text-xl font-serif leading-relaxed drop-shadow-2xl">
+            <p className={`text-white font-serif leading-relaxed drop-shadow-2xl ${
+              isMobile ? 'text-base md:text-lg' : 'text-lg md:text-xl'
+            }`}>
               {typedText}
               {isTyping && <span className="animate-pulse ml-1">|</span>}
             </p>
@@ -250,12 +256,18 @@ const HeartAnimationPage = () => {
         </div>
       )}
       
-      {/* Boutons superposés */}
-      <div className="absolute bottom-8 right-8 z-50 flex gap-3">
+      {/* Boutons superposés - Responsive */}
+      <div className={`absolute z-50 flex ${
+        isMobile 
+          ? 'bottom-4 left-4 right-4 gap-2 flex-col-reverse' 
+          : 'bottom-8 right-8 gap-3'
+      }`}>
         {/* Bouton suivant */}
         <button
           onClick={handleNext}
-          className="px-6 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 backdrop-blur-sm border-2 border-pink-400/50"
+          className={`px-6 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 backdrop-blur-sm border-2 border-pink-400/50 ${
+            isMobile ? 'w-full text-center' : ''
+          }`}
         >
           Suivant →
         </button>
@@ -263,9 +275,11 @@ const HeartAnimationPage = () => {
         {/* Bouton retour */}
         <button
           onClick={() => navigate('/valentine-prompt')}
-          className="px-6 py-3 bg-transparent border-2 border-[#ff99cc] text-[#ffccff] rounded-full font-medium shadow-lg hover:bg-[rgba(255,153,204,0.2)] transition-all duration-300 backdrop-blur-sm"
+          className={`px-6 py-3 bg-transparent border-2 border-[#ff99cc] text-[#ffccff] rounded-full font-medium shadow-lg hover:bg-[rgba(255,153,204,0.2)] transition-all duration-300 backdrop-blur-sm ${
+            isMobile ? 'w-full text-center' : ''
+          }`}
         >
-          Retour
+          ← Retour
         </button>
       </div>
     </div>

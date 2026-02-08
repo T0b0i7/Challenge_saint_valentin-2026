@@ -16,34 +16,50 @@ export const HeroSection = () => {
 
   useEffect(() => {
     const video = videoRef.current;
-    if (video) {
-      // Forcer le chargement et la lecture
-      video.load();
-      
-      const handleCanPlay = () => {
-        setIsVideoLoaded(true);
+    if (!video) return;
+
+    // Démarrer la vidéo une seule fois
+    const playVideo = () => {
+      if (video.paused) {
         video.play().catch(error => {
-          console.log("Video play error:", error);
-          // Forcer la lecture avec interaction utilisateur
-          document.addEventListener('click', () => {
-            video.play().catch(e => console.log("Forced play error:", e));
-          }, { once: true });
+          console.log("Erreur lors de la lecture de la vidéo:", error);
         });
-      };
+      }
+      setIsVideoLoaded(true);
+    };
 
-      const handleLoadStart = () => {
-        console.log("Video loading started");
-      };
+    // Démarrer la lecture quand c'est possible
+    video.addEventListener('canplay', playVideo);
 
-      video.addEventListener('canplay', handleCanPlay);
-      video.addEventListener('loadstart', handleLoadStart);
-      
-      return () => {
-        video.removeEventListener('canplay', handleCanPlay);
-        video.removeEventListener('loadstart', handleLoadStart);
-      };
-    }
+    // Gestion de la fin de la vidéo pour la boucler
+    const handleEnded = () => {
+      video.currentTime = 0;
+      video.play().catch(e => console.log("Erreur lors de la reprise:", e));
+    };
+    video.addEventListener('ended', handleEnded);
+
+    // Essayer de jouer immédiatement
+    playVideo();
+
+    return () => {
+      video.removeEventListener('canplay', playVideo);
+      video.removeEventListener('ended', handleEnded);
+    };
   }, []);
+
+  // Pause/Play basé sur la visibilité de la section
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (isInView) {
+      // Reprendre la vidéo quand on revient à la section
+      video.play().catch(e => console.log("Erreur lors de la reprise de lecture:", e));
+    } else {
+      // Pause la vidéo quand on quitte la section
+      video.pause();
+    }
+  }, [isInView]);
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -58,7 +74,7 @@ export const HeroSection = () => {
 
   return (
     <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Video Background - Optimisé pour autoplay avec son */}
+      {/* Video Background - Optimisé pour lecture continue avec son */}
       <video
         ref={videoRef}
         className="absolute inset-0 w-full h-full object-cover min-w-full min-h-full -z-10"
@@ -71,8 +87,18 @@ export const HeroSection = () => {
         onError={(e) => console.log("Video error:", e)}
         onLoadStart={() => console.log("Video load start")}
         onCanPlay={() => console.log("Video can play")}
+        onCanPlayThrough={() => console.log("Video can play through")}
+        onLoadedData={() => console.log("Video loaded data")}
+        onEnded={() => {
+          console.log("Video ended, restarting...");
+          if (videoRef.current) {
+            videoRef.current.currentTime = 0;
+            videoRef.current.play().catch(e => console.log("Loop restart error:", e));
+          }
+        }}
       >
         <source src="/I love you.mp4" type="video/mp4" />
+        <source src="/I love you.webm" type="video/webm" />
         Votre navigateur ne supporte pas la vidéo.
       </video>
       

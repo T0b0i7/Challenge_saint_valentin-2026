@@ -1,9 +1,85 @@
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Heart, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CountdownTimer } from '../interactive/CountdownTimer';
 import plushBearRibbon from '@/assets/images/pelluche_produit.jpg';
+
+const AnimatedWaveTitle = ({ text, isInView }: { text: string; isInView: boolean }) => {
+  const words = text.split(' ');
+  const [hoveredWordIndex, setHoveredWordIndex] = useState<number | null>(null);
+
+  return (
+    <h2 
+      className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-primary-foreground leading-tight mb-6 cursor-pointer"
+      onMouseLeave={() => setHoveredWordIndex(null)}
+    >
+      {words.map((word, wordIdx) => (
+        <motion.span
+          key={wordIdx}
+          className="inline-block mr-3"
+          onMouseEnter={() => setHoveredWordIndex(wordIdx)}
+          initial={{ opacity: 0, y: 20, rotateX: 90 }}
+          animate={isInView ? { 
+            opacity: 1, 
+            y: 0, 
+            rotateX: 0
+          } : {}}
+          transition={{
+            duration: 0.6,
+            delay: wordIdx * 0.1,
+            ease: "easeOut"
+          }}
+        >
+          <motion.span
+            className="relative inline-block"
+            animate={{
+              ...(hoveredWordIndex === wordIdx ? {
+                y: [0, -8, 0, -8, 0],
+              } : {}),
+              textShadow: isInView ? [
+                "0 0 0px rgba(255,255,255,0)",
+                "0 0 20px rgba(255,255,255,0.6)",
+                "0 0 0px rgba(255,255,255,0)"
+              ] : "0 0 0px rgba(255,255,255,0)"
+            }}
+            transition={{
+              y: {
+                duration: 0.6,
+                ease: "easeInOut"
+              },
+              textShadow: {
+                duration: 2,
+                delay: wordIdx * 0.1 + 0.3,
+                repeat: Infinity
+              }
+            }}
+          >
+            {word.split('').map((char, charIdx) => (
+              <motion.span
+                key={charIdx}
+                className="inline-block"
+                animate={hoveredWordIndex === wordIdx ? {
+                  y: [0, -10, 0],
+                } : {
+                  y: 0
+                }}
+                transition={{
+                  duration: hoveredWordIndex === wordIdx ? 0.5 : 0.3,
+                  delay: hoveredWordIndex === wordIdx ? charIdx * 0.05 : 0,
+                  repeat: hoveredWordIndex === wordIdx ? Infinity : 0,
+                  ease: "easeInOut"
+                }}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </motion.span>
+        </motion.span>
+      ))}
+    </h2>
+  );
+};
 
 export const FinalCTASection = () => {
   const ref = useRef(null);
@@ -50,15 +126,10 @@ export const FinalCTASection = () => {
             transition={{ duration: 0.6 }}
             className="text-center lg:text-left"
           >
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.2 }}
-              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-display font-bold text-primary-foreground leading-tight mb-6"
-            >
-              Parce que certaines étreintes ne devraient{' '}
-              <span className="italic">jamais s'arrêter</span>
-            </motion.h2>
+            <AnimatedWaveTitle 
+              text="Parce que certaines étreintes ne devraient jamais s'arrêter" 
+              isInView={isInView}
+            />
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}

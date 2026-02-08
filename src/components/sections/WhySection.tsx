@@ -269,51 +269,77 @@ const UrgencyAnimation = ({ isInView }: { isInView: boolean }) => {
 };
 const BalloonTitle = ({ isInView }: { isInView: boolean }) => {
   const text = "Parce que certaines distances sont trop longues à supporter";
-  const balloonEmojis = ['🎈', '🎀', '💓', '🎁'];
-  
-  // Split text by sentences/words
   const words = text.split(' ');
-  let balloonIndex = 0;
+  const [hoveredWordIndex, setHoveredWordIndex] = useState<number | null>(null);
 
   return (
-    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-foreground mb-6">
-      {words.map((word, idx) => {
-        const isFirstLetter = idx === 0 || words[idx - 1].endsWith('.');
-        const hasBalloon = isFirstLetter && balloonIndex < balloonEmojis.length;
-        const currentBalloon = hasBalloon ? balloonEmojis[balloonIndex++] : null;
-
-        return (
-          <span key={idx} className="inline relative">
-            {hasBalloon && currentBalloon && (
+    <h2 
+      className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-6 cursor-pointer"
+      onMouseLeave={() => setHoveredWordIndex(null)}
+    >
+      {words.map((word, wordIdx) => (
+        <motion.span
+          key={wordIdx}
+          className="inline-block mr-3"
+          onMouseEnter={() => setHoveredWordIndex(wordIdx)}
+          initial={{ opacity: 0, y: 20, rotateX: 90 }}
+          animate={isInView ? { 
+            opacity: 1, 
+            y: 0, 
+            rotateX: 0
+          } : {}}
+          transition={{
+            duration: 0.6,
+            delay: wordIdx * 0.1,
+            ease: "easeOut"
+          }}
+        >
+          <motion.span
+            className="relative inline-block"
+            animate={{
+              ...(hoveredWordIndex === wordIdx ? {
+                y: [0, -8, 0, -8, 0],
+              } : {}),
+              textShadow: isInView ? [
+                "0 0 0px rgba(255,20,147,0)",
+                "0 0 20px rgba(255,20,147,0.6)",
+                "0 0 0px rgba(255,20,147,0)"
+              ] : "0 0 0px rgba(255,20,147,0)"
+            }}
+            transition={{
+              y: {
+                duration: 0.6,
+                ease: "easeInOut"
+              },
+              textShadow: {
+                duration: 2,
+                delay: wordIdx * 0.1 + 0.3,
+                repeat: Infinity
+              }
+            }}
+          >
+            {word.split('').map((char, charIdx) => (
               <motion.span
-                initial={{ opacity: 0, y: 0 }}
-                animate={isInView ? { opacity: 1, y: -15 } : {}}
-                transition={{ 
-                  duration: 0.8,
-                  delay: idx * 0.05
+                key={charIdx}
+                className="inline-block"
+                animate={hoveredWordIndex === wordIdx ? {
+                  y: [0, -10, 0],
+                } : {
+                  y: 0
                 }}
-                className="inline-block relative mr-1"
+                transition={{
+                  duration: hoveredWordIndex === wordIdx ? 0.5 : 0.3,
+                  delay: hoveredWordIndex === wordIdx ? charIdx * 0.05 : 0,
+                  repeat: hoveredWordIndex === wordIdx ? Infinity : 0,
+                  ease: "easeInOut"
+                }}
               >
-                <motion.span
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ 
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: idx * 0.1
-                  }}
-                  className="text-2xl"
-                >
-                  {currentBalloon}
-                </motion.span>
+                {char}
               </motion.span>
-            )}
-            <span className={isFirstLetter && hasBalloon ? "text-gradient italic" : ""}>
-              {word}{' '}
-            </span>
-          </span>
-        );
-      })}
+            ))}
+          </motion.span>
+        </motion.span>
+      ))}
     </h2>
   );
 };

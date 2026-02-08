@@ -11,6 +11,7 @@ import { Footer } from '@/components/layout/Footer';
 import { MorphingTransition, WaveDivider, HeartDivider } from '@/components/interactive/MorphingTransition';
 import { ParallaxSection, ParallaxFloat } from '@/components/common/ParallaxSection';
 import { TransitionManager, usePageTransitions, useRandomTransition, TransitionType } from '@/components/common/TransitionManager';
+import { ShareButton } from '@/components/interactive/ShareButton';
 
 const LandingPage = () => {
   const { currentTransition, isTransitioning, startTransition, endTransition } = usePageTransitions();
@@ -71,16 +72,19 @@ const LandingPage = () => {
        {/* Footer */}
        <Footer />
        
+       {/* Bouton de partage flottant */}
+       <ShareButton />
+       
        {/* Système de transitions global */}
-       <TransitionManager 
-         isActive={showTransition}
-         transitionType={transitionType}
-         onComplete={() => {
-           setShowTransition(false);
-           endTransition();
-         }}
-       />
-    </main>
+        <TransitionManager 
+          isActive={showTransition}
+          transitionType={transitionType}
+          onComplete={() => {
+            setShowTransition(false);
+            endTransition();
+          }}
+        />
+      </main>
   );
 };
 
