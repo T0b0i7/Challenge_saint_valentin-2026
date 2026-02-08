@@ -114,7 +114,7 @@ export const HeroSection = () => {
                   scrollToSection('hero');
                   setMenuOpen(false);
                 }}
-                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+                className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
               >
                 <Play className="w-4 h-4" />
                 Hero
