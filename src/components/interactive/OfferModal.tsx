@@ -17,11 +17,11 @@ interface InvoiceData {
 }
 
 interface FormData {
-  offer: any;
   name: string;
   email: string;
   phone: string;
   address: string;
+  offer?: string;
 }
 
 interface Offer {
@@ -135,86 +135,159 @@ export const OfferModal = ({ isOpen, selectedOfferId, onClose }: OfferModalProps
 
     // Créer le PDF
     const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 15;
+    const contentWidth = pageWidth - (margin * 2);
     
-    // En-tête de la facture
+    // En-tête avec fond rose
+    doc.setFillColor(255, 20, 147);
+    doc.rect(0, 0, pageWidth, 60, 'F');
+    
+    // Logo et titre en blanc
+    doc.setTextColor(255, 255, 255);
     doc.setFontSize(20);
-    doc.setTextColor(255, 20, 147);
-    doc.text('FACTURE', 105, 20, { align: 'center' });
+    doc.setFont(undefined, 'bold');
+    doc.text('HUGGY LOVE', pageWidth / 2, 20, { align: 'center' });
     
-    // Logo SVG simplifié
-    doc.setFontSize(8);
-    doc.setTextColor(255, 20, 147);
-    doc.text('❤️ HUGGY LOVE ❤️', 105, 30, { align: 'center' });
-    
-    // Informations de l'entreprise
     doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.text('Huggy Love', 20, 45);
-    doc.text('Site: https://huggylove.netlify.app', 20, 50);
-    doc.text('Email: contact@huggylove.com', 20, 55);
+    doc.setFont(undefined, 'normal');
+    doc.text('Peluches d\'amour personnalisées', pageWidth / 2, 30, { align: 'center' });
+    doc.text('❤️ Fabriqué avec amour au Bénin ❤️', pageWidth / 2, 40, { align: 'center' });
     
-    // Informations client
-    doc.text(`Numéro: ${invoiceData.orderNumber}`, 140, 45);
-    doc.text(`Date: ${invoiceData.date}`, 140, 50);
-    doc.text(`Client: ${invoiceData.customerName}`, 140, 55);
+    // Numéro facture
+    doc.setFontSize(12);
+    doc.text(`FACTURE N° ${invoiceData.orderNumber}`, pageWidth / 2, 52, { align: 'center' });
+    
+    // Zone informations - deux colonnes
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(9);
+    
+    // Colonne gauche - Entreprise
+    doc.setFont(undefined, 'bold');
+    doc.text('HUGGY LOVE', margin, 75);
+    doc.setFont(undefined, 'normal');
+    doc.text('Cotonou, Bénin', margin, 82);
+    doc.text('contact@huggylove.com', margin, 89);
+    doc.text('huggylove.netlify.app', margin, 96);
+    
+    // Colonne droite - Client
+    const rightCol = pageWidth - margin - 60;
+    doc.setFont(undefined, 'bold');
+    doc.text('FACTURE POUR:', rightCol, 75);
+    doc.setFont(undefined, 'normal');
+    doc.text(invoiceData.customerName, rightCol, 82);
+    doc.text(invoiceData.email, rightCol, 89);
+    doc.text(invoiceData.phone, rightCol, 96);
+    
+    // Date
+    doc.setFont(undefined, 'bold');
+    doc.text(`Date: ${invoiceData.date}`, margin, 110);
     
     // Ligne de séparation
     doc.setDrawColor(255, 20, 147);
-    doc.line(20, 65, 190, 65);
+    doc.setLineWidth(0.5);
+    doc.line(margin, 120, pageWidth - margin, 120);
     
     // Tableau des produits
-    doc.setFontSize(12);
+    doc.setFillColor(255, 240, 245);
+    doc.rect(margin, 125, contentWidth, 10, 'F');
     doc.setTextColor(255, 20, 147);
-    doc.text('DÉTAILS DE LA COMMANDE', 105, 80, { align: 'center' });
-    
-    // En-têtes du tableau
-    doc.setDrawColor(200, 200, 200);
-    doc.rect(20, 90, 170, 10);
+    doc.setFont(undefined, 'bold');
     doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.text('Article', 25, 97);
-    doc.text('Prix', 165, 97);
+    doc.text('DÉTAILS DE LA COMMANDE', pageWidth / 2, 132, { align: 'center' });
     
-    // Contenu du tableau
+    // En-têtes tableau
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(8);
     doc.setDrawColor(200, 200, 200);
-    doc.rect(20, 100, 170, 10);
-    doc.text(invoiceData.offer, 25, 107);
-    doc.text(invoiceData.price, 165, 107);
+    doc.rect(margin, 140, contentWidth, 8);
+    doc.text('Description', margin + 2, 146);
+    doc.text('Quantité', margin + 80, 146);
+    doc.text('Prix Unitaire', margin + 110, 146);
+    doc.text('Total', margin + 140, 146);
     
-    // Informations de livraison
-    doc.setFontSize(12);
-    doc.setTextColor(255, 20, 147);
-    doc.text('INFORMATIONS DE LIVRAISON', 105, 130, { align: 'center' });
-    
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Nom: ${invoiceData.customerName}`, 20, 140);
-    doc.text(`Email: ${invoiceData.email}`, 20, 145);
-    doc.text(`Téléphone: ${invoiceData.phone}`, 20, 150);
-    doc.text(`Adresse: ${invoiceData.address}`, 20, 155);
+    // Contenu tableau
+    doc.rect(margin, 148, contentWidth, 8);
+    doc.text(invoiceData.offer, margin + 2, 154);
+    doc.text('1', margin + 80, 154);
+    doc.text(invoiceData.price, margin + 110, 154);
+    doc.text(invoiceData.price, margin + 140, 154);
     
     // Total
-    doc.setFontSize(14);
-    doc.setTextColor(255, 20, 147);
-    doc.text(`TOTAL: ${invoiceData.price}`, 140, 170);
-    
-    // Méthode de paiement
+    doc.setFillColor(255, 20, 147);
+    doc.rect(margin, 165, contentWidth, 12, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont(undefined, 'bold');
     doc.setFontSize(10);
+    doc.text(`TOTAL TTC: ${invoiceData.price}`, pageWidth - margin - 5, 173, { align: 'right' });
+    
+    // Informations livraison - colonne gauche
     doc.setTextColor(0, 0, 0);
-    doc.text(`Méthode: ${invoiceData.paymentMethod}`, 20, 180);
-    
-    // Code QR simplifié
-    doc.setDrawColor(0, 0, 0);
-    doc.rect(150, 185, 40, 40);
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(9);
+    doc.text('LIVRAISON:', margin, 190);
+    doc.setFont(undefined, 'normal');
     doc.setFontSize(8);
-    doc.text('Code QR', 170, 205, { align: 'center' });
-    doc.text('Vérification', 170, 210, { align: 'center' });
     
-    // Signature
-    doc.setFontSize(12);
+    // Gérer les adresses longues
+    const addressLines = doc.splitTextToSize(invoiceData.address, 80);
+    let yPos = 197;
+    doc.text(`Adresse:`, margin, yPos);
+    yPos += 5;
+    addressLines.forEach((line: string) => {
+      doc.text(line, margin + 5, yPos);
+      yPos += 4;
+    });
+    
+    doc.text(`Tél: ${invoiceData.phone}`, margin, yPos + 2);
+    doc.text(`Email: ${invoiceData.email}`, margin, yPos + 6);
+    
+    // Méthode paiement - colonne droite
+    const paymentX = margin + 100;
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(9);
+    doc.text('PAIEMENT:', paymentX, 190);
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(8);
+    doc.text(invoiceData.paymentMethod, paymentX, 197);
+    
+    // Code QR - positionné à droite
+    const qrSize = 30;
+    const qrX = pageWidth - margin - qrSize;
+    const qrY = 200;
+    
+    // Cadre du QR code
+    doc.setDrawColor(0, 0, 0);
+    doc.rect(qrX, qrY, qrSize, qrSize);
+    
+    // Simulation de QR code plus petit
+    doc.setFillColor(0, 0, 0);
+    const blockSize = 2.5;
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if ((i + j) % 2 === 0) {
+          doc.rect(qrX + 4 + i * blockSize, qrY + 4 + j * blockSize, blockSize, blockSize, 'F');
+        }
+      }
+    }
+    
+    // Texte QR
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(7);
+    doc.text('SCANEZ', qrX + qrSize/2, qrY + qrSize + 6, { align: 'center' });
+    doc.text('huggylove.netlify.app', qrX + qrSize/2, qrY + qrSize + 11, { align: 'center' });
+    
+    // Pied de page
+    doc.setFillColor(255, 240, 245);
+    doc.rect(0, pageHeight - 25, pageWidth, 25, 'F');
     doc.setTextColor(255, 20, 147);
-    doc.text('Merci pour votre confiance !', 105, 245, { align: 'center' });
-    doc.text('Huggy Love - Fabriqué avec ❤️ au Bénin', 105, 255, { align: 'center' });
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(9);
+    doc.text('MERCI POUR VOTRE CONFIANCE !', pageWidth / 2, pageHeight - 15, { align: 'center' });
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(7);
+    doc.text('Huggy Love - Votre partenaire pour des moments inoubliables', pageWidth / 2, pageHeight - 8, { align: 'center' });
     
     // Sauvegarder le PDF
     doc.save(`facture-huggylove-${orderId}.pdf`);
