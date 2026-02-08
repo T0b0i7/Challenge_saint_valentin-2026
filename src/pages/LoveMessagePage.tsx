@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Send, Copy, Check, Share2, MessageCircle, Mail, Upload, User, ChevronDown } from 'lucide-react';
+import QRCode from 'qrcode.react';
 
 const LoveMessagePage = () => {
   const navigate = useNavigate();
@@ -41,6 +42,12 @@ const LoveMessagePage = () => {
       return null;
     }
   };
+
+  // Générer le QR code côté client quand le lien est généré
+  useEffect(() => {
+    // On n'a besoin que d'un simple rendu avec qrcode.react
+    // Le composant gère tout automatiquement
+  }, [generatedLink]);
 
   const handleSendMessage = () => {
     if (message.trim().length === 0) return;
@@ -121,11 +128,6 @@ const LoveMessagePage = () => {
       const selected = shareOptions[0]; // Défaut WhatsApp
       selected.action();
     }
-  };
-
-  const generateQRCode = (url: string): string => {
-    const encodedUrl = encodeURIComponent(url);
-    return `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodedUrl}`;
   };
 
   const handleOfferResponse = (accepted: boolean) => {
@@ -537,23 +539,14 @@ const LoveMessagePage = () => {
                 className="mb-4 flex flex-col items-center"
               >
                 <p className="text-xs text-gray-600 mb-3">📱 Ou scannez ce QR code:</p>
-                <div className="w-32 h-32 sm:w-40 sm:h-40 bg-white border-2 border-pink-300 rounded-lg p-2 flex items-center justify-center">
-                  <svg width="100%" height="100%" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    {/* QR Code simple en SVG */}
-                    <rect width="200" height="200" fill="white"/>
-                    {/* Motif QR simplifié */}
-                    <text x="100" y="100" textAnchor="middle" dy=".3em" fontSize="12" fill="gray">
-                      QR Code
-                    </text>
-                  </svg>
-                  {/* Fallback image si SVG ne suffit pas */}
-                  <img 
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(generatedLink)}`}
-                    alt="QR Code"
-                    className="w-full h-full object-contain rounded"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
+                <div className="w-32 h-32 sm:w-40 sm:h-40 bg-white border-2 border-pink-300 rounded-lg p-2 flex items-center justify-center overflow-hidden">
+                  <QRCode 
+                    value={generatedLink}
+                    size={160}
+                    level="H"
+                    includeMargin={false}
+                    fgColor="#ec4899"
+                    bgColor="#ffffff"
                   />
                 </div>
               </motion.div>
