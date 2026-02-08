@@ -248,7 +248,7 @@ export const ValentineQuestion = ({ onYesClick }: ValentineQuestionProps) => {
     setShowHearts(true);
     onYesClick();
     setTimeout(() => {
-      navigate('/heart-animation');
+      navigate('/landing-page');
     }, 1500);
   };
 

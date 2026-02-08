@@ -44,7 +44,7 @@ export const ValentinePrompt: React.FC<ValentinePromptProps> = ({ onYesClick }) 
   const handleYesClick = () => {
     setShowBear(false);
     setTimeout(() => {
-      window.location.href = '/heart-animation-page'; // Go to page 3: HeartAnimationPage
+      window.location.href = '/landing-page'; // Go to landing page
     }, 1000);
   };
 

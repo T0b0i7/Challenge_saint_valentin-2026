@@ -147,15 +147,6 @@ const HeartAnimationPage = () => {
     }
   }, []);
 
-  const handleNext = () => {
-    console.log('Bouton Suivant cliqué - navigation vers /landing-page'); // Debug
-    navigate('/landing-page'); // Return to landing page
-  };
-
-  const handleBack = () => {
-    navigate('/valentine-prompt'); // Go back to page 1: ValentinePrompt
-  };
-
   return (
     <div className={`relative overflow-hidden ${isMobile ? 'w-screen h-screen' : 'w-full h-screen'}`}
          style={{ 
@@ -262,19 +253,9 @@ const HeartAnimationPage = () => {
           ? 'bottom-4 left-4 right-4 gap-2 flex-col-reverse' 
           : 'bottom-8 right-8 gap-3'
       }`}>
-        {/* Bouton suivant */}
-        <button
-          onClick={handleNext}
-          className={`px-6 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 backdrop-blur-sm border-2 border-pink-400/50 ${
-            isMobile ? 'w-full text-center' : ''
-          }`}
-        >
-          Suivant →
-        </button>
-        
         {/* Bouton retour */}
         <button
-          onClick={() => navigate('/valentine-prompt')}
+          onClick={() => navigate('/landing-page')}
           className={`px-6 py-3 bg-transparent border-2 border-[#ff99cc] text-[#ffccff] rounded-full font-medium shadow-lg hover:bg-[rgba(255,153,204,0.2)] transition-all duration-300 backdrop-blur-sm ${
             isMobile ? 'w-full text-center' : ''
           }`}

@@ -8,6 +8,7 @@ import { ValentinePreloader } from "@/components/valentine/ValentinePreloader";
 import LandingPage from "@/components/common/LandingPage";
 import HeartAnimationPage from "@/pages/HeartAnimationPage";
 import ValentineQuestionPage from "@/pages/ValentineQuestionPage";
+import LoveMessagePage from "@/pages/LoveMessagePage";
 import { ValentinePrompt } from "@/components/valentine/ValentinePrompt";
 import NotFound from "./pages/NotFound";
 
@@ -45,6 +46,8 @@ const App = () => {
             } />
             <Route path="/valentine-prompt" element={<ValentinePrompt />} />
             <Route path="/heart-animation-page" element={<HeartAnimationPage />} />
+            <Route path="/love-message" element={<LoveMessagePage />} />
+            <Route path="/love-message/:messageId" element={<LoveMessagePage />} />
             <Route path="/landing-page" element={<LandingPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

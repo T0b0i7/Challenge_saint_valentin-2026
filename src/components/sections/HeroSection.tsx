@@ -1,11 +1,12 @@
 import { motion, useInView } from 'framer-motion';
-import { ArrowDown, Heart, Play, Pause, Home, HelpCircle, Package, Gift, DollarSign, ShieldCheck, Star, Zap } from 'lucide-react';
+import { ArrowDown, Heart, Play, Pause, Home, HelpCircle, Package, Gift, DollarSign, ShieldCheck, Star, Zap, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CountdownTimer } from '../interactive/CountdownTimer';
 import { AnimatedTitle, AnimatedItalicWord } from '../common/AnimatedTitle';
 import { ParticleRipple } from '../effects/ParticleRipple';
 import plushBear from '@/assets/images/pelluche_produit.jpg';
 import { useRef, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const HeroSection = () => {
   const sectionRef = useRef<HTMLVideoElement>(null);
@@ -14,6 +15,7 @@ export const HeroSection = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const video = videoRef.current;
@@ -188,6 +190,17 @@ export const HeroSection = () => {
               >
                 <Zap className="w-4 h-4" />
                 Dernier CTA
+              </button>
+              <div className="border-t border-pink-200 my-2" />
+              <button
+                onClick={() => {
+                  navigate('/love-message');
+                  setMenuOpen(false);
+                }}
+                className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+              >
+                <Sparkles className="w-4 h-4" />
+                Galerie d'Amour
               </button>
             </nav>
           </motion.div>
