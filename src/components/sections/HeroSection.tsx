@@ -124,7 +124,7 @@ export const HeroSection = () => {
                   scrollToSection('why');
                   setMenuOpen(false);
                 }}
-                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+                className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
               >
                 <HelpCircle className="w-4 h-4" />
                 Pourquoi l'offrir ?
@@ -134,7 +134,7 @@ export const HeroSection = () => {
                   scrollToSection('product');
                   setMenuOpen(false);
                 }}
-                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+                className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
               >
                 <Package className="w-4 h-4" />
                 Produit
@@ -144,7 +144,7 @@ export const HeroSection = () => {
                   scrollToSection('benefits');
                   setMenuOpen(false);
                 }}
-                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+                className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
               >
                 <Gift className="w-4 h-4" />
                 Bénéfices
@@ -154,7 +154,7 @@ export const HeroSection = () => {
                   scrollToSection('pricing');
                   setMenuOpen(false);
                 }}
-                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+                className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
               >
                 <DollarSign className="w-4 h-4" />
                 Pricing
@@ -164,7 +164,7 @@ export const HeroSection = () => {
                   scrollToSection('reassurance');
                   setMenuOpen(false);
                 }}
-                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+                className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
               >
                 <ShieldCheck className="w-4 h-4" />
                 Garanties
@@ -174,7 +174,7 @@ export const HeroSection = () => {
                   scrollToSection('testimonials');
                   setMenuOpen(false);
                 }}
-                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+                className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
               >
                 <Star className="w-4 h-4" />
                 Avis clients
@@ -184,7 +184,7 @@ export const HeroSection = () => {
                   scrollToSection('cta');
                   setMenuOpen(false);
                 }}
-                className="block w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+                className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
               >
                 <Zap className="w-4 h-4" />
                 Dernier CTA
