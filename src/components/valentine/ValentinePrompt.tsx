@@ -406,8 +406,9 @@ export const ValentinePrompt: React.FC<ValentinePromptProps> = ({ onYesClick }) 
         <div id="rose-petals-fall-container"></div>
         
         <div className="scene-container">
-          <div className="text flex items-center justify-center gap-2 sm:gap-4">
-            <span className="text-xl sm:text-3xl font-bold text-center">Pourquoi une peluche le jour de la Saint-Valentin ?<br/>Tu veux savoir si tu veux accepter d'être ma Valentin(e) en cliquant sur ce cœur</span> <span className="heart-beat cursor-pointer text-4xl sm:text-5xl" onClick={handleHeartClick}>❤️</span>
+          <div className="text flex flex-col items-center justify-center gap-2 sm:gap-4 sm:flex-row">
+            <span className="text-xl sm:text-3xl font-bold text-center">Pourquoi une peluche le jour de la Saint-Valentin ?<br/>Tu veux savoir si tu veux accepter d'être ma Valentin(e) en cliquant sur ce cœur</span> 
+            <span className="heart-beat cursor-pointer text-4xl sm:text-5xl" onClick={handleHeartClick}>❤️</span>
           </div>
           
           <div className="rose">
