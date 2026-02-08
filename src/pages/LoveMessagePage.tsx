@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Send, Copy, Check, Share2, MessageCircle, Mail, Upload, User, ChevronDown } from 'lucide-react';
-import QRCode from 'qrcode.react';
 
 const LoveMessagePage = () => {
   const navigate = useNavigate();
@@ -43,11 +42,7 @@ const LoveMessagePage = () => {
     }
   };
 
-  // Générer le QR code côté client quand le lien est généré
-  useEffect(() => {
-    // On n'a besoin que d'un simple rendu avec qrcode.react
-    // Le composant gère tout automatiquement
-  }, [generatedLink]);
+
 
   const handleSendMessage = () => {
     if (message.trim().length === 0) return;
@@ -530,27 +525,6 @@ const LoveMessagePage = () => {
                 {copied ? 'Copié!' : 'Copier'}
               </button>
             </div>
-
-            {/* QR Code - Responsive */}
-            {generatedLink && (
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-4 flex flex-col items-center"
-              >
-                <p className="text-xs text-gray-600 mb-3">📱 Ou scannez ce QR code:</p>
-                <div className="w-32 h-32 sm:w-40 sm:h-40 bg-white border-2 border-pink-300 rounded-lg p-2 flex items-center justify-center overflow-hidden">
-                  <QRCode 
-                    value={generatedLink}
-                    size={160}
-                    level="H"
-                    includeMargin={false}
-                    fgColor="#ec4899"
-                    bgColor="#ffffff"
-                  />
-                </div>
-              </motion.div>
-            )}
 
             {/* Bouton Partager - Responsive */}
             <button
