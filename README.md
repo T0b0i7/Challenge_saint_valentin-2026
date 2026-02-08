@@ -154,7 +154,7 @@ Une expérience unique pour envoyer des messages d'amour personnalisés à votre
 2. **Composition** - Zone texte pour rédiger un message personnalisé
 3. **Partage Intelligent** :
    - 🔗 **Lien unique** encodé en Base64 (pas de dépendance serveur)
-   - 📱 **QR Code** - Scannable directement pour les mobiles
+
    - 📤 **Partage natif** - Envoyer via WhatsApp, SMS, Mail en un clic
 
 4. **Lecture du Message** :
@@ -184,9 +184,9 @@ Galerie d'Amour (demande)
   ↓
 Composition du message
   ↓
-Génération du lien + QR Code
+Génération du lien partageable
   ↓
-Partage (Copie/QR/WhatsApp/SMS)
+Partage (Copie/WhatsApp/Email/Réseaux sociaux)
   ↓
 Destinataire clique le lien
   ↓
