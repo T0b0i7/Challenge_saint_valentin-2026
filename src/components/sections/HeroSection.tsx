@@ -101,13 +101,15 @@ export const HeroSection = () => {
           <Home className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600" />
         </motion.button>
 
-        {/* Menu déroulant - Toujours visible pour meilleure accessibilité */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2 }}
-          className="absolute top-14 sm:top-16 left-0 bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-4 min-w-max max-w-xs sm:max-w-md border border-pink-200"
-        >
+        {/* Menu déroulant - Affiché si menuOpen est true */}
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute top-14 sm:top-16 left-0 bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-4 min-w-max max-w-xs sm:max-w-md border border-pink-200"
+          >
             <nav className="space-y-1 sm:space-y-2">
               <button
                 onClick={() => {
@@ -201,7 +203,8 @@ export const HeroSection = () => {
                 <span>Message d'Amour ✨</span>
               </button>
             </nav>
-        </motion.div>
+          </motion.div>
+        )}
       </div>
       <motion.button
         initial={{ opacity: 0 }}
