@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Send, Copy, Check, Share2, MessageCircle, Mail, User, ChevronDown, AlertCircle, X } from 'lucide-react';
+import LZ from 'lz-string';
 
 const LoveMessagePage = () => {
   const navigate = useNavigate();
@@ -23,21 +24,22 @@ const LoveMessagePage = () => {
   const [notification, setNotification] = useState<{ type: 'error' | 'success'; message: string } | null>(null);
   const [errors, setErrors] = useState<{ message?: string; senderName?: string }>({});
 
-  // Encoder le message avec les métadonnées
+  // Encoder le message avec les métadonnées - Compressé
   const encodeMessage = (msg: string, name: string, anon: boolean): string => {
     const data = {
       message: msg,
       sender: anon ? null : name,
       isAnonymous: anon
     };
-    return btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+    return LZ.compressToBase64(JSON.stringify(data));
   };
 
-  // Décoder le message depuis Base64
+  // Décoder le message depuis Base64 compressé
   const decodeMessage = (encoded: string): { message: string; sender: string | null; isAnonymous: boolean } | null => {
     try {
-      const decoded = decodeURIComponent(escape(atob(encoded)));
-      return JSON.parse(decoded);
+      const decompressed = LZ.decompressFromBase64(encoded);
+      if (!decompressed) return null;
+      return JSON.parse(decompressed);
     } catch (e) {
       return null;
     }
@@ -49,8 +51,26 @@ const LoveMessagePage = () => {
     setTimeout(() => setNotification(null), 5000);
   };
 
-  // Valider les champs
-  const validateFields = (): boolean => {
+  // Valider les champs du message uniquement
+  const validateMessage = (): boolean => {
+    const newErrors: { message?: string; senderName?: string } = {};
+    
+    if (!message.trim()) {
+      newErrors.message = 'Le message est obligatoire';
+    }
+    
+    setErrors(newErrors);
+    
+    if (Object.keys(newErrors).length > 0) {
+      showNotificationMessage('error', 'Veuillez remplir tous les champs obligatoires');
+      return false;
+    }
+    
+    return true;
+  };
+
+  // Valider tous les champs (message + nom si pas anonyme)
+  const validateAllFields = (): boolean => {
     const newErrors: { message?: string; senderName?: string } = {};
     
     if (!message.trim()) {
@@ -72,12 +92,12 @@ const LoveMessagePage = () => {
   };
 
   const handleSendMessage = () => {
-    if (!validateFields()) return;
+    if (!validateMessage()) return;
     setStep('options');
   };
 
   const handleFinishOptions = () => {
-    if (!validateFields()) return;
+    if (!validateAllFields()) return;
 
     const encoded = encodeMessage(message, senderName, isAnonymous);
     const link = `${window.location.origin}/love-message/${encoded}`;
