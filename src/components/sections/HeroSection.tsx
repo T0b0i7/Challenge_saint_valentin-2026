@@ -197,10 +197,10 @@ export const HeroSection = () => {
                   navigate('/love-message');
                   setMenuOpen(false);
                 }}
-                className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
+                className="w-full text-left px-4 py-3 rounded-lg bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold flex items-center gap-3 transition-all duration-300 hover:from-pink-600 hover:to-rose-600 hover:scale-105 hover:shadow-lg animate-pulse border-2 border-pink-300 shadow-md"
               >
-                <Sparkles className="w-4 h-4" />
-                Message d'Amour
+                <Sparkles className="w-5 h-5 text-yellow-200 animate-spin" />
+                <span className="text-lg">Message d'Amour ✨</span>
               </button>
             </nav>
           </motion.div>
@@ -348,9 +348,9 @@ export const HeroSection = () => {
                 className="relative"
               >
                 <img
-                  src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif"
-                  alt="Deux oursons qui s'embrassent - Peluche Étreinte Éternelle"
-                  className="relative z-10 w-full h-auto rounded-3xl shadow-2xl"
+                  src="/pelluche_produit.jpg"
+                  alt="Peluche Étreinte Éternelle - Cadeau Saint-Valentin"
+                  className="relative z-10 w-full h-auto rounded-3xl shadow-2xl object-cover"
                 />
                 
                 {/* Decorative Badge */}

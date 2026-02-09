@@ -21,5 +21,18 @@ export default defineConfig(({ mode }) => ({
   build: {
     // Désactiver la génération de service worker pour éviter les erreurs de cache
     serviceWorker: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Séparer les bibliothèques lourdes
+          'vendor': ['react', 'react-dom'],
+          'framer-motion': ['framer-motion'],
+          'radix': ['@radix-ui/react-dialog', '@radix-ui/react-toast', '@radix-ui/react-tooltip'],
+          'lucide': ['lucide-react'],
+          'tanstack': ['@tanstack/react-query'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 600,
   },
 } as any));

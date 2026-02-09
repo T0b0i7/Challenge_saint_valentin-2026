@@ -44,7 +44,7 @@ const App = () => {
                 {!showLanding && <ValentinePreloader onAnimationEnd={() => {
                   window.dispatchEvent(new CustomEvent('valentineAnimationEnd'));
                 }} />}
-                {showLanding && <ValentinePrompt />}
+                {showLanding && <LandingPage />}
               </>
             } />
             <Route path="/valentine-prompt" element={<ValentinePrompt />} />

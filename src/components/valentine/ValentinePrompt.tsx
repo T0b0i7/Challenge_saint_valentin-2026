@@ -381,8 +381,23 @@ export const ValentinePrompt: React.FC<ValentinePromptProps> = ({ onYesClick }) 
           70% { transform: scale(1); }
         }
 
+        @keyframes pulse {
+          0% { 
+            filter: drop-shadow(0 0 20px rgba(255, 20, 147, 0.8)) brightness(1);
+            transform: scale(1);
+          }
+          50% { 
+            filter: drop-shadow(0 0 40px rgba(255, 20, 147, 1)) brightness(1.3);
+            transform: scale(1.05);
+          }
+          100% { 
+            filter: drop-shadow(0 0 20px rgba(255, 20, 147, 0.8)) brightness(1);
+            transform: scale(1);
+          }
+        }
+
         .heart-beat {
-          animation: heartBeat 1.3s infinite;
+          animation: heartBeat 1.3s infinite, pulse 2s infinite;
           display: inline-block;
         }
       `}</style>
@@ -408,7 +423,10 @@ export const ValentinePrompt: React.FC<ValentinePromptProps> = ({ onYesClick }) 
         <div className="scene-container">
           <div className="text flex flex-col items-center justify-center gap-2 sm:gap-4 sm:flex-row">
             <span className="text-xl sm:text-3xl font-bold text-center">Pourquoi une peluche le jour de la Saint-Valentin ?<br/>Tu veux savoir si tu veux accepter d'être ma Valentin(e) en cliquant sur ce cœur</span> 
-            <span className="heart-beat cursor-pointer text-4xl sm:text-5xl" onClick={handleHeartClick}>❤️</span>
+            <span className="heart-beat cursor-pointer text-4xl sm:text-5xl transition-all duration-500 hover:scale-150 hover:rotate-12 hover:drop-shadow-2xl hover:filter hover:brightness-125 active:scale-125 relative z-30" onClick={handleHeartClick} style={{
+          filter: 'drop-shadow(0 0 20px rgba(255, 20, 147, 0.8))',
+          animation: 'heartBeat 1.3s infinite, pulse 2s infinite'
+        }}>❤️</span>
           </div>
           
           <div className="rose">

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CreditCard, Smartphone, QrCode, Check, ArrowLeft, Shield, Truck, Gift, ChevronDown, ArrowUp, Download, FileText, Image } from 'lucide-react';
+import { X, CreditCard, Smartphone, QrCode, Check, ArrowLeft, Shield, Truck, Gift, ChevronDown, ArrowUp, Download, FileText, Image, AlertCircle, Info, Globe } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { toast } from 'sonner';
 
 // Icônes personnalisées pour les méthodes de paiement
 const MoovMoneyIcon = () => (
@@ -82,6 +83,7 @@ export const PaymentForm = ({ isOpen, onClose, amount, productName }: PaymentFor
   const [showInvoice, setShowInvoice] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [touchedFields, setTouchedFields] = useState<Set<string>>(new Set());
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -89,6 +91,40 @@ export const PaymentForm = ({ isOpen, onClose, amount, productName }: PaymentFor
       ...prev,
       [name]: value
     }));
+    
+    // Marquer le champ comme touché
+    setTouchedFields(prev => new Set(prev).add(name));
+  };
+
+  const handleFieldBlur = (fieldName: string) => {
+    setTouchedFields(prev => new Set(prev).add(fieldName));
+  };
+
+  const getFieldError = (fieldName: string) => {
+    if (!touchedFields.has(fieldName)) return '';
+    
+    switch (fieldName) {
+      case 'fullName':
+        return !formData.fullName.trim() ? 'Le nom complet est requis' : '';
+      case 'email':
+        if (!formData.email.trim()) return 'L\'adresse email est requise';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return 'L\'adresse email n\'est pas valide';
+        return '';
+      case 'phone':
+        if (!formData.phone.trim()) return 'Le numéro de téléphone est requis';
+        
+        // Nettoyer le numéro (garder seulement les chiffres)
+        const cleanPhone = formData.phone.replace(/\D/g, '');
+        
+        // Vérifier le minimum de 8 chiffres (très souple)
+        if (cleanPhone.length < 8) return 'Minimum 8 chiffres requis';
+        
+        return '';
+      case 'address':
+        return !formData.address.trim() ? 'L\'adresse de livraison est requise' : '';
+      default:
+        return '';
+    }
   };
 
   const generateInvoice = () => {
@@ -109,19 +145,78 @@ export const PaymentForm = ({ isOpen, onClose, amount, productName }: PaymentFor
     };
   };
 
+  const validateForm = () => {
+    const errors = [];
+    
+    if (!formData.fullName.trim()) {
+      errors.push('Le nom complet est requis');
+    }
+    
+    if (!formData.email.trim()) {
+      errors.push('L\'adresse email est requise');
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.push('L\'adresse email n\'est pas valide');
+    }
+    
+    if (!formData.phone.trim()) {
+      errors.push('Le numéro de téléphone est requis');
+    } else if (!/^\+?[\d\s-]{10,}$/.test(formData.phone.replace(/\s/g, ''))) {
+      errors.push('Le numéro de téléphone n\'est pas valide');
+    }
+    
+    if (!formData.address.trim()) {
+      errors.push('L\'adresse de livraison est requise');
+    }
+    
+    return errors;
+  };
+
   const handlePayment = async () => {
-    if (!formData.fullName || !formData.email || !formData.phone) {
-      alert('Veuillez remplir tous les champs obligatoires');
+    const errors = validateForm();
+    
+    if (errors.length > 0) {
+      // Afficher les erreurs avec des notifications professionnelles
+      errors.forEach((error, index) => {
+        setTimeout(() => {
+          toast.error(error, {
+            duration: 4000,
+            position: 'top-right',
+            icon: <AlertCircle className="w-4 h-4" />,
+            description: 'Veuillez corriger cette information pour continuer'
+          });
+        }, index * 200); // Délai entre chaque notification
+      });
+      
+      // Mettre en évidence les champs invalides
+      const firstErrorField = document.querySelector('input[name="fullName"], input[name="email"], input[name="phone"], textarea[name="address"]') as HTMLInputElement | HTMLTextAreaElement;
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstErrorField.focus();
+      }
       return;
     }
 
     setIsProcessing(true);
+    
+    // Notification de début de traitement
+    toast.info('Traitement du paiement en cours...', {
+      duration: 2000,
+      position: 'top-right',
+      icon: <Info className="w-4 h-4" />,
+    });
     
     // Simuler le traitement du paiement
     setTimeout(() => {
       setIsProcessing(false);
       setPaymentSuccess(true);
       setShowInvoice(true);
+      
+      // Notification de succès
+      toast.success('Paiement traité avec succès !', {
+        duration: 5000,
+        position: 'top-right',
+        description: 'Votre facture a été générée ci-dessous',
+      });
     }, 2000);
   };
 
@@ -304,28 +399,68 @@ export const PaymentForm = ({ isOpen, onClose, amount, productName }: PaymentFor
                       <label className="block text-sm font-medium text-slate-700 mb-2">
                         Nom Complet *
                       </label>
-                      <input
-                        type="text"
-                        name="fullName"
-                        value={formData.fullName}
-                        onChange={handleInputChange}
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all text-sm"
-                        placeholder="Jean Dupont"
-                      />
+                      <div className="relative">
+                        <input
+                          type="text"
+                          name="fullName"
+                          value={formData.fullName}
+                          onChange={handleInputChange}
+                          onBlur={() => handleFieldBlur('fullName')}
+                          className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all text-sm ${
+                            getFieldError('fullName') 
+                              ? 'border-red-300 bg-red-50' 
+                              : touchedFields.has('fullName') && formData.fullName.trim()
+                              ? 'border-green-300 bg-green-50'
+                              : 'border-slate-300'
+                          }`}
+                          placeholder="Jean Dupont"
+                        />
+                        {getFieldError('fullName') && (
+                          <div className="absolute right-3 top-3">
+                            <AlertCircle className="w-4 h-4 text-red-500" />
+                          </div>
+                        )}
+                      </div>
+                      {getFieldError('fullName') && (
+                        <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3" />
+                          {getFieldError('fullName')}
+                        </p>
+                      )}
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-2">
                         Email *
                       </label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all text-sm"
-                        placeholder="jean.dupont@email.com"
-                      />
+                      <div className="relative">
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          onBlur={() => handleFieldBlur('email')}
+                          className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all text-sm ${
+                            getFieldError('email') 
+                              ? 'border-red-300 bg-red-50' 
+                              : touchedFields.has('email') && !getFieldError('email')
+                              ? 'border-green-300 bg-green-50'
+                              : 'border-slate-300'
+                          }`}
+                          placeholder="jean.dupont@email.com"
+                        />
+                        {getFieldError('email') && (
+                          <div className="absolute right-3 top-3">
+                            <AlertCircle className="w-4 h-4 text-red-500" />
+                          </div>
+                        )}
+                      </div>
+                      {getFieldError('email') && (
+                        <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3" />
+                          {getFieldError('email')}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -333,28 +468,79 @@ export const PaymentForm = ({ isOpen, onClose, amount, productName }: PaymentFor
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       Téléphone *
                     </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all text-sm"
-                      placeholder="+221 XX XX XX XX"
-                    />
+                    <div className="relative">
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        onBlur={() => handleFieldBlur('phone')}
+                        className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all text-sm ${
+                          getFieldError('phone') 
+                            ? 'border-red-300 bg-red-50' 
+                            : touchedFields.has('phone') && !getFieldError('phone')
+                            ? 'border-green-300 bg-green-50'
+                            : 'border-slate-300'
+                        }`}
+                        placeholder="🇧🇯 +229 01 90 12 34 56 (Bénin)"
+                      />
+                      {getFieldError('phone') && (
+                        <div className="absolute right-3 top-3">
+                          <AlertCircle className="w-4 h-4 text-red-500" />
+                        </div>
+                      )}
+                    </div>
+                    {getFieldError('phone') && (
+                      <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {getFieldError('phone')}
+                      </p>
+                    )}
+                    {!getFieldError('phone') && touchedFields.has('phone') && (
+                      <p className="mt-1 text-xs text-green-600 flex items-center gap-1">
+                        <Check className="w-3 h-3" />
+                        Numéro valide
+                      </p>
+                    )}
+                    {!touchedFields.has('phone') && (
+                      <p className="mt-1 text-xs text-slate-500">
+                        Format: 🇧🇯 +229 01 90 12 34 56 (Bénin)
+                      </p>
+                    )}
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       Adresse de Livraison *
                     </label>
-                    <textarea
-                      name="address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      rows={3}
-                      className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all resize-none text-sm"
-                      placeholder="123 Rue de l'Amour, Abidjan, Côte d'Ivoire"
-                    />
+                    <div className="relative">
+                      <textarea
+                        name="address"
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        onBlur={() => handleFieldBlur('address')}
+                        rows={3}
+                        className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all resize-none text-sm ${
+                          getFieldError('address') 
+                            ? 'border-red-300 bg-red-50' 
+                            : touchedFields.has('address') && !getFieldError('address')
+                            ? 'border-green-300 bg-green-50'
+                            : 'border-slate-300'
+                        }`}
+                        placeholder="123 Rue de l'Amour, Abidjan, Côte d'Ivoire"
+                      />
+                      {getFieldError('address') && (
+                        <div className="absolute right-3 top-3">
+                          <AlertCircle className="w-4 h-4 text-red-500" />
+                        </div>
+                      )}
+                    </div>
+                    {getFieldError('address') && (
+                      <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {getFieldError('address')}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -472,20 +658,22 @@ export const PaymentForm = ({ isOpen, onClose, amount, productName }: PaymentFor
                       <div className="text-xs sm:text-sm text-slate-500 font-mono">
                         {invoice.invoiceNumber}
                       </div>
-                      <div className="flex gap-1">
+                      <div className="flex gap-2">
                         <button
                           onClick={() => downloadInvoice('pdf')}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all flex items-center gap-2 font-medium shadow-md hover:shadow-lg transform hover:scale-105"
                           title="Télécharger en PDF"
                         >
-                          <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
+                          <FileText className="w-5 h-5" />
+                          <span className="hidden sm:inline">PDF</span>
                         </button>
                         <button
                           onClick={() => downloadInvoice('image')}
-                          className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                          className="px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all flex items-center gap-2 font-medium shadow-md hover:shadow-lg transform hover:scale-105"
                           title="Télécharger en image"
                         >
-                          <Image className="w-3 h-3 sm:w-4 sm:h-4" />
+                          <Image className="w-5 h-5" />
+                          <span className="hidden sm:inline">Image</span>
                         </button>
                       </div>
                     </div>

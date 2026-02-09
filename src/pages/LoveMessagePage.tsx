@@ -379,7 +379,7 @@ const LoveMessagePage = () => {
           </motion.div>
 
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">
-            Galerie d'Amour 💌
+            Message d'Amour 💌
           </h1>
 
           <p className="text-white/90 text-base sm:text-lg mb-6 sm:mb-8 font-light">
