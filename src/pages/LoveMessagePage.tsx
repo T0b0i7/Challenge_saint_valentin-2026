@@ -298,13 +298,23 @@ const LoveMessagePage = () => {
           <div className="mb-6 sm:mb-8">
             <textarea
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e) => setMessage(e.target.value.substring(0, 500))}
               placeholder="Écris ici ton message d'amour..."
+              maxLength={500}
               className="w-full h-48 sm:h-64 p-4 border-2 border-pink-200 rounded-2xl focus:border-pink-500 focus:outline-none resize-none text-gray-700 text-sm sm:text-base bg-pink-50/50"
             />
-            <p className="mt-2 text-xs sm:text-sm text-gray-500">
-              {message.length} caractères
-            </p>
+            <div className="mt-2 flex items-center justify-between">
+              <p className={`text-xs sm:text-sm ${
+                message.length >= 450 ? 'text-red-500 font-semibold' : 
+                message.length >= 400 ? 'text-orange-500' : 
+                'text-gray-500'
+              }`}>
+                {message.length} / 500 caractères
+              </p>
+              {message.length >= 450 && (
+                <p className="text-xs text-red-500">⚠️ Limite approche</p>
+              )}
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
@@ -318,6 +328,7 @@ const LoveMessagePage = () => {
               onClick={handleSendMessage}
               disabled={message.trim().length === 0}
               className="flex-1 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full font-medium hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm sm:text-base"
+              title={message.trim().length === 0 ? 'Écrivez un message pour continuer' : ''}
             >
               <Send className="w-4 h-4" />
               Envoyer
