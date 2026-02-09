@@ -28,12 +28,36 @@ const OrangeMoneyIcon = () => (
   </svg>
 );
 
+const MTNMoneyIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="24" height="24" rx="4" fill="#FFB900"/>
+    <path d="M12 4L8 8v4l4 4 4-4V8l-4-4z" fill="white"/>
+    <path d="M12 8v4" stroke="#FFB900" strokeWidth="2" strokeLinecap="round"/>
+    <circle cx="12" cy="10" r="1" fill="#FFB900"/>
+  </svg>
+);
+
+const StripeIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="24" height="24" rx="4" fill="#635BFF"/>
+    <path d="M6 12h12M8 10v4M12 10v4M16 10v4" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+);
+
+const PayPalIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="24" height="24" rx="4" fill="#00457C"/>
+    <path d="M8 8h8l-1 4H7l1-4z" fill="white"/>
+    <path d="M7 12h8l-1 4H6l1-4z" fill="#FFB900"/>
+  </svg>
+);
+
 interface PaymentFormData {
   fullName: string;
   email: string;
   phone: string;
   address: string;
-  paymentMethod: 'moov-money' | 'wave' | 'orange-money';
+  paymentMethod: 'moov-money' | 'wave' | 'orange-money' | 'mtn-money' | 'stripe' | 'paypal';
   cardNumber?: string;
   cardExpiry?: string;
   cardCVV?: string;
@@ -337,58 +361,89 @@ export const PaymentForm = ({ isOpen, onClose, amount, productName }: PaymentFor
                 {/* Méthode de paiement */}
                 <div id="payment-method">
                   <h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-3 sm:mb-4">Méthode de Paiement</h3>
-                  <div className="grid grid-cols-1 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {[
-                      { id: 'moov-money', name: 'Moov Money', color: 'orange', icon: <MoovMoneyIcon /> },
-                      { id: 'wave', name: 'Wave', color: 'green', icon: <WaveIcon /> },
-                      { id: 'orange-money', name: 'Orange Money', color: 'orange', icon: <OrangeMoneyIcon /> }
+                      { id: 'moov-money', name: 'Moov Money', color: 'orange', icon: <MoovMoneyIcon />, gradient: 'from-orange-400 to-orange-600' },
+                      { id: 'wave', name: 'Wave', color: 'green', icon: <WaveIcon />, gradient: 'from-teal-400 to-cyan-600' },
+                      { id: 'orange-money', name: 'Orange Money', color: 'orange', icon: <OrangeMoneyIcon />, gradient: 'from-orange-500 to-red-600' },
+                      { id: 'mtn-money', name: 'MTN Money', color: 'yellow', icon: <MTNMoneyIcon />, gradient: 'from-yellow-400 to-amber-600' },
+                      { id: 'stripe', name: 'Stripe', color: 'purple', icon: <StripeIcon />, gradient: 'from-purple-500 to-indigo-600' },
+                      { id: 'paypal', name: 'PayPal', color: 'blue', icon: <PayPalIcon />, gradient: 'from-blue-500 to-blue-700' }
                     ].map((method) => (
-                      <button
+                      <motion.button
                         key={method.id}
                         onClick={() => setFormData(prev => ({ ...prev, paymentMethod: method.id as any }))}
-                        className={`p-3 sm:p-4 rounded-xl border-2 transition-all ${
+                        className={`relative p-4 rounded-xl border-2 transition-all duration-300 overflow-hidden group ${
                           formData.paymentMethod === method.id
-                            ? 'border-orange-500 bg-orange-50'
-                            : 'border-slate-200 hover:border-slate-300'
+                            ? 'border-transparent shadow-lg scale-105'
+                            : 'border-slate-200 hover:border-slate-300 hover:shadow-md hover:scale-102'
                         }`}
+                        whileHover={{ y: -2 }}
+                        whileTap={{ scale: 0.98 }}
                       >
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                        {/* Background gradient */}
+                        <div className={`absolute inset-0 bg-gradient-to-br ${method.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
+                        
+                        {/* Selection indicator */}
+                        {formData.paymentMethod === method.id && (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center"
+                          >
+                            <Check className="w-3 h-3 text-white" />
+                          </motion.div>
+                        )}
+                        
+                        <div className="relative flex flex-col items-center gap-2">
+                          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${method.gradient} flex items-center justify-center shadow-lg`}>
                             {method.icon}
                           </div>
-                          <div className="text-left flex-1">
-                            <div className="font-medium text-slate-800 text-sm sm:text-base">{method.name}</div>
-                            <div className="text-xs sm:text-sm text-slate-600">
-                              {method.id === 'moov-money' && '+221 123 456 789'}
-                              {method.id === 'wave' && '+221 987 654 321'}
-                              {method.id === 'orange-money' && '+221 555 123 456'}
-                            </div>
+                          <div className="text-center">
+                            <div className="font-semibold text-slate-800 text-sm">{method.name}</div>
                           </div>
                         </div>
-                      </button>
+                      </motion.button>
                     ))}
                   </div>
                 </div>
 
                 {/* Bouton de paiement */}
                 <div id="payment-button">
-                  <button
+                  <motion.button
                     onClick={handlePayment}
                     disabled={isProcessing}
-                    className="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 sm:py-4 rounded-xl font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                    className="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 sm:py-4 rounded-xl font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base relative overflow-hidden group"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    {isProcessing ? (
-                      <>
-                        <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white/30 border-t-transparent rounded-full animate-spin"></div>
-                        <span className="text-sm sm:text-base">Traitement...</span>
-                      </>
-                    ) : (
-                      <>
-                        <CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />
-                        <span>Payer {amount.toLocaleString()} FCFA</span>
-                      </>
-                    )}
-                  </button>
+                    {/* Animated background */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-rose-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    
+                    {/* Button content */}
+                    <div className="relative flex items-center justify-center gap-3">
+                      {isProcessing ? (
+                        <>
+                          <motion.div 
+                            className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white/30 border-t-transparent rounded-full"
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          />
+                          <span className="text-sm sm:text-base">Traitement...</span>
+                        </>
+                      ) : (
+                        <>
+                          <motion.div
+                            animate={{ rotate: [0, 10, -10, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                          >
+                            <CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />
+                          </motion.div>
+                          <span>Payer {amount.toLocaleString()} FCFA</span>
+                        </>
+                      )}
+                    </div>
+                  </motion.button>
                 </div>
 
                 {/* Sécurité */}
@@ -479,7 +534,11 @@ export const PaymentForm = ({ isOpen, onClose, amount, productName }: PaymentFor
                           <span className="text-slate-600">Méthode:</span>
                           <span className="text-slate-800 font-medium capitalize">
                             {formData.paymentMethod === 'moov-money' ? 'Moov Money' : 
-                             formData.paymentMethod === 'wave' ? 'Wave' : 'Orange Money'}
+                             formData.paymentMethod === 'wave' ? 'Wave' : 
+                             formData.paymentMethod === 'orange-money' ? 'Orange Money' :
+                             formData.paymentMethod === 'mtn-money' ? 'MTN Money' :
+                             formData.paymentMethod === 'stripe' ? 'Stripe' :
+                             formData.paymentMethod === 'paypal' ? 'PayPal' : 'Inconnu'}
                           </span>
                         </div>
                       </div>
@@ -525,9 +584,12 @@ export const PaymentForm = ({ isOpen, onClose, amount, productName }: PaymentFor
                           <div className="text-xs text-slate-600 space-y-1 text-center">
                             <p className="font-medium">Référence: ETERNAL-LOVE-2026</p>
                             <div className="space-y-1">
-                              <p>• Moov Money: +221 123 456 789</p>
-                              <p>• Wave: +221 987 654 321</p>
-                              <p>• Orange Money: +221 555 123 456</p>
+                              <p>• Moov Money disponible</p>
+                              <p>• Wave disponible</p>
+                              <p>• Orange Money disponible</p>
+                              <p>• MTN Money disponible</p>
+                              <p>• Stripe disponible</p>
+                              <p>• PayPal disponible</p>
                             </div>
                           </div>
                         </div>

@@ -83,7 +83,7 @@ const AnimatedWaveTitle = ({ text, isInView }: { text: string; isInView: boolean
 
 const plans = [
   {
-    name: "Offre Standard",
+    name: "Cœur d'Éternité - Offre Standard",
     price: 45000,
     description: "L'essentiel de l'amour",
     popular: false,
@@ -96,7 +96,7 @@ const plans = [
     ],
   },
   {
-    name: "Offre Ultime",
+    name: "Cœur d'Éternité - Offre Ultime",
     price: 75000,
     originalPrice: 95000,
     description: "L'expérience complète",
