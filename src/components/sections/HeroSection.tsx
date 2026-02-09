@@ -101,15 +101,13 @@ export const HeroSection = () => {
           <Home className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600" />
         </motion.button>
 
-        {/* Menu déroulant */}
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="absolute top-14 sm:top-16 left-0 bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-4 min-w-max max-w-xs sm:max-w-md border border-pink-200"
-          >
+        {/* Menu déroulant - Toujours visible pour meilleure accessibilité */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+          className="absolute top-14 sm:top-16 left-0 bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-4 min-w-max max-w-xs sm:max-w-md border border-pink-200"
+        >
             <nav className="space-y-1 sm:space-y-2">
               <button
                 onClick={() => {
@@ -119,8 +117,7 @@ export const HeroSection = () => {
                 className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
               >
                 <Play className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Hero</span>
-                <span className="sm:hidden">▶️</span>
+                <span>Hero</span>
               </button>
               <button
                 onClick={() => {
@@ -130,8 +127,7 @@ export const HeroSection = () => {
                 className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
               >
                 <HelpCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Pourquoi l'offrir ?</span>
-                <span className="sm:hidden">❓</span>
+                <span>Pourquoi l'offrir ?</span>
               </button>
               <button
                 onClick={() => {
@@ -141,8 +137,7 @@ export const HeroSection = () => {
                 className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
               >
                 <Package className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Produit</span>
-                <span className="sm:hidden">📦</span>
+                <span>Produit</span>
               </button>
               <button
                 onClick={() => {
@@ -152,8 +147,7 @@ export const HeroSection = () => {
                 className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
               >
                 <Gift className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Bénéfices</span>
-                <span className="sm:hidden">🎁</span>
+                <span>Bénéfices</span>
               </button>
               <button
                 onClick={() => {
@@ -163,8 +157,7 @@ export const HeroSection = () => {
                 className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
               >
                 <DollarSign className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Pricing</span>
-                <span className="sm:hidden">💰</span>
+                <span>Pricing</span>
               </button>
               <button
                 onClick={() => {
@@ -174,8 +167,7 @@ export const HeroSection = () => {
                 className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
               >
                 <ShieldCheck className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Garanties</span>
-                <span className="sm:hidden">✅</span>
+                <span>Garanties</span>
               </button>
               <button
                 onClick={() => {
@@ -185,8 +177,7 @@ export const HeroSection = () => {
                 className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
               >
                 <Star className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Avis clients</span>
-                <span className="sm:hidden">⭐</span>
+                <span>Avis clients</span>
               </button>
               <button
                 onClick={() => {
@@ -196,8 +187,7 @@ export const HeroSection = () => {
                 className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
               >
                 <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Dernier CTA</span>
-                <span className="sm:hidden">⚡</span>
+                <span>Dernier CTA</span>
               </button>
               <div className="border-t border-pink-200 my-2" />
               <button
@@ -208,11 +198,10 @@ export const HeroSection = () => {
                 className="w-full text-left px-3 py-2 sm:px-4 sm:py-3 rounded-lg bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold flex items-center gap-2 sm:gap-3 transition-all duration-300 hover:from-pink-600 hover:to-rose-600 hover:scale-105 hover:shadow-lg animate-pulse border-2 border-pink-300 shadow-md text-sm sm:text-base"
               >
                 <Sparkles className="w-3 h-3 sm:w-5 sm:h-5 text-yellow-200 animate-spin" />
-                <span className="text-xs sm:text-lg">Message d'Amour ✨</span>
+                <span>Message d'Amour ✨</span>
               </button>
             </nav>
-          </motion.div>
-        )}
+        </motion.div>
       </div>
       <motion.button
         initial={{ opacity: 0 }}
