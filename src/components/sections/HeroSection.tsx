@@ -57,7 +57,7 @@ export const HeroSection = () => {
   };
 
   return (
-    <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ position: 'relative' }}>
       {/* Video Background - Utilisateur contrôle le play/pause */}
       <video
         ref={videoRef}
@@ -200,7 +200,7 @@ export const HeroSection = () => {
                 className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-3"
               >
                 <Sparkles className="w-4 h-4" />
-                Galerie d'Amour
+                Message d'Amour
               </button>
             </nav>
           </motion.div>

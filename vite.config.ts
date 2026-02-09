@@ -18,4 +18,8 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-}));
+  build: {
+    // Désactiver la génération de service worker pour éviter les erreurs de cache
+    serviceWorker: false,
+  },
+} as any));

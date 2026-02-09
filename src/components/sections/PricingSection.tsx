@@ -1,8 +1,9 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
-import { Check, Sparkles, Truck, Heart, Volume2, Package } from 'lucide-react';
+import { Check, Sparkles, Truck, Heart, Volume2, Package, QrCode, Receipt } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { OfferModal } from '@/components/interactive/OfferModal';
+import { PaymentForm } from '@/components/interactive/PaymentForm';
 
 const AnimatedWaveTitle = ({ text, isInView }: { text: string; isInView: boolean }) => {
   const words = text.split(' ');
@@ -118,6 +119,8 @@ export const PricingSection = () => {
   const [stockCount, setStockCount] = useState(14);
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<any>(null);
 
   useEffect(() => {
     // Simulate stock decreasing occasionally
@@ -137,6 +140,16 @@ export const PricingSection = () => {
   const handleCloseOfferModal = () => {
     setShowOfferModal(false);
     setSelectedOfferId(null);
+  };
+
+  const handlePayment = (plan: any) => {
+    setSelectedPlan(plan);
+    setShowPaymentForm(true);
+  };
+
+  const handleClosePaymentForm = () => {
+    setShowPaymentForm(false);
+    setSelectedPlan(null);
   };
 
   return (
@@ -228,15 +241,15 @@ export const PricingSection = () => {
                 variant={plan.popular ? "cta-white" : "romantic"}
                 size="xl"
                 className="w-full"
-                onClick={() => handleOpenOfferModal(plan.name === 'Offre Ultime' ? 'ultimate' : 'standard')}
+                onClick={() => handlePayment(plan)}
               >
                 {plan.popular ? (
                   <>
                     <Heart className="w-5 h-5" fill="currentColor" />
-                    Choisir cette offre
+                    Payer maintenant
                   </>
                 ) : (
-                  'Sélectionner'
+                  'Payer maintenant'
                 )}
               </Button>
 
@@ -267,7 +280,118 @@ export const PricingSection = () => {
             </span>
           </div>
         </motion.div>
+
+        {/* Facture avec QR Code */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 1, duration: 0.6 }}
+          className="mt-20 max-w-2xl mx-auto"
+        >
+          <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl shadow-xl p-8 border border-slate-200">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <Receipt className="w-6 h-6 text-slate-600" />
+                <h3 className="text-xl font-bold text-slate-800">Facture Proforma</h3>
+              </div>
+              <div className="text-sm text-slate-500">
+                #FAC-2026-0214
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Détails de la facture */}
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold text-slate-700 mb-2">Informations</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Date:</span>
+                      <span className="text-slate-800 font-medium">14/02/2026</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Client:</span>
+                      <span className="text-slate-800 font-medium">Valentine's Lover</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Produit:</span>
+                      <span className="text-slate-800 font-medium">Peluche Éternelle</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Quantité:</span>
+                      <span className="text-slate-800 font-medium">1 unité</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-slate-700 mb-2">Paiement</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Montant:</span>
+                      <span className="text-slate-800 font-medium">75 000 FCFA</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Méthode:</span>
+                      <span className="text-slate-800 font-medium">Mobile Money / Wave</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Statut:</span>
+                      <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                        En attente
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* QR Code */}
+              <div className="flex flex-col items-center justify-center">
+                <div className="bg-white p-6 rounded-xl shadow-lg border-2 border-slate-200">
+                  <div className="text-center mb-4">
+                    <QrCode className="w-16 h-16 text-slate-700 mx-auto mb-2" />
+                    <p className="text-sm font-medium text-slate-700">Scanner pour payer</p>
+                  </div>
+                  <div className="text-xs text-slate-600 space-y-1">
+                    <p>• Mobile Money: +221 123 456 789</p>
+                    <p>• Wave: +221 987 654 321</p>
+                    <p>• Référence: ETERNAL-LOVE-2026</p>
+                  </div>
+                </div>
+                <div className="mt-4 text-center">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-medium">
+                    <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                    QR Code Valide 48h
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer facture */}
+            <div className="mt-6 pt-6 border-t border-slate-200 text-center">
+              <p className="text-xs text-slate-500 mb-2">
+                Merci pour votre confiance ! Cette peluche symbolise un amour éternel.
+              </p>
+              <div className="flex items-center justify-center gap-4 text-xs text-slate-400">
+                <span>© 2026 Peluche Éternelle</span>
+                <span>•</span>
+                <span>support@peluche-eternelle.com</span>
+                <span>•</span>
+                <span>+221 123 456 789</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
       </div>
+
+      <PaymentForm
+        isOpen={showPaymentForm}
+        onClose={handleClosePaymentForm}
+        amount={selectedPlan?.price || 0}
+        productName={selectedPlan?.name || ''}
+      />
 
       <OfferModal 
         isOpen={showOfferModal}

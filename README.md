@@ -142,7 +142,7 @@ Tous les titres suivent le même pattern d'animation :
 ✨ **TestimonialsSection** - "Ils ont fait le choix de l'amour, et vous ?"
 ✨ **FinalCTASection** - "Parce que certaines étreintes ne devraient jamais s'arrêter"
 
-## 💌 Galerie d'Amour - Messages d'Amour Interactifs
+## 💌 Message d'Amour - Messages d'Amour Interactifs
 
 ### Nouvelle Fonctionnalité (v3.0)
 
@@ -150,7 +150,7 @@ Une expérience unique pour envoyer des messages d'amour personnalisés à votre
 
 #### 🎯 Fonctionnalités:
 
-1. **Menu Landing Page** - Accès via lien "Galerie d'Amour" dans le menu Home
+1. **Menu Landing Page** - Accès via lien "Message d'Amour" dans le menu Home
 2. **Composition** - Zone texte pour rédiger un message personnalisé
 3. **Partage Intelligent** :
    - 🔗 **Lien unique** encodé en Base64 (pas de dépendance serveur)
@@ -180,7 +180,7 @@ Une expérience unique pour envoyer des messages d'amour personnalisés à votre
 ```
 Landing Page (Menu) 
   ↓
-Galerie d'Amour (demande)
+Message d'Amour (demande)
   ↓
 Composition du message
   ↓
@@ -199,4 +199,4 @@ Redirection landing page
 
 ---
 
-*Mise à jour : 8 Février 2026 - Version 3.0 avec Galerie d'Amour et messages partagés*
+*Mise à jour : 8 Février 2026 - Version 3.0 avec Message d'Amour et messages partagés*
