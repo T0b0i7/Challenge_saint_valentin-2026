@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Send, Copy, Check, Share2, MessageCircle, Mail, Upload, User, ChevronDown } from 'lucide-react';
+import { Heart, Send, Copy, Check, Share2, MessageCircle, Mail, User, ChevronDown } from 'lucide-react';
 
 const LoveMessagePage = () => {
   const navigate = useNavigate();
@@ -11,29 +11,26 @@ const LoveMessagePage = () => {
   const [generatedLink, setGeneratedLink] = useState('');
   const [copied, setCopied] = useState(false);
   const [viewMessage, setViewMessage] = useState('');
-  const [viewSender, setViewSender] = useState<{ name: string | null; image: string | null; isAnonymous: boolean } | null>(null);
+  const [viewSender, setViewSender] = useState<{ name: string | null; isAnonymous: boolean } | null>(null);
   const [showOfferNotification, setShowOfferNotification] = useState(false);
   
   // Nouvelles options
   const [senderName, setSenderName] = useState('');
   const [isAnonymous, setIsAnonymous] = useState(false);
-  const [senderImage, setSenderImage] = useState<string | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [showSocialDrawer, setShowSocialDrawer] = useState(false);
 
   // Encoder le message avec les métadonnées
-  const encodeMessage = (msg: string, name: string, anon: boolean, image: string | null): string => {
+  const encodeMessage = (msg: string, name: string, anon: boolean): string => {
     const data = {
       message: msg,
       sender: anon ? null : name,
-      isAnonymous: anon,
-      image: image
+      isAnonymous: anon
     };
     return btoa(unescape(encodeURIComponent(JSON.stringify(data))));
   };
 
   // Décoder le message depuis Base64
-  const decodeMessage = (encoded: string): { message: string; sender: string | null; isAnonymous: boolean; image: string | null } | null => {
+  const decodeMessage = (encoded: string): { message: string; sender: string | null; isAnonymous: boolean } | null => {
     try {
       const decoded = decodeURIComponent(escape(atob(encoded)));
       return JSON.parse(decoded);
@@ -49,18 +46,7 @@ const LoveMessagePage = () => {
     setStep('options');
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setSenderImage(base64);
-        setImagePreview(base64);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+
 
   const handleFinishOptions = () => {
     if (!isAnonymous && senderName.trim().length === 0) {
@@ -68,7 +54,7 @@ const LoveMessagePage = () => {
       return;
     }
 
-    const encoded = encodeMessage(message, senderName, isAnonymous, senderImage);
+    const encoded = encodeMessage(message, senderName, isAnonymous);
     const link = `${window.location.origin}/love-message/${encoded}`;
     setGeneratedLink(link);
     setStep('share');
@@ -154,7 +140,6 @@ const LoveMessagePage = () => {
     setViewMessage(decodedData.message);
     setViewSender({
       name: decodedData.sender,
-      image: decodedData.image,
       isAnonymous: decodedData.isAnonymous
     });
   }
@@ -173,21 +158,7 @@ const LoveMessagePage = () => {
             <h1 className="text-xl sm:text-3xl font-bold text-pink-600 mb-2">Un message d'amour pour toi 💌</h1>
           </div>
 
-          {/* Avatar/Image du sender - Responsive */}
-          {viewSender.image && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="flex justify-center mb-4 sm:mb-6"
-            >
-              <img 
-                src={viewSender.image} 
-                alt="Sender" 
-                className="w-16 sm:w-24 h-16 sm:h-24 rounded-full object-cover border-4 border-pink-400 shadow-lg"
-              />
-            </motion.div>
-          )}
+
 
           {/* Nom du sender - Responsive */}
           {!viewSender.isAnonymous && viewSender.name && (
@@ -408,47 +379,7 @@ const LoveMessagePage = () => {
             )}
           </div>
 
-          {/* Upload Image - Responsive */}
-          <div className="mb-6 sm:mb-8">
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-3">
-              <Upload className="w-4 h-4 inline mr-2" />
-              Joindre une photo (optionnel):
-            </label>
 
-            {!imagePreview ? (
-              <div className="border-2 border-dashed border-pink-300 rounded-2xl p-4 sm:p-6 text-center cursor-pointer hover:bg-pink-50 transition-colors">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                  id="image-upload"
-                />
-                <label htmlFor="image-upload" className="cursor-pointer block">
-                  <Upload className="w-6 sm:w-8 h-6 sm:h-8 mx-auto text-pink-500 mb-2" />
-                  <p className="text-xs sm:text-base text-gray-600">Cliquez pour ajouter une photo</p>
-                  <p className="text-xs text-gray-500">PNG, JPG jusqu'à 10MB</p>
-                </label>
-              </div>
-            ) : (
-              <div className="relative w-fit mx-auto">
-                <img 
-                  src={imagePreview} 
-                  alt="Preview" 
-                  className="w-24 sm:w-32 h-24 sm:h-32 rounded-lg object-cover border-2 border-pink-400"
-                />
-                <button
-                  onClick={() => {
-                    setSenderImage(null);
-                    setImagePreview(null);
-                  }}
-                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 text-xs sm:text-base"
-                >
-                  ✕
-                </button>
-              </div>
-            )}
-          </div>
 
           {/* Résumé du message - Responsive */}
           <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-pink-50 rounded-2xl border-2 border-pink-200">
