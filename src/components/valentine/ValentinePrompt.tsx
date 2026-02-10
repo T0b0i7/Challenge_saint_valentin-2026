@@ -421,11 +421,11 @@ export const ValentinePrompt: React.FC<ValentinePromptProps> = ({ onYesClick }) 
         <div id="rose-petals-fall-container"></div>
         
         <div className="scene-container">
-          <div className="text flex flex-col items-center justify-center gap-2 sm:gap-4 sm:flex-row">
-            <span className="text-xl sm:text-3xl font-bold text-center">Pourquoi une peluche le jour de la Saint-Valentin ?<br/>Tu veux savoir si tu veux accepter d'être ma Valentin(e) en cliquant sur ce cœur</span> 
-            <span className="heart-beat cursor-pointer text-4xl sm:text-5xl transition-all duration-500 hover:scale-150 hover:rotate-12 hover:drop-shadow-2xl hover:filter hover:brightness-125 active:scale-125 relative z-30" onClick={handleHeartClick} style={{
-          filter: 'drop-shadow(0 0 20px rgba(255, 20, 147, 0.8))',
-          animation: 'heartBeat 1.3s infinite, pulse 2s infinite'
+          <div className="text flex flex-col lg:flex-row items-center justify-center gap-4 sm:gap-4 lg:gap-8">
+            <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-center leading-relaxed max-w-2xl">Une peluche pour la Saint-Valentin ?<br/>Parce que l'amour mérite plus qu'un souvenir éphémère.<br/>Clique sur ce cœur pour découvrir si tu acceptes d'être ma Valentine</span> 
+            <span className="heart-beat cursor-pointer text-6xl sm:text-7xl lg:text-8xl transition-all duration-500 hover:scale-150 hover:rotate-12 hover:drop-shadow-2xl hover:filter hover:brightness-125 active:scale-125 relative z-30 animate-bounce mt-4 sm:mt-0" onClick={handleHeartClick} style={{
+          filter: 'drop-shadow(0 0 30px rgba(255, 20, 147, 1))',
+          animation: 'heartBeat 1.3s infinite, pulse 2s infinite, bounce 2s infinite'
         }}>❤️</span>
           </div>
           
