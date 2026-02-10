@@ -6,6 +6,21 @@
 
 ---
 
+## 📸 APERÇU DU PROJET
+
+### 🌐 **Visitez le projet en ligne**
+**🔗 [https://huggylove.netlify.app/](https://huggylove.netlify.app/)**
+
+### 📱 **Captures d'écran**
+
+#### Desktop - Hero Section & Product Showcase
+![Aperçu Desktop](public/p1.PNG)
+
+#### Responsive - Multi-device View
+![Aperçu Responsive](public/p2.png)
+
+---
+
 ## 📋 BRIEF COMPLET - ANALYSE DE CONFORMITÉ
 
 ### ✅ **1⃣ OBJECTIF DU CHALLENGE - PARFAITEMENT RESPECTÉ**
