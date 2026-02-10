@@ -12,6 +12,14 @@
 
 ## 📸 APERÇU DU PROJET
 
+### 🎨 **Captures d'écran du projet final**
+
+#### 📱 **Version Mobile Optimisée**
+![Version Mobile](public/p1.PNG)
+
+#### 🖥️ **Version Desktop Élégante**
+![Version Desktop](public/p2.png)
+
 **Visite le projet en ligne pour voir :** 🎨 Design moderne et romantique 💝 Messages d'amour personnalisés 💳 Système de paiement complet 🎬 Animations premium fluides
 
 ### 🌐 **Accès direct au site:**
