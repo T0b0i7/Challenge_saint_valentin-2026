@@ -268,7 +268,7 @@ export const HeroSection = () => {
               <span className="text-sm text-[#DC143C] font-medium">Édition Saint-Valentin 2026</span>
             </motion.div>
 
-             <div className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-display font-bold text-black leading-tight mb-4 sm:mb-6">
+             <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-bold text-black leading-tight mb-4 sm:mb-6">
                <AnimatedTitle delay={0.3} as="h1" className="inline">
                  Cette peluche gardera votre
                </AnimatedTitle>{' '}
@@ -282,7 +282,7 @@ export const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="text-base xs:text-lg sm:text-xl text-black/90 mb-6 sm:mb-8 font-body font-light max-w-xl mx-auto lg:mx-0"
+              className="text-sm md:text-base lg:text-lg text-black/90 mb-4 sm:mb-6 font-body font-light max-w-xl mx-auto lg:mx-0"
             >
               Le cadeau qui dit "je t'aime" même quand vous êtes loin. 
               Une présence douce et réconfortante qui traverse les distances.
@@ -292,31 +292,30 @@ export const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mb-8 sm:mb-12"
+              className="flex flex-col sm:flex-row gap-2 sm:gap-3 lg:gap-4 justify-center lg:justify-start mb-4 sm:mb-6 lg:mb-8"
             >
                <ParticleRipple particleCount={30} spread={80}>
                  <Button
-                   className="group text-base sm:text-lg bg-[#FF1493] hover:bg-[#FF0000] text-white border-2 border-[#FF1493] hover:border-[#FF0000] px-4 py-2 xs:px-6 xs:py-3 sm:px-8 sm:py-4 transition-all duration-300"
+                   className="group text-xs sm:text-sm md:text-base lg:text-lg bg-[#FF1493] hover:bg-[#FF0000] text-white border-2 border-[#FF1493] hover:border-[#FF0000] px-2 py-1 sm:px-3 sm:py-1 md:px-4 md:py-2 lg:px-6 lg:py-3 transition-all duration-300 w-full sm:w-auto"
                    onClick={() => scrollToSection('pricing')}
                  >
-                   <Heart className="w-4 h-4 sm:w-5 sm:h-5 group-hover:animate-heartbeat" fill="currentColor" />
-                   <span className="hidden xs:inline">Offrir l'Étreinte qui Rapproche les Cœurs</span>
-                   <span className="xs:hidden">Offrir l'Étreinte</span>
+                   <Heart className="w-2 h-2 sm:w-3 sm:h-3 md:w-3 md:h-3 lg:w-4 lg:h-4 group-hover:animate-heartbeat" fill="currentColor" />
+                   <span className="hidden sm:inline text-xs md:text-xs lg:text-sm">Offrir l'Étreinte qui Rapproche les Cœurs</span>
+                   <span className="sm:hidden text-xs">Offrir</span>
                    <motion.span
                      animate={{ x: [0, 5, 0] }}
                      transition={{ repeat: Infinity, duration: 1.5 }}
-                     className="hidden sm:inline"
+                     className="hidden md:inline"
                    >
                      →
                    </motion.span>
                  </Button>
                </ParticleRipple>
               <Button
-                className="bg-pink-500 hover:bg-pink-600 text-white px-3 py-2 xs:px-4 xs:py-2 sm:px-5 sm:py-2 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-1"
+                className="bg-pink-500 hover:bg-pink-600 text-white px-2 py-1 sm:px-3 sm:py-1 md:px-4 md:py-2 lg:px-6 lg:py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center w-full sm:w-auto"
                 onClick={() => scrollToSection('product')}
               >
-                <span className="text-xs sm:text-sm">❤️</span>
-                <span className="hidden xs:inline text-sm sm:text-base">Découvrir</span>
+                <span className="text-xs md:text-xs lg:text-sm font-medium">Explorer</span>
               </Button>
             </motion.div>
 
