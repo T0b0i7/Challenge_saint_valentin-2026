@@ -12,11 +12,10 @@
 
 ## 📸 APERÇU DU PROJET
 
-### 🖥️ Vue Desktop
-![Huggy Love - Desktop View](./public/p1.PNG)
+**Visite le projet en ligne pour voir :** 🎨 Design moderne et romantique 💝 Messages d'amour personnalisés 💳 Système de paiement complet 🎬 Animations premium fluides
 
-### 📱 Vue Responsive (Mobile, Tablet, Desktop)
-![Huggy Love - Responsive View](./public/p2.png)
+### 🌐 **Accès direct au site:**
+# ⭐ [https://huggylove.netlify.app/](https://huggylove.netlify.app/) ⭐
 
 ---
 
