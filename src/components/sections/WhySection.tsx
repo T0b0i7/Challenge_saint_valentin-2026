@@ -370,23 +370,89 @@ export const WhySection = () => {
           {reasons.map((reason, index) => (
             <motion.div
               key={reason.title}
-              initial={{ opacity: 0, y: 40 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="card-romantic p-3 xs:p-4 sm:p-6 lg:p-8 text-center group"
+              initial={{ opacity: 0, y: 40, scale: 0.9 }}
+              animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.12, ease: "easeOut" }}
+              whileHover={{ y: -12, boxShadow: "0 20px 40px rgba(255, 20, 147, 0.15)" }}
+              className="card-romantic p-3 xs:p-4 sm:p-6 lg:p-8 text-center group relative overflow-hidden cursor-pointer transition-all duration-300"
             >
-            <motion.div
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                className="inline-flex items-center justify-center w-12 xs:w-14 sm:w-16 h-12 xs:h-14 sm:h-16 rounded-xl xs:rounded-2xl bg-primary/10 text-primary mb-3 xs:mb-4 sm:mb-6 mx-auto transition-colors group-hover:bg-primary group-hover:text-primary-foreground"
-              >
-                <reason.icon className="w-6 xs:w-7 sm:w-8 h-6 xs:h-7 sm:h-8" />
-              </motion.div>
-              <h3 className="text-base xs:text-lg sm:text-xl font-display font-semibold text-foreground mb-2 xs:mb-3">
-                {reason.title}
-              </h3>
-              <p className="text-xs xs:text-sm text-muted-foreground font-body leading-relaxed">
-                {reason.description}
-              </p>
+              {/* Animated Background Gradient */}
+              <motion.div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                animate={isInView ? { 
+                  backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
+                } : {}}
+                transition={{ duration: 8, repeat: Infinity }}
+                style={{
+                  background: "linear-gradient(45deg, transparent, rgba(255, 20, 147, 0.05), transparent)",
+                  backgroundSize: "200% 200%"
+                }}
+              />
+
+              {/* Card Content */}
+              <div className="relative z-10">
+                {/* Animated Icon Container */}
+                <motion.div
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={isInView ? { scale: 1, rotate: 0 } : {}}
+                  transition={{ duration: 0.6, delay: index * 0.12 + 0.2, type: "spring", stiffness: 100 }}
+                  whileHover={{ scale: 1.15, rotate: 15 }}
+                  className="inline-flex items-center justify-center w-12 xs:w-14 sm:w-16 h-12 xs:h-14 sm:h-16 rounded-xl xs:rounded-2xl bg-primary/10 text-primary mb-3 xs:mb-4 sm:mb-6 mx-auto transition-all duration-300 group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-secondary group-hover:text-white shadow-lg"
+                >
+                  <motion.div
+                    animate={isInView ? {
+                      y: [0, -3, 0],
+                      opacity: [1, 0.8, 1]
+                    } : {}}
+                    transition={{ duration: 2.5 + index * 0.3, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <reason.icon className="w-6 xs:w-7 sm:w-8 h-6 xs:h-7 sm:h-8" />
+                  </motion.div>
+                </motion.div>
+
+                {/* Animated Title */}
+                <motion.h3
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: index * 0.12 + 0.3 }}
+                  className="text-base xs:text-lg sm:text-xl font-display font-semibold text-foreground mb-2 xs:mb-3 leading-tight min-h-14"
+                >
+                  {reason.title}
+                </motion.h3>
+
+                {/* Animated Description */}
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: index * 0.12 + 0.4 }}
+                  className="text-xs xs:text-sm text-muted-foreground font-body leading-relaxed"
+                >
+                  {reason.description}
+                </motion.p>
+
+                {/* Floating Decoration on Hover */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileHover={{ opacity: 1, scale: 1 }}
+                  animate={isInView ? { 
+                    y: [0, -5, 0]
+                  } : {}}
+                  transition={{ duration: 3 + index * 0.3, repeat: Infinity }}
+                  className="absolute -bottom-4 -right-4 text-4xl opacity-10 group-hover:opacity-30"
+                >
+                  💕
+                </motion.div>
+
+                {/* Pulse Ring Effect */}
+                <motion.div
+                  className="absolute inset-0 rounded-2xl border-2 border-primary opacity-0 group-hover:opacity-20"
+                  animate={isInView ? {
+                    scale: [1, 1.05, 1],
+                    opacity: [0, 0.3, 0]
+                  } : {}}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+              </div>
             </motion.div>
           ))}
         </div>
