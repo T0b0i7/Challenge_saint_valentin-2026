@@ -9,40 +9,35 @@ import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const HeroSection = () => {
-  const sectionRef = useRef<HTMLVideoElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const isInView = useInView(sectionRef, { amount: 0.5 });
+  const sectionRef = useRef<HTMLElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const isInView = useInView(sectionRef, { amount: 0.5 });
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
-
-    // Définir le vidéo comme chargé quand possible
-    const handleCanPlay = () => {
-      setIsVideoLoaded(true);
-      console.log("Vidéo prête à jouer (utilisateur contrôle)");
-      // Assurer que la vidéo est en pause au chargement
-      if (!video.paused) {
-        video.pause();
-        setIsPlaying(false);
-      }
-    };
-
-    video.addEventListener('canplay', handleCanPlay);
-
-    return () => {
-      video.removeEventListener('canplay', handleCanPlay);
-    };
+    if (video) {
+      video.load();
+      video.addEventListener('loadeddata', () => {
+        setIsVideoLoaded(true);
+      });
+      video.addEventListener('error', () => {
+        setIsVideoLoaded(true);
+      });
+    }
   }, []);
 
   const togglePlay = () => {
     const video = videoRef.current;
     if (!video) return;
-
+    
     if (isPlaying) {
       video.pause();
       setIsPlaying(false);
@@ -50,10 +45,6 @@ export const HeroSection = () => {
       video.play().catch(e => console.log("Erreur lors de la reprise:", e));
       setIsPlaying(true);
     }
-  };
-
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -64,7 +55,7 @@ export const HeroSection = () => {
         className="absolute inset-0 w-full h-full object-cover min-w-full min-h-full -z-10"
         playsInline
         preload="auto"
-        style={{ opacity: 0.6, transform: 'scale(1.05)' }}
+        style={{ opacity: 0.3, transform: 'scale(1.01)' }}
         onError={(e) => console.log("Video error:", e)}
         onLoadStart={() => console.log("Video load start")}
         onCanPlay={() => console.log("Video can play")}
@@ -206,6 +197,7 @@ export const HeroSection = () => {
           </motion.div>
         )}
       </div>
+      
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
