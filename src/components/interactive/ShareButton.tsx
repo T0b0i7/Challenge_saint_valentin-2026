@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Share2, Facebook, Twitter, Instagram, Link2, Volume2, VolumeX, MessageCircle, Send, Linkedin, Music2, Pin } from 'lucide-react';
+import { Share2, Facebook, Twitter, Instagram, Link2, Volume2, VolumeX, MessageCircle, Send, Linkedin, Music2, Pin, Check } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface ShareButtonProps {
   className?: string;
@@ -85,9 +86,15 @@ export const ShareButton = ({ className = "" }: ShareButtonProps) => {
     if (link.action === "copy") {
       try {
         await navigator.clipboard.writeText(link.url);
-        alert("Lien copié dans le presse-papiers !");
+        toast.success("Lien copié avec succès !", {
+          description: "Vous pouvez maintenant partager le lien",
+          duration: 3000,
+        });
       } catch (err) {
         console.error("Erreur lors de la copie:", err);
+        toast.error("Erreur lors de la copie", {
+          description: "Impossible de copier le lien",
+        });
       }
     } else {
       window.open(link.url, "_blank", "width=600,height=400");
@@ -157,7 +164,7 @@ export const ShareButton = ({ className = "" }: ShareButtonProps) => {
                   className="flex-1 text-xs bg-white border border-pink-200 rounded px-2 py-1 font-mono"
                 />
                 <button
-                  onClick={() => handleShare(shareLinks[3])}
+                  onClick={() => handleShare(shareLinks[8])}
                   className="bg-pink-500 hover:bg-pink-600 text-white px-3 py-1 rounded text-xs transition-colors"
                 >
                   Copier

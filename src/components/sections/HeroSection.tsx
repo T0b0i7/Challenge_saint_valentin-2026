@@ -241,8 +241,8 @@ export const HeroSection = () => {
         ))}
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+      <div className="container mx-auto px-3 sm:px-6 lg:px-8 py-8 sm:py-16 lg:py-20 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-16 items-center">
           {/* Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -260,7 +260,7 @@ export const HeroSection = () => {
               <span className="text-sm text-[#DC143C] font-medium">Édition Saint-Valentin 2026</span>
             </motion.div>
 
-             <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-bold text-black leading-tight mb-4 sm:mb-6">
+             <div className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-bold text-black leading-tight mb-3 sm:mb-6">
                <AnimatedTitle delay={0.3} as="h1" className="inline">
                  Cette peluche gardera votre
                </AnimatedTitle>{' '}
@@ -274,7 +274,7 @@ export const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="text-sm md:text-base lg:text-lg text-black/90 mb-4 sm:mb-6 font-body font-light max-w-xl mx-auto lg:mx-0"
+              className="text-xs sm:text-sm md:text-base lg:text-lg text-black/90 mb-3 sm:mb-6 font-body font-light max-w-xl mx-auto lg:mx-0"
             >
               Le cadeau qui dit "je t'aime" même quand vous êtes loin. 
               Une présence douce et réconfortante qui traverse les distances.
@@ -284,16 +284,16 @@ export const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-2 sm:gap-3 lg:gap-4 justify-center lg:justify-start mb-4 sm:mb-6 lg:mb-8"
+              className="flex flex-col xs:flex-row gap-2 sm:gap-3 lg:gap-4 justify-center lg:justify-start mb-3 sm:mb-6 lg:mb-8"
             >
                <ParticleRipple particleCount={30} spread={80}>
                  <Button
-                   className="group text-xs sm:text-sm md:text-base lg:text-lg bg-[#FF1493] hover:bg-[#FF0000] text-white border-2 border-[#FF1493] hover:border-[#FF0000] px-2 py-1 sm:px-3 sm:py-1 md:px-4 md:py-2 lg:px-6 lg:py-3 transition-all duration-300 w-full sm:w-auto"
+                   className="group text-xs sm:text-sm md:text-base lg:text-lg bg-[#FF1493] hover:bg-[#FF0000] text-white border-2 border-[#FF1493] hover:border-[#FF0000] px-2 py-1 sm:px-3 sm:py-2 md:px-4 md:py-2 lg:px-6 lg:py-3 transition-all duration-300 w-full xs:w-auto"
                    onClick={() => scrollToSection('pricing')}
                  >
                    <Heart className="w-2 h-2 sm:w-3 sm:h-3 md:w-3 md:h-3 lg:w-4 lg:h-4 group-hover:animate-heartbeat" fill="currentColor" />
-                   <span className="hidden sm:inline text-xs md:text-xs lg:text-sm">Offrir l'Étreinte qui Rapproche les Cœurs</span>
-                   <span className="sm:hidden text-xs">Offrir</span>
+                   <span className="hidden xs:inline text-xs md:text-xs lg:text-sm">Offrir l'Étreinte qui Rapproche les Cœurs</span>
+                   <span className="xs:hidden text-xs">Offrir</span>
                    <motion.span
                      animate={{ x: [0, 5, 0] }}
                      transition={{ repeat: Infinity, duration: 1.5 }}
@@ -304,7 +304,7 @@ export const HeroSection = () => {
                  </Button>
                </ParticleRipple>
               <Button
-                className="bg-pink-500 hover:bg-pink-600 text-white px-2 py-1 sm:px-3 sm:py-1 md:px-4 md:py-2 lg:px-6 lg:py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center w-full sm:w-auto"
+                className="bg-pink-500 hover:bg-pink-600 text-white px-2 py-1 sm:px-3 sm:py-2 md:px-4 md:py-2 lg:px-6 lg:py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center w-full xs:w-auto"
                 onClick={() => scrollToSection('product')}
               >
                 <span className="text-xs md:text-xs lg:text-sm font-medium">Explorer</span>
@@ -330,9 +330,9 @@ export const HeroSection = () => {
             initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             transition={{ duration: 1, delay: 0.4, type: "spring" }}
-            className="relative lg:ml-8 sm:ml-4"
+            className="relative lg:ml-8 px-4 xs:px-0"
           >
-            <div className="relative mx-auto max-w-sm sm:max-w-md lg:max-w-lg">
+            <div className="relative mx-auto max-w-xs xs:max-w-sm sm:max-w-md lg:max-w-lg">
               {/* Glow Effect */}
               <div className="absolute inset-0 bg-[#FF1493]/20 rounded-full blur-3xl opacity-40 scale-110" />
               
@@ -352,9 +352,9 @@ export const HeroSection = () => {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 1, type: "spring", stiffness: 200 }}
-                  className="absolute -top-3 sm:-top-4 -right-3 sm:-right-4 bg-white rounded-full p-2 sm:p-3 shadow-lg border-2 border-[#FF1493]"
+                  className="absolute -top-2 xs:-top-3 sm:-top-4 -right-2 xs:-right-3 sm:-right-4 bg-white rounded-full p-1 xs:p-2 sm:p-3 shadow-lg border-2 border-[#FF1493]"
                 >
-                  <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-[#FF1493] heartbeat" fill="#FF1493" />
+                  <Heart className="w-4 h-4 xs:w-6 xs:h-6 sm:w-8 sm:h-8 text-[#FF1493] heartbeat" fill="#FF1493" />
                 </motion.div>
               </motion.div>
             </div>

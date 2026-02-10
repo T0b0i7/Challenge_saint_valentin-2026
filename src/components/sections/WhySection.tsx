@@ -104,34 +104,34 @@ const OfferNotification = () => {
       initial={{ opacity: 0, scale: 0.8, y: 50 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.8, y: 50 }}
-      className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40"
+      className="fixed bottom-4 xs:bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-40"
     >
-      <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-sm mx-4 relative border-4 border-red-500">
+      <div className="bg-white rounded-xl xs:rounded-2xl shadow-2xl p-4 xs:p-5 sm:p-6 max-w-xs mx-3 xs:mx-4 relative border-4 border-red-500">
         {/* Badge de notification */}
-        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse">
+        <div className="absolute -top-2 xs:-top-2 sm:-top-3 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-2 xs:px-3 py-0.5 xs:py-1 rounded-full text-xs font-bold animate-pulse">
           🔥 OFFRE
         </div>
         
-        <div className="text-center">
+        <div className="text-center pt-1">
           <motion.div
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="text-4xl mb-3"
+            className="text-2xl xs:text-3xl sm:text-4xl mb-2 xs:mb-3"
           >
             🎁
           </motion.div>
           
-          <h3 className="text-lg font-bold text-gray-800 mb-2">
+          <h3 className="text-sm xs:text-base sm:text-lg font-bold text-gray-800 mb-1 xs:mb-2">
             Ne manquez pas cette chance !
           </h3>
           
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-xs xs:text-xs sm:text-sm text-gray-600 mb-3 xs:mb-4">
             Offre spéciale Valentine - Livraison gratuite
           </p>
           
-          <div className="flex gap-2 justify-center">
+          <div className="flex gap-1 xs:gap-2 sm:gap-3 justify-center flex-wrap">
             <motion.button
-              className="bg-red-500 text-white px-4 py-2 rounded-full font-bold text-sm hover:bg-red-600 transition-colors"
+              className="bg-red-500 text-white px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 rounded-full font-bold text-xs xs:text-xs sm:text-sm hover:bg-red-600 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => {
@@ -142,7 +142,7 @@ const OfferNotification = () => {
             </motion.button>
             
             <button
-              className="text-gray-400 hover:text-gray-600 text-sm underline"
+              className="text-gray-400 hover:text-gray-600 text-xs xs:text-sm underline"
               onClick={handleDismiss}
             >
               ✕
@@ -184,7 +184,7 @@ const UrgencyAnimation = ({ isInView }: { isInView: boolean }) => {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={isInView ? { opacity: 1, scale: 1 } : {}}
       transition={{ duration: 0.5, delay: 0.5 }}
-      className="mt-12 p-8 bg-gradient-to-r from-red-500 to-pink-500 rounded-2xl text-white text-center relative overflow-hidden"
+      className="mt-8 xs:mt-10 sm:mt-12 p-4 xs:p-6 sm:p-8 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl xs:rounded-2xl text-white text-center relative overflow-hidden"
     >
       {/* Animation de particules */}
       <div className="absolute inset-0">
@@ -213,19 +213,19 @@ const UrgencyAnimation = ({ isInView }: { isInView: boolean }) => {
       
       <div className="relative z-10">
         <motion.h3 
-          className="text-2xl font-bold mb-4"
+          className="text-lg xs:text-xl sm:text-2xl font-bold mb-2 xs:mb-3 sm:mb-4"
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
           🎁 OFFRE SPÉCIALE VALENTINE 🎁
         </motion.h3>
         
-        <p className="text-lg mb-6">
+        <p className="text-xs xs:text-sm sm:text-base md:text-lg mb-3 xs:mb-4 sm:mb-6">
           Transformez votre distance en amour éternel avec notre peluche magique
         </p>
         
         <motion.div 
-          className="inline-block bg-white text-red-500 px-6 py-3 rounded-full font-bold text-xl mb-4"
+          className="inline-block bg-white text-red-500 px-3 xs:px-4 sm:px-6 py-2 xs:py-2 sm:py-3 rounded-full font-bold text-sm xs:text-base sm:text-xl mb-3 xs:mb-4 sm:mb-4"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -236,44 +236,44 @@ const UrgencyAnimation = ({ isInView }: { isInView: boolean }) => {
           )}
         </motion.div>
         
-        <div className="flex justify-center gap-4 flex-wrap">
+        <div className="flex justify-center gap-2 xs:gap-3 sm:gap-4 flex-wrap px-2 xs:px-0">
           <motion.button
-            className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-yellow-300 transition-colors"
+            className="bg-yellow-400 text-gray-900 px-4 xs:px-6 sm:px-8 py-2 xs:py-3 sm:py-4 rounded-full font-bold text-xs xs:text-sm sm:text-lg hover:bg-yellow-300 transition-colors"
             whileHover={{ scale: 1.1, rotate: 5 }}
             whileTap={{ scale: 0.95 }}
           >
-            🛒 COMMANDER MAINTENANT
+            🛒 COMMANDER
           </motion.button>
           
           <motion.button
-            className="bg-white/20 backdrop-blur text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white/30 transition-colors"
+            className="bg-white/20 backdrop-blur text-white px-4 xs:px-6 sm:px-8 py-2 xs:py-3 sm:py-4 rounded-full font-bold text-xs xs:text-sm sm:text-lg hover:bg-white/30 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            💝 OFFRIR UN CADEAU
+            💝 OFFRIR
           </motion.button>
         </div>
         
         <motion.p 
-          className="text-sm mt-4 opacity-80"
+          className="text-xs xs:text-xs sm:text-sm mt-2 xs:mt-3 sm:mt-4 opacity-80"
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.8 }}
           transition={{ delay: 1 }}
         >
-          ⚡ Livraison express gratuite - Garantie satisfaction 30 jours
+          ⚡ Livraison express - Garantie 30 jours
         </motion.p>
       </div>
     </motion.div>
   );
 };
 const BalloonTitle = ({ isInView }: { isInView: boolean }) => {
-  const text = "Parce que certaines distances sont trop longues à supporter";
+  const text = "Parce que certaines étreintes ne devraient jamais s'arrêter";
   const words = text.split(' ');
   const [hoveredWordIndex, setHoveredWordIndex] = useState<number | null>(null);
 
   return (
     <h2 
-      className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-6 cursor-pointer"
+      className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold mb-6 cursor-pointer"
       onMouseLeave={() => setHoveredWordIndex(null)}
     >
       {words.map((word, wordIdx) => (
@@ -349,42 +349,42 @@ export const WhySection = () => {
   const textContent = "Cette peluche n'est pas qu'un simple jouet. C'est un pont entre deux cœurs, un symbole de votre amour qui transcende l'espace.";
 
   return (
-    <section id="why" className="py-24 lg:py-32 bg-muted" ref={ref}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="why" className="py-12 xs:py-16 sm:py-24 lg:py-32 bg-muted" ref={ref}>
+      <div className="container mx-auto px-3 xs:px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-           className="text-center mb-16"
+           className="text-center mb-8 xs:mb-12 sm:mb-16"
         >
-          <span className="inline-block text-primary font-semibold text-sm uppercase tracking-widest mb-4">
+          <span className="inline-block text-primary font-semibold text-xs xs:text-sm uppercase tracking-widest mb-2 xs:mb-4">
             Pourquoi l'offrir ?
           </span>
           <BalloonTitle isInView={isInView} />
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-body min-h-[4rem] flex items-center justify-center">
+          <p className="text-xs xs:text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto font-body min-h-[4rem] flex items-center justify-center px-2 xs:px-0">
             <TypewriterText text={textContent} isInView={isInView} />
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 lg:gap-8">
           {reasons.map((reason, index) => (
             <motion.div
               key={reason.title}
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="card-romantic p-6 lg:p-8 text-center group"
+              className="card-romantic p-3 xs:p-4 sm:p-6 lg:p-8 text-center group"
             >
-              <motion.div
+            <motion.div
                 whileHover={{ scale: 1.1, rotate: 5 }}
-                className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 text-primary mb-6 mx-auto transition-colors group-hover:bg-primary group-hover:text-primary-foreground"
+                className="inline-flex items-center justify-center w-12 xs:w-14 sm:w-16 h-12 xs:h-14 sm:h-16 rounded-xl xs:rounded-2xl bg-primary/10 text-primary mb-3 xs:mb-4 sm:mb-6 mx-auto transition-colors group-hover:bg-primary group-hover:text-primary-foreground"
               >
-                <reason.icon className="w-8 h-8" />
+                <reason.icon className="w-6 xs:w-7 sm:w-8 h-6 xs:h-7 sm:h-8" />
               </motion.div>
-              <h3 className="text-xl font-display font-semibold text-foreground mb-3">
+              <h3 className="text-base xs:text-lg sm:text-xl font-display font-semibold text-foreground mb-2 xs:mb-3">
                 {reason.title}
               </h3>
-              <p className="text-muted-foreground font-body leading-relaxed">
+              <p className="text-xs xs:text-sm text-muted-foreground font-body leading-relaxed">
                 {reason.description}
               </p>
             </motion.div>

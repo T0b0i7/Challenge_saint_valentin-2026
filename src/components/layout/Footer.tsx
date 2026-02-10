@@ -30,11 +30,11 @@ export const Footer = () => {
             </a>
           </div>
 
-          <p className="text-primary-foreground/40 text-sm">
-            ©2026 Étreinte Éternelle. Créer par Eucher ABATTI avec{' '}
-            <Heart className="w-3 h-3 inline text-primary" fill="currentColor" />{' '}
-            au Bénin
-          </p>
+          <div className="text-primary-foreground/60 text-sm space-y-1">
+            <p>© 2026 Pour la Saint-Valentin</p>
+            <p>Créé avec amour au Bénin 🇧🇯</p>
+            <p className="text-primary-foreground/40">Tous droits réservés</p>
+          </div>
         </div>
       </div>
     </footer>
