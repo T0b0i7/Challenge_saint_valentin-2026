@@ -27,12 +27,25 @@ export const HeroSection = () => {
       video.load();
       video.addEventListener('loadeddata', () => {
         setIsVideoLoaded(true);
+        // Auto-play quand la vidéo est chargée
+        video.play().catch(e => console.log("Auto-play error:", e));
       });
       video.addEventListener('error', () => {
         setIsVideoLoaded(true);
       });
     }
   }, []);
+
+  // Gérer la lecture quand l'utilisateur navigue
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video && isVideoLoaded) {
+      // Si la vidéo n'est pas en pause et qu'elle est prête, jouer automatiquement
+      if (isPlaying) {
+        video.play().catch(e => console.log("Play error:", e));
+      }
+    }
+  }, [isInView, isPlaying, isVideoLoaded]);
 
   const togglePlay = () => {
     const video = videoRef.current;
