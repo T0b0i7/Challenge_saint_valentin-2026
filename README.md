@@ -14,10 +14,10 @@
 
 ### 🎨 **Captures d'écran du projet final**
 
-#### 📱 **Version Mobile Optimisée**
+#### 📱 **Version Desktop Optimisée**
 ![Version Mobile](public/p1.PNG)
 
-#### 🖥️ **Version Desktop Élégante**
+#### 🖥️ **Version Mobile Élégante**
 ![Version Desktop](public/p2.png)
 
 **Visite le projet en ligne pour voir :** 🎨 Design moderne et romantique 💝 Messages d'amour personnalisés 💳 Système de paiement complet 🎬 Animations premium fluides
