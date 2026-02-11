@@ -15,7 +15,6 @@ export const HeroSection = () => {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(sectionRef, { amount: 0.5 });
-  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { scrollToSection } = useSectionRouting();
 
@@ -88,127 +87,7 @@ export const HeroSection = () => {
       {/* Overlay léger pour lisibilité */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-[#FF1493]/10 to-black/20 -z-5" />
       
-      {/* Bouton Home avec Menu Navigation - STICKY */}
-      <div className="fixed top-4 left-4 z-[9999]">
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="bg-white/90 backdrop-blur-sm rounded-full p-2 sm:p-3 hover:bg-white transition-colors"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          aria-label="Menu navigation"
-        >
-          <Home className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600" />
-        </motion.button>
-
-        {/* Menu déroulant - Affiché si menuOpen est true - STICKY */}
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="fixed top-14 sm:top-16 left-4 bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-4 min-w-max max-w-xs sm:max-w-md border border-pink-200 z-[9999]"
-          >
-            <nav className="space-y-1 sm:space-y-2">
-              <button
-                onClick={() => {
-                  scrollToSection('hero');
-                  setMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
-              >
-                <Play className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span>Hero</span>
-              </button>
-              <button
-                onClick={() => {
-                  scrollToSection('why');
-                  setMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
-              >
-                <HelpCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span>Pourquoi l'offrir ?</span>
-              </button>
-              <button
-                onClick={() => {
-                  scrollToSection('product');
-                  setMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
-              >
-                <Package className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span>Produit</span>
-              </button>
-              <button
-                onClick={() => {
-                  scrollToSection('benefits');
-                  setMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
-              >
-                <Gift className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span>Bénéfices</span>
-              </button>
-              <button
-                onClick={() => {
-                  scrollToSection('pricing');
-                  setMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
-              >
-                <DollarSign className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span>Pricing</span>
-              </button>
-              <button
-                onClick={() => {
-                  scrollToSection('reassurance');
-                  setMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
-              >
-                <ShieldCheck className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span>Garanties</span>
-              </button>
-              <button
-                onClick={() => {
-                  scrollToSection('testimonials');
-                  setMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
-              >
-                <Star className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span>Avis clients</span>
-              </button>
-              <button
-                onClick={() => {
-                  scrollToSection('cta');
-                  setMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-pink-100 transition-colors text-pink-600 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
-              >
-                <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span>Dernier CTA</span>
-              </button>
-              <div className="border-t border-pink-200 my-2" />
-              <button
-                onClick={() => {
-                  navigate('/love-message');
-                  setMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 sm:px-4 sm:py-3 rounded-lg bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold flex items-center gap-2 sm:gap-3 transition-all duration-300 hover:from-pink-600 hover:to-rose-600 hover:scale-105 hover:shadow-lg animate-pulse border-2 border-pink-300 shadow-md text-sm sm:text-base"
-              >
-                <Sparkles className="w-3 h-3 sm:w-5 sm:h-5 text-yellow-200 animate-spin" />
-                <span>Message d'Amour ✨</span>
-              </button>
-            </nav>
-          </motion.div>
-        )}
-      </div>
-      
+      {/* Bouton play/pause vidéo uniquement */}
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
