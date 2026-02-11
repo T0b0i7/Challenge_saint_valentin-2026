@@ -7,6 +7,7 @@ import { ParticleRipple } from '../effects/ParticleRipple';
 import plushBear from '@/assets/images/pelluche_produit.jpg';
 import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSectionRouting } from '@/hooks/useSectionRouting';
 
 export const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -16,10 +17,7 @@ export const HeroSection = () => {
   const isInView = useInView(sectionRef, { amount: 0.5 });
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const { scrollToSection } = useSectionRouting();
 
   useEffect(() => {
     const video = videoRef.current;
@@ -90,8 +88,8 @@ export const HeroSection = () => {
       {/* Overlay léger pour lisibilité */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-[#FF1493]/10 to-black/20 -z-5" />
       
-      {/* Bouton Home avec Menu Navigation */}
-      <div className="absolute top-4 left-4 z-20">
+      {/* Bouton Home avec Menu Navigation - STICKY */}
+      <div className="fixed top-4 left-4 z-[9999]">
         <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -105,14 +103,14 @@ export const HeroSection = () => {
           <Home className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600" />
         </motion.button>
 
-        {/* Menu déroulant - Affiché si menuOpen est true */}
+        {/* Menu déroulant - Affiché si menuOpen est true - STICKY */}
         {menuOpen && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-14 sm:top-16 left-0 bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-4 min-w-max max-w-xs sm:max-w-md border border-pink-200"
+            className="fixed top-14 sm:top-16 left-4 bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-4 min-w-max max-w-xs sm:max-w-md border border-pink-200 z-[9999]"
           >
             <nav className="space-y-1 sm:space-y-2">
               <button

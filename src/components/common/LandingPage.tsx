@@ -12,10 +12,13 @@ import { MorphingTransition, WaveDivider, HeartDivider } from '@/components/inte
 import { ParallaxSection, ParallaxFloat } from '@/components/common/ParallaxSection';
 import { TransitionManager, usePageTransitions, useRandomTransition, TransitionType } from '@/components/common/TransitionManager';
 import { ShareButton } from '@/components/interactive/ShareButton';
+import { useSectionRouting } from '@/hooks/useSectionRouting';
+import { FloatingMenu } from './FloatingMenu';
 
 const LandingPage = () => {
   const { currentTransition, isTransitioning, startTransition, endTransition } = usePageTransitions();
   const { getRandomTransition } = useRandomTransition();
+  const { scrollToSection } = useSectionRouting();
 
   // Gérer les transitions entre les sections principales
   const [showTransition, setShowTransition] = useState(false);
@@ -29,6 +32,9 @@ const LandingPage = () => {
 
   return (
     <main className="overflow-hidden">
+      {/* Menu Flottant Global - TOUJOURS VISIBLE */}
+      <FloatingMenu />
+
        {/* Hero Section */}
         <ParallaxSection speed={0.2}>
           <HeroSection />
