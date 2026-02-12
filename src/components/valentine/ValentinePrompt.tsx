@@ -463,7 +463,7 @@ export const ValentinePrompt: React.FC<ValentinePromptProps> = ({ onYesClick }) 
               
               <p className="text-pink-600 text-sm sm:text-lg mb-4 sm:mb-6 leading-relaxed mt-2 sm:mt-4" style={{ fontFamily: 'cursive', fontSize: '16px', lineHeight: '1.6' }}>
                 Depuis que je t'ai rencontré(e), chaque jour semble plus lumineux. 
-                Ton sourillumine ma journée et ta présence rend tout plus beau. 
+                Ton sourire illumine ma journée et ta présence rend tout plus beau. 
                 Tu es la personne la plus incroyable que je connaisse, et je me demande...
               </p>
               
